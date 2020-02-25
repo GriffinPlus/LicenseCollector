@@ -23,15 +23,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build (repo)", "build (repo)", "{AA944ACD-A8F2-48BA-97BB-ABEEF466A793}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
 		Build.ps1 = Build.ps1
 		src\CommonAssemblyInfo.cs = src\CommonAssemblyInfo.cs
 		src\CommonAssemblyInfo.mcpp = src\CommonAssemblyInfo.mcpp
 		src\Directory.Build.props = src\Directory.Build.props
 		src\Directory.Build.targets = src\Directory.Build.targets
 		README.md = README.md
+		THIRD_PARTY_NOTICES = THIRD_PARTY_NOTICES
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseCollector", "src\LicenseCollector\LicenseCollector.csproj", "{A465CC32-06AA-4DF4-983C-8F3E62EFFFFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LicenseCollector", "src\LicenseCollector\LicenseCollector.csproj", "{A465CC32-06AA-4DF4-983C-8F3E62EFFFFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
