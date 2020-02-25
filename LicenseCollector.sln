@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build (common)", "build (common)", "{7118AA1D-8AE4-48E5-AC2D-D954315C7E1D}"
+	ProjectSection(SolutionItems) = preProject
+		build.vs\AssemblyInfoVersion.cs = build.vs\AssemblyInfoVersion.cs
+		build.vs\AssemblyInfoVersion.mcpp = build.vs\AssemblyInfoVersion.mcpp
+		build.vs\Build+Deploy.psm1 = build.vs\Build+Deploy.psm1
+		build.vs\Directory.Build.Cpp.props = build.vs\Directory.Build.Cpp.props
+		build.vs\Directory.Build.Cpp.targets = build.vs\Directory.Build.Cpp.targets
+		build.vs\Directory.Build.Cs.props = build.vs\Directory.Build.Cs.props
+		build.vs\Directory.Build.Cs.targets = build.vs\Directory.Build.Cs.targets
+		build.vs\Directory.Build.props = build.vs\Directory.Build.props
+		build.vs\Directory.Build.targets = build.vs\Directory.Build.targets
+		build.vs\GitVersion.yml = build.vs\GitVersion.yml
+		build.vs\LICENSE = build.vs\LICENSE
+		build.vs\NuGet.msbuild = build.vs\NuGet.msbuild
+		build.vs\README.md = build.vs\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build (repo)", "build (repo)", "{AA944ACD-A8F2-48BA-97BB-ABEEF466A793}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Build.ps1 = Build.ps1
+		src\CommonAssemblyInfo.cs = src\CommonAssemblyInfo.cs
+		src\CommonAssemblyInfo.mcpp = src\CommonAssemblyInfo.mcpp
+		src\Directory.Build.props = src\Directory.Build.props
+		src\Directory.Build.targets = src\Directory.Build.targets
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseCollector", "src\LicenseCollector\LicenseCollector.csproj", "{A465CC32-06AA-4DF4-983C-8F3E62EFFFFF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A465CC32-06AA-4DF4-983C-8F3E62EFFFFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A465CC32-06AA-4DF4-983C-8F3E62EFFFFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A465CC32-06AA-4DF4-983C-8F3E62EFFFFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A465CC32-06AA-4DF4-983C-8F3E62EFFFFF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB1302F4-3A30-40E9-AA3C-3D8FD744DC83}
+	EndGlobalSection
+EndGlobal
