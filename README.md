@@ -12,3 +12,6 @@
 -----
 
 ## Overview and Motivation
+
+This repository contains the Griffin+ *LicenseCollector*, a tool which helps to collect
+ licenses of used 3rd party libraries in a Visual Studio solution.

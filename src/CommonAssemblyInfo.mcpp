@@ -2,4 +2,4 @@
 
 [assembly: AssemblyCompany("Griffin+")];
 [assembly: AssemblyProduct("Griffin+ License Collector")];
-[assembly: AssemblyCopyright("Copyright (c) Sebastian Piel 2020")];
+[assembly: AssemblyCopyright("Copyright (c) Sebastian Piel, Sascha Falk 2020")];

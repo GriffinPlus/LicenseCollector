@@ -1,12 +1,234 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using CommandLine;
+using GriffinPlus.Lib.Logging;
 
 namespace GriffinPlus.LicenseCollector
 {
 	class Program
 	{
-		static void Main(string[] args)
+		private static LogWriter sLog = Log.GetWriter<Program>();
+
+		/// <summary>
+		/// Command line argument mapping class
+		/// (see https://github.com/commandlineparser/commandline for details).
+		/// </summary>
+		class Options
 		{
-			Console.WriteLine("Hello World!");
+			/// <summary>
+			/// Gets and sets verbosity of this tool.
+			/// </summary>
+			[Option('v', Default = false)]
+			public bool Verbose { get; set; }
+
+			/// <summary>
+			/// Gets and sets path to solution file to examine licenses for.
+			/// </summary>
+			[Option('s', "solutionFilePath", Required = true)]
+			public string SolutionFilePath { get; set; }
+
+			/// <summary>
+			/// Gets and sets used configuration of the solution file.
+			/// </summary>
+			[Option('c', "configuration", Required = true)]
+			public string Configuration { get; set; }
+
+			/// <summary>
+			/// Gets and sets used platform of the solution file.
+			/// </summary>
+			[Option('p', "platform", Required = true)]
+			public string Platform { get; set; }
+
+			/// <summary>
+			/// Gets and sets path to the output license file.
+			/// </summary>
+			[Value(0, Required = true)]
+			public string OutputLicensePath { get; set; }
 		}
+
+		/// <summary>
+		/// Exit codes returned by the application.
+		/// </summary>
+		internal enum ExitCode
+		{
+			Success = 0,
+			ArgumentError = 1,
+			GeneralError = 2,
+			FileNotFound = 3
+		}
+
+		static int Main(string[] args)
+		{
+			// configure the log
+			Log.LogMessageProcessingPipeline = new ConsoleWriterPipelineStage()
+				.WithTimestamp()
+				.WithLogLevel()
+				.WithText();
+
+			// configure command line parser
+			var parser = new Parser(with =>
+			{
+				with.CaseInsensitiveEnumValues = true;
+				with.CaseSensitive = false;
+				with.EnableDashDash = true;
+				with.IgnoreUnknownArguments = false;
+				with.ParsingCulture = CultureInfo.InvariantCulture;
+				with.HelpWriter = null;
+			});
+
+			//process command line
+			int exitCode = parser.ParseArguments<Options>(args)
+				.MapResult(
+					options => (int) RunOptionsAndReturnExitCode(options),
+					errors => (int) HandleParseError(errors));
+
+			return exitCode;
+		}
+
+		#region Command Line Processing
+		/// <summary>
+		/// Is called, if specified command line arguments have successfully been validated.
+		/// </summary>
+		/// <param name="options">Command line options.</param>
+		/// <returns>Exit code the application should return.</returns>
+		private static ExitCode RunOptionsAndReturnExitCode(Options options)
+		{
+			// configure the log, if more verbosity is required
+			if (options.Verbose)
+			{
+				var configuration = new LogConfiguration();
+				configuration.SetLogWriterSettings(
+					new LogConfiguration.LogWriter(
+						new LogConfiguration.WildcardLogWriterPattern("*"),
+						"All"));
+				Log.Configuration = configuration;
+			}
+
+			sLog.Write(LogLevel.Developer, "LicenseCollector v{0}", Assembly.GetExecutingAssembly().GetName().Version);
+			sLog.Write(LogLevel.Developer, "--------------------------------------------------------------------------------");
+			sLog.Write(LogLevel.Developer, "Verbose:       '{0}'", options.Verbose);
+			sLog.Write(LogLevel.Developer, "SolutionFile:  '{0}'", options.SolutionFilePath);
+			sLog.Write(LogLevel.Developer, "Configuration: '{0}'", options.Configuration);
+			sLog.Write(LogLevel.Developer, "Platform:      '{0}'", options.Platform);
+			sLog.Write(LogLevel.Developer, "OutputPath:    '{0}'", options.OutputLicensePath);
+			sLog.Write(LogLevel.Developer, "--------------------------------------------------------------------------------");
+
+			return ExitCode.Success;
+		}
+
+		private static ExitCode HandleParseError(IEnumerable<Error> errors)
+		{
+			if (errors.Any(x => x.Tag == ErrorType.HelpRequestedError))
+			{
+				PrintUsage(null, Console.Out);
+				return ExitCode.Success;
+			}
+			if (errors.Any(x => x.Tag == ErrorType.VersionRequestedError))
+			{
+				PrintVersion(Console.Out);
+				return ExitCode.Success;
+			}
+
+			PrintUsage(errors, Console.Error);
+			return ExitCode.ArgumentError;
+		}
+
+		#endregion
+
+		#region Usage Information / Error Reporting
+		/// <summary>
+		/// Writes usage text (with an optional error section).
+		/// </summary>
+		/// <param name="errors">Command line parsing errors (null, if no error occurred).</param>
+		/// <param name="writer">Text writer to use.</param>
+		private static void PrintUsage(IEnumerable<Error> errors, TextWriter writer)
+		{
+			writer.WriteLine($"  LicenseCollector v{Assembly.GetExecutingAssembly().GetName().Version}");
+			writer.WriteLine("--------------------------------------------------------------------------------");
+
+			if (errors != null && errors.Any())
+			{
+				writer.WriteLine();
+				writer.WriteLine("  ERRORS:");
+				writer.WriteLine();
+
+				foreach (Error error in errors)
+				{
+					switch (error.Tag)
+					{
+						case ErrorType.UnknownOptionError:
+						{
+							var err = (UnknownOptionError) error;
+							writer.WriteLine($"    - Unknown option: {err.Token}");
+							break;
+						}
+						case ErrorType.RepeatedOptionError:
+						{
+							var err = (RepeatedOptionError) error;
+							writer.WriteLine($"    - Repeated option: -{err.NameInfo.ShortName}, --{err.NameInfo.LongName}");
+							break;
+						}
+						case ErrorType.MissingRequiredOptionError:
+						{
+							var err = (MissingRequiredOptionError) error;
+							if (string.IsNullOrEmpty(err.NameInfo.LongName) && string.IsNullOrEmpty(err.NameInfo.ShortName))
+							{
+								writer.WriteLine($"    - Missing required value: <outpath>");
+							}
+							else
+							{
+								writer.WriteLine($"    - Missing required option: -{err.NameInfo.ShortName}, --{err.NameInfo.LongName}");
+							}
+							break;
+						}
+						default:
+						{
+							writer.WriteLine("    - Unspecified command line error");
+							break;
+						}
+					}
+				}
+
+				writer.WriteLine();
+				writer.WriteLine("--------------------------------------------------------------------------------");
+			}
+
+			writer.WriteLine();
+			writer.WriteLine("  USAGE:");
+			writer.WriteLine();
+			writer.WriteLine("    LicenseCollector.exe [-v] -s|--solutionFilePath <spath> -c|--configuration <conf> -p|--platform <platform> <outpath>");
+			writer.WriteLine();
+			writer.WriteLine("    [-v]");
+			writer.WriteLine("      Sets output to verbose.");
+			writer.WriteLine();
+			writer.WriteLine("    -s|--solutionFilePath <spath>");
+			writer.WriteLine("      The path to the Visual Studio solution file for which to collect licenses.");
+			writer.WriteLine();
+			writer.WriteLine("    -c|--configuration <conf>");
+			writer.WriteLine("      The build configuration of the solution, e.g. 'Release' or 'Debug'.");
+			writer.WriteLine();
+			writer.WriteLine("    -p|--platform <platform>");
+			writer.WriteLine("      The build platform of the solution, e.g. 'x64' or 'x86'.");
+			writer.WriteLine();
+			writer.WriteLine("    <outpath>");
+			writer.WriteLine("      The path of the file where the results should be written to.");
+			writer.WriteLine();
+			writer.WriteLine("--------------------------------------------------------------------------------");
+		}
+
+		/// <summary>
+		/// Writes version information.
+		/// </summary>
+		/// <param name="writer">Text writer to use.</param>
+		private static void PrintVersion(TextWriter writer)
+		{
+			writer.WriteLine($"  LicenseCollector v{Assembly.GetExecutingAssembly().GetName().Version}");
+		}
+		#endregion
 	}
 }
