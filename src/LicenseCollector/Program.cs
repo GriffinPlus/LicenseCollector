@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -10,6 +9,9 @@ using GriffinPlus.Lib.Logging;
 
 namespace GriffinPlus.LicenseCollector
 {
+	/// <summary>
+	/// Main entry and starting point of application.
+	/// </summary>
 	class Program
 	{
 		private static LogWriter sLog = Log.GetWriter<Program>();
@@ -117,6 +119,43 @@ namespace GriffinPlus.LicenseCollector
 			sLog.Write(LogLevel.Developer, "Platform:      '{0}'", options.Platform);
 			sLog.Write(LogLevel.Developer, "OutputPath:    '{0}'", options.OutputLicensePath);
 			sLog.Write(LogLevel.Developer, "--------------------------------------------------------------------------------");
+
+			// the given path for the solution does not exist
+			if (!File.Exists(options.SolutionFilePath))
+			{
+				sLog.Write(LogLevel.Error, "The path to the solution file under '{0}' does not exist.", options.SolutionFilePath);
+				return ExitCode.FileNotFound;
+			}
+			// the given path is not a solution file
+			if (!Path.GetExtension(options.SolutionFilePath).Equals(".sln"))
+			{
+				sLog.Write(LogLevel.Error, "The path '{0}' is not a solution file.", options.SolutionFilePath);
+				return ExitCode.ArgumentError;
+			}
+			// convert given relative paths to absolute paths if necessary
+			if (!Path.IsPathRooted(options.SolutionFilePath))
+				options.SolutionFilePath = Path.Combine(Environment.CurrentDirectory, options.SolutionFilePath);
+			if (!Path.IsPathRooted(options.OutputLicensePath))
+				options.OutputLicensePath = Path.Combine(Environment.CurrentDirectory, options.OutputLicensePath);
+
+			var app = new AppCore(options.SolutionFilePath, options.Configuration, options.Platform, options.OutputLicensePath);
+			try
+			{
+				app.CollectProjects();
+
+				app.GetNuGetPackages();
+
+				app.GetNuGetLicenseInfo();
+
+				app.GetStaticLicenseInfo();
+
+				app.GenerateOutputFile();
+			}
+			catch (Exception ex)
+			{
+				sLog.Write(LogLevel.Error, "Caught exception during processing. Exception: {0}", ex.ToString());
+				return ExitCode.GeneralError;
+			}
 
 			return ExitCode.Success;
 		}
