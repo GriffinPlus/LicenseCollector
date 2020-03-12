@@ -5,7 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Net;
+using System.Xml.Linq;
 using Microsoft.Build.Locator;
 using Newtonsoft.Json.Linq;
 
@@ -42,6 +43,10 @@ namespace GriffinPlus.LicenseCollector
 		#region Internal members for processing
 
 		/// <summary>
+		/// Determines if processing is already completed because nothing needs to be done.
+		/// </summary>
+		private bool mFinishProcessing;
+		/// <summary>
 		/// Contains msbuild projects to process by this application.
 		/// </summary>
 		private List<ProjectInfo> mProjectsToProcess;
@@ -49,10 +54,15 @@ namespace GriffinPlus.LicenseCollector
 		/// Contains 'id/version' of NuGet package as key and the path to the corresponding .nuspec file as value.
 		/// </summary>
 		private Dictionary<string, string> mNuGetPackages;
+		/// <summary>
+		/// Contains license infos for included packages.
+		/// </summary>
+		private List<PackageLicenseInfo> mLicenses;
 
 		#endregion
 
 		private const string cProjectAssets = "project.assets.json";
+		private const string cDeprecatedLicenseUrl = "https://aka.ms/deprecateLicenseUrl";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AppCore"/> class.
@@ -71,8 +81,10 @@ namespace GriffinPlus.LicenseCollector
 			mPlatform = platform;
 			mOutputPath = outputPath;
 
+			mFinishProcessing = false;
 			mProjectsToProcess = new List<ProjectInfo>();
 			mNuGetPackages = new Dictionary<string, string>();
+			mLicenses = new List<PackageLicenseInfo>();
 		}
 
 		#region Collect projects under given 'configuration|platform'
@@ -101,7 +113,9 @@ namespace GriffinPlus.LicenseCollector
 
 			if (solution.ProjectsInOrder == null || solution.ProjectsInOrder.Count == 0)
 			{
-				throw new FormatException("The given solution file does not contain any projects.");
+				sLog.Write(LogLevel.Note, "The given solution file does not contain any projects.");
+				mFinishProcessing = true;
+				return;
 			}
 
 			foreach (ProjectInSolution project in solution.ProjectsInOrder)
@@ -135,10 +149,15 @@ namespace GriffinPlus.LicenseCollector
 		/// </summary>
 		public void GetNuGetPackages()
 		{
+			// already finished processing
+			if (mFinishProcessing)
+				return;
+
 			// no project to process.
 			if (mProjectsToProcess == null || mProjectsToProcess.Count == 0)
 			{
-				sLog.Write(LogLevel.Developer, "There are no projects to process.");
+				sLog.Write(LogLevel.Note, "There are no projects to process.");
+				mFinishProcessing = true;
 				return;
 			}
 
@@ -278,7 +297,96 @@ namespace GriffinPlus.LicenseCollector
 		/// </summary>
 		public void GetNuGetLicenseInfo()
 		{
-			throw new NotImplementedException();
+			if (mFinishProcessing)
+				return;
+
+			// no NuGet packages found to process.
+			if (mNuGetPackages == null || mNuGetPackages.Count == 0)
+			{
+				sLog.Write(LogLevel.Note, "There are no NuGet packages found.");
+				return;
+			}
+
+			foreach (string nuSpecFilePath in mNuGetPackages.Values)
+			{
+				sLog.Write(LogLevel.Developer, "Begin retrieving NuGet specification information from '{0}'...", nuSpecFilePath);
+				var identifier = string.Empty;
+				var version = string.Empty;
+				var authors = string.Empty;
+				var licenseUrl = string.Empty;
+				var projectUrl = string.Empty;
+				var license = string.Empty;
+
+				// extract important information from NuGet specification file
+				foreach (XElement element in XElement.Load(nuSpecFilePath).DescendantsAndSelf())
+				{
+					switch (element.Name.LocalName)
+					{
+						case "id":
+							identifier = element.Value;
+							break;
+						case "version":
+							version = element.Value;
+							break;
+						case "authors":
+							authors = element.Value;
+							break;
+						// licenseUrl is deprecated and now 'license' should be used.
+						case "licenseUrl":
+							if (element.Value != cDeprecatedLicenseUrl)
+								licenseUrl = element.Value;
+							break;
+						case "projectUrl":
+							projectUrl = element.Value;
+							break;
+						case "license":
+							switch (element.Attribute("type").Value)
+							{
+								// SPDX expression as defined in https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
+								case "expression":
+									license = element.Value;
+									break;
+								// license is contained as file within the nuget package
+								case "file":
+									string licensePath = Path.Combine(Path.GetDirectoryName(nuSpecFilePath),
+										element.Value);
+									if (!File.Exists(licensePath))
+									{
+										sLog.Write(LogLevel.Error,
+											"The path '{0}' to the license defined by the NuGet specification does not exists.",
+											licensePath);
+										break;
+									}
+									license = File.ReadAllText(licensePath);
+									break;
+							}
+							break;
+					}
+				}
+
+				// download license when only url to license is given
+				if (string.IsNullOrEmpty(license) && licenseUrl != string.Empty)
+				{
+					string url = licenseUrl;
+					if (licenseUrl.Contains("https://github.com"))
+						url = url.Replace("/blob/", "/raw/");
+					using (var client = new WebClient())
+					{
+						license = client.DownloadString(url);
+						sLog.Write(LogLevel.Developer, "Successful downloaded license '{0}' for {1}", url, identifier);
+					}
+				}
+
+				if (string.IsNullOrEmpty(license))
+				{
+					sLog.Write(LogLevel.Error, "The NuGet specification file '{0}' does not contain valid license information", nuSpecFilePath);
+					continue;
+				}
+
+				var package = new PackageLicenseInfo(identifier, version, authors, licenseUrl, projectUrl, license);
+				mLicenses.Add(package);
+				sLog.Write(LogLevel.Note, "Successful extract license information for '{0} v{1}'.", identifier, version);
+			}
 		}
 
 		#endregion
@@ -289,6 +397,9 @@ namespace GriffinPlus.LicenseCollector
 		/// </summary>
 		public void GetStaticLicenseInfo()
 		{
+			if (mFinishProcessing)
+				return;
+
 			throw new NotImplementedException();
 		}
 
@@ -300,6 +411,12 @@ namespace GriffinPlus.LicenseCollector
 		/// </summary>
 		public void GenerateOutputFile()
 		{
+			if (mLicenses == null || mLicenses.Count == 0 || mFinishProcessing)
+			{
+				sLog.Write(LogLevel.Note, "Nothing to store, because there are no licenses found.");
+				return;
+			}
+
 			throw new NotImplementedException();
 		}
 
