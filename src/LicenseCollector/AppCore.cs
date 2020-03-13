@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Xml.Linq;
 using Microsoft.Build.Locator;
 using Newtonsoft.Json.Linq;
@@ -17,30 +18,30 @@ namespace GriffinPlus.LicenseCollector
 	/// </summary>
 	public class AppCore
 	{
-		private static LogWriter sLog = Log.GetWriter<AppCore>();
+		private static readonly LogWriter sLog = Log.GetWriter<AppCore>();
 
 		#region Internal members for input
 
 		/// <summary>
 		/// Solution file to process.
 		/// </summary>
-		private string mSolutionPath;
+		private readonly string mSolutionPath;
 		/// <summary>
 		/// Configuration of solution to consider.
 		/// </summary>
-		private string mConfiguration;
+		private readonly string mConfiguration;
 		/// <summary>
 		/// Platform of solution to consider.
 		/// </summary>
-		private string mPlatform;
+		private readonly string mPlatform;
 		/// <summary>
 		/// Output path to generate 3rd party notices.
 		/// </summary>
-		private string mOutputPath;
+		private readonly string mOutputPath;
 		/// <summary>
 		/// Search pattern for static licenses to include.
 		/// </summary>
-		private string mSearchPattern;
+		private readonly string mSearchPattern;
 
 		#endregion
 
@@ -53,15 +54,15 @@ namespace GriffinPlus.LicenseCollector
 		/// <summary>
 		/// Contains msbuild projects to process by this application.
 		/// </summary>
-		private List<ProjectInfo> mProjectsToProcess;
+		private readonly List<ProjectInfo> mProjectsToProcess;
 		/// <summary>
 		/// Contains 'id/version' of NuGet package as key and the path to the corresponding .nuspec file as value.
 		/// </summary>
-		private Dictionary<string, string> mNuGetPackages;
+		private readonly Dictionary<string, string> mNuGetPackages;
 		/// <summary>
 		/// Contains license infos for included packages.
 		/// </summary>
-		private List<PackageLicenseInfo> mLicenses;
+		private readonly List<PackageLicenseInfo> mLicenses;
 
 		#endregion
 
@@ -128,8 +129,7 @@ namespace GriffinPlus.LicenseCollector
 				// only c# projects get processed which are build with given "configuration|platform"
 				if (project.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat &&
 				    Path.GetExtension(project.AbsolutePath).Equals(".csproj") && project.ProjectConfigurations.Keys.Any(
-					    x =>
-						    x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild))
+					    x => x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild))
 				{
 					var msBuildProject = new Project(project.AbsolutePath);
 					string baseIntermediateOutputPath = msBuildProject.GetPropertyValue("BaseIntermediateOutputPath");
@@ -374,11 +374,9 @@ namespace GriffinPlus.LicenseCollector
 				}
 
 				// download license when only url to license is given
-				if (string.IsNullOrEmpty(license) && licenseUrl != string.Empty)
+				if (string.IsNullOrEmpty(license) && licenseUrl != string.Empty && licenseUrl.Contains("github.com"))
 				{
-					string url = licenseUrl;
-					if (licenseUrl.Contains("https://github.com"))
-						url = url.Replace("/blob/", "/raw/");
+					string url = licenseUrl.Replace("/blob/", "/raw/");
 					using (var client = new WebClient())
 					{
 						license = client.DownloadString(url);
@@ -386,7 +384,7 @@ namespace GriffinPlus.LicenseCollector
 					}
 				}
 
-				if (string.IsNullOrEmpty(license))
+				if (string.IsNullOrEmpty(license) && string.IsNullOrEmpty(licenseUrl))
 				{
 					sLog.Write(LogLevel.Error, "The NuGet specification file '{0}' does not contain valid license information", nuSpecFilePath);
 					continue;
@@ -456,10 +454,23 @@ namespace GriffinPlus.LicenseCollector
 				return;
 			}
 
-			throw new NotImplementedException();
+			// overwrite existing file if necessary
+			if (File.Exists(mOutputPath))
+				File.Delete(mOutputPath);
+
+			foreach (PackageLicenseInfo license in mLicenses)
+			{
+				var builder = new StringBuilder();
+				builder.AppendLine("--------------------------------------------------------------------------------");
+				builder.AppendLine(license.ToString());
+				builder.AppendLine("--------------------------------------------------------------------------------");
+				File.AppendAllText(mOutputPath, builder.ToString());
+				sLog.Write(LogLevel.Developer, "Append license information for '{0}'", license.PackageIdentifier);
+			}
+
+			sLog.Write(LogLevel.Note, "Successful write collected licenses to '{0}'", mOutputPath);
 			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
 		}
-
 		#endregion
 	}
 }

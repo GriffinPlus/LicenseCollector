@@ -71,5 +71,14 @@
 		public ProjectType Type { get; }
 
 		#endregion
+
+		/// <summary>
+		/// Returns the name of the project.
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			return ProjectName;
+		}
 	}
 }

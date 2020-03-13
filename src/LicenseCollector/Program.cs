@@ -14,7 +14,7 @@ namespace GriffinPlus.LicenseCollector
 	/// </summary>
 	class Program
 	{
-		private static LogWriter sLog = Log.GetWriter<Program>();
+		private static readonly LogWriter sLog = Log.GetWriter<Program>();
 
 		/// <summary>
 		/// Command line argument mapping class
@@ -47,7 +47,7 @@ namespace GriffinPlus.LicenseCollector
 			public string Platform { get; set; }
 
 			/// <summary>
-			/// Gets and sets search pattern for static license files. Supports pattern used by <see cref="Directory.EnumerateFíles(string)"/>.
+			/// Gets and sets search pattern for static license files. Supports pattern used by <see cref="Directory.EnumerateFiles(string)"/>.
 			/// </summary>
 			[Option("searchPattern", Default = "*.License")]
 			public string SearchPattern { get; set; }

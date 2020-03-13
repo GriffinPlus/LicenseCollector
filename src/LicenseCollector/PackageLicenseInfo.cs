@@ -1,4 +1,6 @@
-﻿namespace GriffinPlus.LicenseCollector
+﻿using System.Text;
+
+namespace GriffinPlus.LicenseCollector
 {
 	/// <summary>
 	/// Information of a 3rd party package and its license.
@@ -69,5 +71,32 @@
 		public string License { get; set; }
 
 		#endregion
+
+		/// <summary>
+		/// Creates a textual representation of this <see cref="PackageLicenseInfo"/>.
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			var builder = new StringBuilder();
+			builder.AppendLine();
+			builder.Append($"- Package: {PackageIdentifier}");
+			if (!string.IsNullOrEmpty(PackageVersion))
+				builder.Append($" (v{PackageVersion})");
+			builder.AppendLine();
+			if (!string.IsNullOrEmpty(Author))
+				builder.AppendLine($"- Author: {Author}");
+			if (!string.IsNullOrEmpty(ProjectUrl))
+				builder.AppendLine($"- Project: {ProjectUrl}");
+			if (!string.IsNullOrEmpty(LicenseUrl))
+				builder.AppendLine($"- License: {LicenseUrl}");
+			builder.AppendLine();
+			if (!string.IsNullOrEmpty(License))
+			{
+				builder.AppendLine();
+				builder.AppendLine(License);
+			}
+			return builder.ToString();
+		}
 	}
 }
