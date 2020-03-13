@@ -37,6 +37,10 @@ namespace GriffinPlus.LicenseCollector
 		/// Output path to generate 3rd party notices.
 		/// </summary>
 		private string mOutputPath;
+		/// <summary>
+		/// Search pattern for static licenses to include.
+		/// </summary>
+		private string mSearchPattern;
 
 		#endregion
 
@@ -71,7 +75,7 @@ namespace GriffinPlus.LicenseCollector
 		/// <param name="config">Solution configuration to examine.</param>
 		/// <param name="platform">Solution platform to examine.</param>
 		/// <param name="outputPath">Path to output third party license file.</param>
-		public AppCore(string solution, string config, string platform, string outputPath)
+		public AppCore(string solution, string config, string platform, string outputPath, string searchPattern)
 		{
 			// register default msbuild version to use.
 			MSBuildLocator.RegisterDefaults();
@@ -80,6 +84,7 @@ namespace GriffinPlus.LicenseCollector
 			mConfiguration = config;
 			mPlatform = platform;
 			mOutputPath = outputPath;
+			mSearchPattern = searchPattern;
 
 			mFinishProcessing = false;
 			mProjectsToProcess = new List<ProjectInfo>();
@@ -139,6 +144,8 @@ namespace GriffinPlus.LicenseCollector
 					throw new NotImplementedException();
 				}
 			}
+			sLog.Write(LogLevel.Note, "Successful collect all projects for solution.");
+			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
 		}
 
 		#endregion
@@ -183,6 +190,8 @@ namespace GriffinPlus.LicenseCollector
 						throw new FormatException($"The project type of '{project.ProjectAbsolutePath}' is not supported.");
 				}
 			}
+			sLog.Write(LogLevel.Note, "Successful collect NuGet packages for solution.");
+			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
 		}
 
 		/// <summary>
@@ -385,8 +394,10 @@ namespace GriffinPlus.LicenseCollector
 
 				var package = new PackageLicenseInfo(identifier, version, authors, licenseUrl, projectUrl, license);
 				mLicenses.Add(package);
-				sLog.Write(LogLevel.Note, "Successful extract license information for '{0} v{1}'.", identifier, version);
+				sLog.Write(LogLevel.Developer, "Successful extract license information for '{0} v{1}'.", identifier, version);
 			}
+			sLog.Write(LogLevel.Note, "Successful extract license information from found NuGet packages.");
+			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
 		}
 
 		#endregion
@@ -400,7 +411,35 @@ namespace GriffinPlus.LicenseCollector
 			if (mFinishProcessing)
 				return;
 
-			throw new NotImplementedException();
+			foreach (ProjectInfo project in mProjectsToProcess)
+			{
+				string projectDir = Path.GetDirectoryName(project.ProjectAbsolutePath);
+
+				IEnumerable<string> staticProjectLicenses = Directory.EnumerateFiles(projectDir, mSearchPattern, SearchOption.AllDirectories);
+
+				if (staticProjectLicenses != null && staticProjectLicenses.Any())
+				{
+					foreach (string staticLicensePath in staticProjectLicenses)
+					{
+						sLog.Write(LogLevel.Developer, "Project '{0}': Found static license '{1}'", project.ProjectName, staticLicensePath);
+						string staticLicenseIdentifier = Path.GetFileNameWithoutExtension(staticLicensePath);
+						string license = File.ReadAllText(staticLicensePath);
+						// static license is already existing in another project
+						if (mLicenses.Any(x => x.PackageIdentifier == staticLicenseIdentifier))
+						{
+							sLog.Write(LogLevel.Developer, "Static license '{0}' was already found in another project.", staticLicenseIdentifier);
+							continue;
+						}
+						mLicenses.Add(new PackageLicenseInfo(staticLicenseIdentifier, license));
+					}
+				}
+				else
+				{
+					sLog.Write(LogLevel.Developer, "No static licenses found under project directory '{0}'", projectDir);
+				}
+			}
+			sLog.Write(LogLevel.Note, "Successful scan project directories for static licenses.");
+			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
 		}
 
 		#endregion
@@ -418,6 +457,7 @@ namespace GriffinPlus.LicenseCollector
 			}
 
 			throw new NotImplementedException();
+			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
 		}
 
 		#endregion

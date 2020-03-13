@@ -47,6 +47,12 @@ namespace GriffinPlus.LicenseCollector
 			public string Platform { get; set; }
 
 			/// <summary>
+			/// Gets and sets search pattern for static license files. Supports pattern used by <see cref="Directory.EnumerateFíles(string)"/>.
+			/// </summary>
+			[Option("searchPattern", Default = "*.License")]
+			public string SearchPattern { get; set; }
+
+			/// <summary>
 			/// Gets and sets path to the output license file.
 			/// </summary>
 			[Value(0, Required = true)]
@@ -117,6 +123,7 @@ namespace GriffinPlus.LicenseCollector
 			sLog.Write(LogLevel.Developer, "SolutionFile:  '{0}'", options.SolutionFilePath);
 			sLog.Write(LogLevel.Developer, "Configuration: '{0}'", options.Configuration);
 			sLog.Write(LogLevel.Developer, "Platform:      '{0}'", options.Platform);
+			sLog.Write(LogLevel.Developer, "SearchPattern: '{0}'", options.SearchPattern);
 			sLog.Write(LogLevel.Developer, "OutputPath:    '{0}'", options.OutputLicensePath);
 			sLog.Write(LogLevel.Developer, "--------------------------------------------------------------------------------");
 
@@ -138,7 +145,7 @@ namespace GriffinPlus.LicenseCollector
 			if (!Path.IsPathRooted(options.OutputLicensePath))
 				options.OutputLicensePath = Path.Combine(Environment.CurrentDirectory, options.OutputLicensePath);
 
-			var app = new AppCore(options.SolutionFilePath, options.Configuration, options.Platform, options.OutputLicensePath);
+			var app = new AppCore(options.SolutionFilePath, options.Configuration, options.Platform, options.OutputLicensePath, options.SearchPattern);
 			try
 			{
 				app.CollectProjects();
@@ -240,7 +247,7 @@ namespace GriffinPlus.LicenseCollector
 			writer.WriteLine();
 			writer.WriteLine("  USAGE:");
 			writer.WriteLine();
-			writer.WriteLine("    LicenseCollector.exe [-v] -s|--solutionFilePath <spath> -c|--configuration <conf> -p|--platform <platform> <outpath>");
+			writer.WriteLine("    LicenseCollector.exe [-v] -s|--solutionFilePath <spath> -c|--configuration <conf> -p|--platform <platform> [--searchPattern <pattern>] <outpath>");
 			writer.WriteLine();
 			writer.WriteLine("    [-v]");
 			writer.WriteLine("      Sets output to verbose.");
@@ -253,6 +260,9 @@ namespace GriffinPlus.LicenseCollector
 			writer.WriteLine();
 			writer.WriteLine("    -p|--platform <platform>");
 			writer.WriteLine("      The build platform of the solution, e.g. 'x64' or 'x86'.");
+			writer.WriteLine();
+			writer.WriteLine("    [--searchPattern <pattern>]");
+			writer.WriteLine("      The search pattern for static license files. Wildcards like '*' are supported.");
 			writer.WriteLine();
 			writer.WriteLine("    <outpath>");
 			writer.WriteLine("      The path of the file where the results should be written to.");
