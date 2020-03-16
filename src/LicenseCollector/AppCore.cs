@@ -67,6 +67,7 @@ namespace GriffinPlus.LicenseCollector
 		#endregion
 
 		private const string cProjectAssets = "project.assets.json";
+		private const string cPackagesConfig = "packages.config";
 		private const string cDeprecatedLicenseUrl = "https://aka.ms/deprecateLicenseUrl";
 
 		/// <summary>
@@ -131,17 +132,82 @@ namespace GriffinPlus.LicenseCollector
 				    Path.GetExtension(project.AbsolutePath).Equals(".csproj") && project.ProjectConfigurations.Keys.Any(
 					    x => x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild))
 				{
+					string[] packagesConfig = Directory.EnumerateFiles(Path.GetDirectoryName(project.AbsolutePath), cPackagesConfig,
+						SearchOption.AllDirectories).ToArray();
+					// project uses packages.config
+					if (packagesConfig.Length == 1)
+					{
+						sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", packagesConfig[0], project.ProjectName);
+						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath,
+							packagesConfig[0], NuGetStyle.PackagesConfig));
+						continue;
+					}
+					//  ignore project when more than one 'packages.config' exists
+					if (packagesConfig.Length > 1)
+					{
+						sLog.Write(LogLevel.Error, "There are more than one '{0}' found for '{1}'. Skip project.", cPackagesConfig, project.ProjectName);
+						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
+							NuGetStyle.Undefined));
+						continue;
+					}
+
+					// project seems to use package reference
+					sLog.Write(LogLevel.Developer, "Calculate path to '{0}' for '{1}'.", cProjectAssets, project.ProjectName);
 					var msBuildProject = new Project(project.AbsolutePath);
 					string baseIntermediateOutputPath = msBuildProject.GetPropertyValue("BaseIntermediateOutputPath");
-					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, baseIntermediateOutputPath));
-					sLog.Write(LogLevel.Developer, "Project '{0}' successfully added for processing...", project.ProjectName);
+					if (baseIntermediateOutputPath == null)
+					{
+						sLog.Write(LogLevel.Error, "The project '{0}' does not define a 'BaseIntermediateOutputPath'", project.ProjectName);
+						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
+							NuGetStyle.Undefined));
+						continue;
+					}
+					sLog.Write(LogLevel.Developer, "Found BaseIntermediateOutputPath = '{0}'", baseIntermediateOutputPath);
+					// calculate path to 'project.assets.json' for given project
+					string projectAssetsPath = Path.Combine(baseIntermediateOutputPath, cProjectAssets);
+					if (!Path.IsPathRooted(projectAssetsPath))
+					{
+						projectAssetsPath = Path.Combine(Path.GetDirectoryName(mSolutionPath),
+							baseIntermediateOutputPath, cProjectAssets);
+						if (!File.Exists(projectAssetsPath))
+						{
+							sLog.Write(LogLevel.Developer,
+								"The file '{0}' does not exists for project '{1}'. Try relative from project folder...",
+								projectAssetsPath, project.ProjectName);
+							projectAssetsPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath),
+								baseIntermediateOutputPath, cProjectAssets);
+						}
+					}
+					if (!File.Exists(projectAssetsPath))
+					{
+						sLog.Write(LogLevel.Error, "No '{0}' found for '{1}'. Skip project.", cProjectAssets,
+							project.ProjectName);
+						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
+							NuGetStyle.Undefined));
+						continue;
+					}
+
+					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, projectAssetsPath,
+						NuGetStyle.PackageReference));
+					sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", projectAssetsPath, project.ProjectName);
 				}
 				// process c++ projects
 				else if (project.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat &&
-				         Path.GetExtension(project.AbsolutePath).Equals(".vcxproj"))
+				         Path.GetExtension(project.AbsolutePath).Equals(".vcxproj")) // TODO: condition to include only build c++ projects
 				{
-					// TODO: Support c++ projects as well -> each project has a "packages" folder where NuGet package are listed after restore (see packages.config as well)
-					throw new NotImplementedException();
+					string[] packagesConfig = Directory.EnumerateFiles(Path.GetDirectoryName(project.AbsolutePath), cPackagesConfig,
+						SearchOption.AllDirectories).ToArray();
+					// project uses packages.config
+					if (packagesConfig.Length != 1)
+					{
+						sLog.Write(LogLevel.Error, "There are more than one or no '{0}' found for '{1}'. Skip project.", cPackagesConfig, project.ProjectName);
+						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
+							NuGetStyle.Undefined));
+						continue;
+					}
+					sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", packagesConfig[0], project.ProjectName);
+					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath,
+						packagesConfig[0], NuGetStyle.PackagesConfig));
 				}
 			}
 			sLog.Write(LogLevel.Note, "Successful collect all projects for solution.");
@@ -170,22 +236,23 @@ namespace GriffinPlus.LicenseCollector
 
 			foreach (ProjectInfo project in mProjectsToProcess)
 			{
+				sLog.Write(LogLevel.Developer, "Determine NuGet packages for '{0}' from '{1}'.",
+					project.ProjectName,
+					project.NuGetInformationPath);
 				switch (project.Type)
 				{
-					case ProjectType.CsProject:
+					case NuGetStyle.PackageReference:
 					{
-						sLog.Write(LogLevel.Developer, "Determine NuGet packages for C# project '{0}'.",
-							project.ProjectName);
-						GetCsNuGetPackage(project);
+						GetNuGetPackageFromProjectAssets(project);
 						break;
 					}
-					case ProjectType.CppProject:
+					case NuGetStyle.PackagesConfig:
 					{
-						sLog.Write(LogLevel.Developer, "Determine NuGet packages for C++ project {0}",
-							project.ProjectName);
-						GetCppNuGetPackages(project);
+						GetNuGetPackagesFromPackagesConfig(project);
 						break;
 					}
+					case NuGetStyle.Undefined:
+						continue;
 					default:
 						throw new FormatException($"The project type of '{project.ProjectAbsolutePath}' is not supported.");
 				}
@@ -195,34 +262,14 @@ namespace GriffinPlus.LicenseCollector
 		}
 
 		/// <summary>
-		/// Determines NuGet packages for a C# project.
+		/// Determines NuGet packages from 'project.assets.json'.
 		/// </summary>
-		private void GetCsNuGetPackage(ProjectInfo project)
+		private void GetNuGetPackageFromProjectAssets(ProjectInfo project)
 		{
-			// calculate path to 'project.assets.json' for given project
-			string projectAssetsPath = Path.Combine(project.ProjectBaseIntermediateOutputPath, cProjectAssets);
-			if (!Path.IsPathRooted(projectAssetsPath))
-			{
-				projectAssetsPath = Path.Combine(Path.GetDirectoryName(mSolutionPath),
-					project.ProjectBaseIntermediateOutputPath, cProjectAssets);
-				if (!File.Exists(projectAssetsPath))
-				{
-					sLog.Write(LogLevel.Developer,
-						"The file '{0}' does not exists for project '{1}'. Try relative from project folder...",
-						projectAssetsPath, project.ProjectName);
-					projectAssetsPath = Path.Combine(Path.GetDirectoryName(project.ProjectAbsolutePath),
-						project.ProjectBaseIntermediateOutputPath, cProjectAssets);
-				}
-			}
-			if (!File.Exists(projectAssetsPath))
-				throw new ArgumentException($"The file '{projectAssetsPath}' does not exists for project '{project.ProjectName}'.");
-
-			sLog.Write(LogLevel.Developer, "Found '{0}' for project '{1}'.", projectAssetsPath, project.ProjectName);
-
 			// parse 'project.assets.json' file of project to get all included NuGet packages
 			var packageNuspecs = new List<string>();
 			var packageFolders = new List<string>();
-			using (var reader = new StreamReader(projectAssetsPath))
+			using (var reader = new StreamReader(project.NuGetInformationPath))
 			{
 				string json = reader.ReadToEnd();
 				JObject jsonObject = JObject.Parse(json);
@@ -291,9 +338,9 @@ namespace GriffinPlus.LicenseCollector
 		}
 
 		/// <summary>
-		/// Determines NuGet packages for a C++ project.
+		/// Determines NuGet packages from 'packages.config'.
 		/// </summary>
-		private void GetCppNuGetPackages(ProjectInfo project)
+		private void GetNuGetPackagesFromPackagesConfig(ProjectInfo project)
 		{
 			throw new NotImplementedException();
 		}

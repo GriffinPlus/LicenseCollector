@@ -3,16 +3,20 @@
 	/// <summary>
 	/// Lists different supported project types
 	/// </summary>
-	public enum ProjectType
+	public enum NuGetStyle
 	{
 		/// <summary>
-		/// Defines a C# project
+		/// Defines that project uses 'project.assets.json'.
 		/// </summary>
-		CsProject,
+		PackageReference,
 		/// <summary>
-		/// Defines a C++ project
+		/// Defines that project uses 'packages.config'.
 		/// </summary>
-		CppProject
+		PackagesConfig,
+		/// <summary>
+		/// No 'packages.config' or 'project.assets.json' found.
+		/// </summary>
+		Undefined
 	}
 
 	/// <summary>
@@ -23,27 +27,18 @@
 		#region Construction
 
 		/// <summary>
-		/// Creates a new instance of <see cref="ProjectInfo"/> of <see cref="ProjectType.CppProject"/>.
+		/// Creates a new instance of <see cref="ProjectInfo"/>.
 		/// </summary>
 		/// <param name="name">Name of the project.</param>
 		/// <param name="absolutePath">Absolute path to the project file.</param>
-		public ProjectInfo(string name, string absolutePath) : this(name, absolutePath, null)
-		{
-			Type = ProjectType.CppProject;
-		}
-
-		/// <summary>
-		/// Creates a new instance of <see cref="ProjectInfo"/> of <see cref="ProjectType.CsProject"/>.
-		/// </summary>
-		/// <param name="name">Name of the project.</param>
-		/// <param name="absolutePath">Absolute path to the project file.</param>
-		/// <param name="baseIntermediateOutputPath">Path of the property 'BaseIntermediateOutputPath'.</param>
-		public ProjectInfo(string name, string absolutePath, string baseIntermediateOutputPath)
+		/// <param name="nugetInfo">Path to the NuGet information.</param>
+		/// <param name="type">Used NuGet style.</param>
+		public ProjectInfo(string name, string absolutePath, string nugetInfo, NuGetStyle type)
 		{
 			ProjectName = name;
 			ProjectAbsolutePath = absolutePath;
-			ProjectBaseIntermediateOutputPath = baseIntermediateOutputPath;
-			Type = ProjectType.CsProject;
+			NuGetInformationPath = nugetInfo;
+			Type = type;
 		}
 
 		#endregion
@@ -61,14 +56,15 @@
 		public string ProjectAbsolutePath { get; }
 
 		/// <summary>
-		/// Gets property 'BaseIntermediateOutputPath' of the project.
+		/// Gets path to the NuGet information. The 'project.assets.json' for <see cref="NuGetStyle.PackageReference"/>
+		/// and the 'packages.config' for <see cref="NuGetStyle.PackagesConfig"/>.
 		/// </summary>
-		public string ProjectBaseIntermediateOutputPath { get; }
+		public string NuGetInformationPath { get; }
 
 		/// <summary>
 		/// Gets type of project.
 		/// </summary>
-		public ProjectType Type { get; }
+		public NuGetStyle Type { get; }
 
 		#endregion
 
