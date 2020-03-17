@@ -127,88 +127,73 @@ namespace GriffinPlus.LicenseCollector
 
 			foreach (ProjectInSolution project in solution.ProjectsInOrder)
 			{
-				// only c# projects get processed which are build with given "configuration|platform"
-				if (project.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat &&
-				    Path.GetExtension(project.AbsolutePath).Equals(".csproj") && project.ProjectConfigurations.Keys.Any(
-					    x => x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild))
+				// only c# and c++ projects get processed which are build with given "configuration|platform"
+				bool isProjectSupported = (Path.GetExtension(project.AbsolutePath).Equals(".csproj") ||
+				                           Path.GetExtension(project.AbsolutePath).Equals(".vcxproj")) &&
+				                          project.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat;
+				if (!isProjectSupported) continue;
+				bool isConfigurationBuild = project.ProjectConfigurations.Keys.Any(x =>
+					x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild);
+				if (!isConfigurationBuild) continue;
+
+				string[] packagesConfig = Directory.EnumerateFiles(Path.GetDirectoryName(project.AbsolutePath), cPackagesConfig,
+					SearchOption.AllDirectories).ToArray();
+				// c++ project is included in build but has no valid NuGet dependencies
+				if (packagesConfig.Length != 1 && Path.GetExtension(project.AbsolutePath).Equals(".vcxproj"))
 				{
-					string[] packagesConfig = Directory.EnumerateFiles(Path.GetDirectoryName(project.AbsolutePath), cPackagesConfig,
-						SearchOption.AllDirectories).ToArray();
-					// project uses packages.config
-					if (packagesConfig.Length == 1)
-					{
-						sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", packagesConfig[0], project.ProjectName);
-						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath,
-							packagesConfig[0], NuGetStyle.PackagesConfig));
-						continue;
-					}
-					//  ignore project when more than one 'packages.config' exists
-					if (packagesConfig.Length > 1)
-					{
-						sLog.Write(LogLevel.Error, "There are more than one '{0}' found for '{1}'. Skip project.", cPackagesConfig, project.ProjectName);
-						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
-							NuGetStyle.Undefined));
-						continue;
-					}
-
-					// project seems to use package reference
-					sLog.Write(LogLevel.Developer, "Calculate path to '{0}' for '{1}'.", cProjectAssets, project.ProjectName);
-					var msBuildProject = new Project(project.AbsolutePath);
-					string baseIntermediateOutputPath = msBuildProject.GetPropertyValue("BaseIntermediateOutputPath");
-					if (baseIntermediateOutputPath == null)
-					{
-						sLog.Write(LogLevel.Error, "The project '{0}' does not define a 'BaseIntermediateOutputPath'", project.ProjectName);
-						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
-							NuGetStyle.Undefined));
-						continue;
-					}
-					sLog.Write(LogLevel.Developer, "Found BaseIntermediateOutputPath = '{0}'", baseIntermediateOutputPath);
-					// calculate path to 'project.assets.json' for given project
-					string projectAssetsPath = Path.Combine(baseIntermediateOutputPath, cProjectAssets);
-					if (!Path.IsPathRooted(projectAssetsPath))
-					{
-						projectAssetsPath = Path.Combine(Path.GetDirectoryName(mSolutionPath),
-							baseIntermediateOutputPath, cProjectAssets);
-						if (!File.Exists(projectAssetsPath))
-						{
-							sLog.Write(LogLevel.Developer,
-								"The file '{0}' does not exists for project '{1}'. Try relative from project folder...",
-								projectAssetsPath, project.ProjectName);
-							projectAssetsPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath),
-								baseIntermediateOutputPath, cProjectAssets);
-						}
-					}
-					if (!File.Exists(projectAssetsPath))
-					{
-						sLog.Write(LogLevel.Error, "No '{0}' found for '{1}'. Skip project.", cProjectAssets,
-							project.ProjectName);
-						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
-							NuGetStyle.Undefined));
-						continue;
-					}
-
-					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, projectAssetsPath,
-						NuGetStyle.PackageReference));
-					sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", projectAssetsPath, project.ProjectName);
+					sLog.Write(LogLevel.Developer, "Found no valid NuGet dependencies for '{0}'", project.ProjectName);
+					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "", NuGetPackageDependency.NoDependencies));
+					continue;
 				}
-				// process c++ projects
-				else if (project.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat &&
-				         Path.GetExtension(project.AbsolutePath).Equals(".vcxproj")) // TODO: condition to include only build c++ projects
+				// project uses packages.config
+				if (packagesConfig.Length == 1)
 				{
-					string[] packagesConfig = Directory.EnumerateFiles(Path.GetDirectoryName(project.AbsolutePath), cPackagesConfig,
-						SearchOption.AllDirectories).ToArray();
-					// project uses packages.config
-					if (packagesConfig.Length != 1)
-					{
-						sLog.Write(LogLevel.Error, "There are more than one or no '{0}' found for '{1}'. Skip project.", cPackagesConfig, project.ProjectName);
-						mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
-							NuGetStyle.Undefined));
-						continue;
-					}
 					sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", packagesConfig[0], project.ProjectName);
 					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath,
-						packagesConfig[0], NuGetStyle.PackagesConfig));
+						packagesConfig[0], NuGetPackageDependency.PackagesConfig));
+					continue;
 				}
+
+				// project seems to use package reference
+				sLog.Write(LogLevel.Developer, "Calculate path to '{0}' for '{1}'.", cProjectAssets, project.ProjectName);
+				var msBuildProject = new Project(project.AbsolutePath);
+				string baseIntermediateOutputPath = msBuildProject.GetPropertyValue("BaseIntermediateOutputPath");
+				if (baseIntermediateOutputPath == null)
+				{
+					sLog.Write(LogLevel.Error, "The project '{0}' does not define a 'BaseIntermediateOutputPath'", project.ProjectName);
+					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
+						NuGetPackageDependency.NoDependencies));
+					continue;
+				}
+				sLog.Write(LogLevel.Developer, "Found BaseIntermediateOutputPath = '{0}'", baseIntermediateOutputPath);
+				// calculate path to 'project.assets.json' for given project
+				string projectAssetsPath = Path.Combine(baseIntermediateOutputPath, cProjectAssets);
+				if (!Path.IsPathRooted(projectAssetsPath))
+				{
+					projectAssetsPath = Path.Combine(Path.GetDirectoryName(mSolutionPath),
+						baseIntermediateOutputPath, cProjectAssets);
+					if (!File.Exists(projectAssetsPath))
+					{
+						sLog.Write(LogLevel.Developer,
+							"The file '{0}' does not exists for project '{1}'. Try relative from project folder...",
+							projectAssetsPath, project.ProjectName);
+						projectAssetsPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath),
+							baseIntermediateOutputPath, cProjectAssets);
+					}
+				}
+				// project does not use 'project.assets.json' or no NuGet package is present
+				if (!File.Exists(projectAssetsPath))
+				{
+					sLog.Write(LogLevel.Error, "No '{0}' found for '{1}'.", cProjectAssets,
+						project.ProjectName);
+					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
+						NuGetPackageDependency.NoDependencies));
+					continue;
+				}
+
+				mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, projectAssetsPath,
+					NuGetPackageDependency.PackageReference));
+				sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", projectAssetsPath, project.ProjectName);
 			}
 			sLog.Write(LogLevel.Note, "Successful collect all projects for solution.");
 			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
@@ -241,17 +226,17 @@ namespace GriffinPlus.LicenseCollector
 					project.NuGetInformationPath);
 				switch (project.Type)
 				{
-					case NuGetStyle.PackageReference:
+					case NuGetPackageDependency.PackageReference:
 					{
 						GetNuGetPackageFromProjectAssets(project);
 						break;
 					}
-					case NuGetStyle.PackagesConfig:
+					case NuGetPackageDependency.PackagesConfig:
 					{
 						GetNuGetPackagesFromPackagesConfig(project);
 						break;
 					}
-					case NuGetStyle.Undefined:
+					case NuGetPackageDependency.NoDependencies:
 						continue;
 					default:
 						throw new FormatException($"The project type of '{project.ProjectAbsolutePath}' is not supported.");

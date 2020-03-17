@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Lists different supported project types
 	/// </summary>
-	public enum NuGetStyle
+	public enum NuGetPackageDependency
 	{
 		/// <summary>
 		/// Defines that project uses 'project.assets.json'.
@@ -16,7 +16,7 @@
 		/// <summary>
 		/// No 'packages.config' or 'project.assets.json' found.
 		/// </summary>
-		Undefined
+		NoDependencies
 	}
 
 	/// <summary>
@@ -33,7 +33,7 @@
 		/// <param name="absolutePath">Absolute path to the project file.</param>
 		/// <param name="nugetInfo">Path to the NuGet information.</param>
 		/// <param name="type">Used NuGet style.</param>
-		public ProjectInfo(string name, string absolutePath, string nugetInfo, NuGetStyle type)
+		public ProjectInfo(string name, string absolutePath, string nugetInfo, NuGetPackageDependency type)
 		{
 			ProjectName = name;
 			ProjectAbsolutePath = absolutePath;
@@ -56,15 +56,15 @@
 		public string ProjectAbsolutePath { get; }
 
 		/// <summary>
-		/// Gets path to the NuGet information. The 'project.assets.json' for <see cref="NuGetStyle.PackageReference"/>
-		/// and the 'packages.config' for <see cref="NuGetStyle.PackagesConfig"/>.
+		/// Gets path to the NuGet information. The 'project.assets.json' for <see cref="NuGetPackageDependency.PackageReference"/>
+		/// and the 'packages.config' for <see cref="NuGetPackageDependency.PackagesConfig"/>.
 		/// </summary>
 		public string NuGetInformationPath { get; }
 
 		/// <summary>
 		/// Gets type of project.
 		/// </summary>
-		public NuGetStyle Type { get; }
+		public NuGetPackageDependency Type { get; }
 
 		#endregion
 
