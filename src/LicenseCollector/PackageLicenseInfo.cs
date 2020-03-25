@@ -14,7 +14,7 @@ namespace GriffinPlus.LicenseCollector
 		/// </summary>
 		/// <param name="id">Identifier of the package.</param>
 		/// <param name="license">License of the package.</param>
-		public PackageLicenseInfo(string id, string license) : this(id, "", "", "", "", license) { }
+		public PackageLicenseInfo(string id, string license) : this(id, "","", "", "", "", license) { }
 
 
 		/// <summary>
@@ -23,14 +23,16 @@ namespace GriffinPlus.LicenseCollector
 		/// <param name="id">Identifier of the package.</param>
 		/// <param name="version">Version of the package.</param>
 		/// <param name="author">Author of the package.</param>
+		/// <param name="copyright">Copyright of the package.</param>
 		/// <param name="licenseUrl">Url to license.</param>
 		/// <param name="projectUrl">Url to project.</param>
 		/// <param name="license">License of the package.</param>
-		public PackageLicenseInfo(string id, string version, string author, string licenseUrl, string projectUrl, string license)
+		public PackageLicenseInfo(string id, string version, string author, string copyright, string licenseUrl, string projectUrl, string license)
 		{
 			PackageIdentifier = id;
 			PackageVersion = version;
 			Author = author;
+			Copyright = copyright;
 			LicenseUrl = licenseUrl;
 			ProjectUrl = projectUrl;
 			License = license;
@@ -54,6 +56,11 @@ namespace GriffinPlus.LicenseCollector
 		/// Gets and sets author of this package.
 		/// </summary>
 		public string Author { get; set; }
+
+		/// <summary>
+		/// Gets and sets copyright of this package.
+		/// </summary>
+		public string Copyright { get; set; }
 
 		/// <summary>
 		/// Gets and sets url to the license.
@@ -91,6 +98,12 @@ namespace GriffinPlus.LicenseCollector
 			if (!string.IsNullOrEmpty(LicenseUrl))
 				builder.AppendLine($"- License: {LicenseUrl}");
 			builder.AppendLine();
+			if (!string.IsNullOrEmpty(Copyright))
+			{
+				builder.AppendLine($"  {Copyright}");
+				builder.AppendLine();
+			}
+
 			if (!string.IsNullOrEmpty(License))
 			{
 				builder.AppendLine();
