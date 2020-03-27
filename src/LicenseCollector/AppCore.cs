@@ -8,6 +8,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Build.Locator;
 using Newtonsoft.Json.Linq;
@@ -455,66 +456,53 @@ namespace GriffinPlus.LicenseCollector
 			foreach (string nuSpecFilePath in mNuGetPackages.Values)
 			{
 				sLog.Write(LogLevel.Developer, "Begin retrieving NuGet specification information from '{0}'...", nuSpecFilePath);
-				var identifier = string.Empty;
-				var version = string.Empty;
-				var authors = string.Empty;
-				var copyright = string.Empty;
-				var licenseUrl = string.Empty;
-				var projectUrl = string.Empty;
-				var license = string.Empty;
 
 				// extract important information from NuGet specification file
-				foreach (XElement element in XElement.Load(nuSpecFilePath).DescendantsAndSelf())
+				var doc = new XmlDocument();
+				doc.Load(nuSpecFilePath);
+				XmlNode root = doc.DocumentElement;
+				if (root == null)
+					continue;
+
+				var namespaceManager = new XmlNamespaceManager(doc.NameTable);
+				namespaceManager.AddNamespace("nu", root.NamespaceURI);
+
+				string identifier = root.SelectSingleNode("/nu:package/nu:metadata/nu:id", namespaceManager)?.InnerText;
+				string version = root.SelectSingleNode("/nu:package/nu:metadata/nu:version", namespaceManager)?.InnerText;
+				string authors = root.SelectSingleNode("/nu:package/nu:metadata/nu:authors", namespaceManager)?.InnerText;
+				string licenseUrl = root.SelectSingleNode("/nu:package/nu:metadata/nu:licenseUrl", namespaceManager)?.InnerText;
+				if (licenseUrl == cDeprecatedLicenseUrl)
+					licenseUrl = null;
+				string projectUrl = root.SelectSingleNode("/nu:package/nu:metadata/nu:projectUrl", namespaceManager)?.InnerText;
+				string copyright = root.SelectSingleNode("/nu:package/nu:metadata/nu:copyright", namespaceManager)?.InnerText;
+				XmlNode licenseNode = root.SelectSingleNode("/nu:package/nu:metadata/nu:license", namespaceManager);
+				string license = null;
+				if (licenseNode != null)
 				{
-					switch (element.Name.LocalName)
+					switch (licenseNode.Attributes["type"].Value)
 					{
-						case "id":
-							identifier = element.Value;
+						// SPDX expression as defined in https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
+						case "expression":
+							license = licenseNode.InnerText;
 							break;
-						case "version":
-							version = element.Value;
-							break;
-						case "authors":
-							authors = element.Value;
-							break;
-						// licenseUrl is deprecated and now 'license' should be used.
-						case "licenseUrl":
-							if (element.Value != cDeprecatedLicenseUrl)
-								licenseUrl = element.Value;
-							break;
-						case "projectUrl":
-							projectUrl = element.Value;
-							break;
-						case "copyright":
-							copyright = element.Value;
-							break;
-						case "license":
-							switch (element.Attribute("type").Value)
+						// license is contained as file within the nuget package
+						case "file":
+							string licensePath = Path.Combine(Path.GetDirectoryName(nuSpecFilePath),
+								licenseNode.InnerText);
+							if (!File.Exists(licensePath))
 							{
-								// SPDX expression as defined in https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
-								case "expression":
-									license = element.Value;
-									break;
-								// license is contained as file within the nuget package
-								case "file":
-									string licensePath = Path.Combine(Path.GetDirectoryName(nuSpecFilePath),
-										element.Value);
-									if (!File.Exists(licensePath))
-									{
-										sLog.Write(LogLevel.Error,
-											"The path '{0}' to the license defined by the NuGet specification does not exists.",
-											licensePath);
-										break;
-									}
-									license = File.ReadAllText(licensePath);
-									break;
+								sLog.Write(LogLevel.Error,
+									"The path '{0}' to the license defined by the NuGet specification does not exists.",
+									licensePath);
+								break;
 							}
+							license = File.ReadAllText(licensePath);
 							break;
 					}
 				}
 
 				// download license when only url to license is given
-				if (string.IsNullOrEmpty(license) && licenseUrl != string.Empty && licenseUrl.Contains("github.com"))
+				if (license == null && licenseUrl != null && licenseUrl.Contains("github.com"))
 				{
 					string url = licenseUrl.Replace("/blob/", "/raw/");
 					try
@@ -531,7 +519,7 @@ namespace GriffinPlus.LicenseCollector
 					}
 				}
 
-				if (string.IsNullOrEmpty(license) && string.IsNullOrEmpty(licenseUrl))
+				if (license == null && licenseUrl == null)
 				{
 					sLog.Write(LogLevel.Error, "The NuGet specification file '{0}' does not contain valid license information", nuSpecFilePath);
 					continue;

@@ -87,7 +87,8 @@ namespace GriffinPlus.LicenseCollector
 		{
 			var builder = new StringBuilder();
 			builder.AppendLine();
-			builder.Append($"- Package: {PackageIdentifier}");
+			if (!string.IsNullOrEmpty(PackageIdentifier))
+				builder.Append($"- Package: {PackageIdentifier}");
 			if (!string.IsNullOrEmpty(PackageVersion))
 				builder.Append($" (v{PackageVersion})");
 			builder.AppendLine();
