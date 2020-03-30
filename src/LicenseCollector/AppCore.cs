@@ -139,21 +139,20 @@ namespace GriffinPlus.LicenseCollector
 					x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild);
 				if (!isConfigurationBuild) continue;
 
-				string[] packagesConfig = Directory.EnumerateFiles(Path.GetDirectoryName(project.AbsolutePath), cPackagesConfig,
-					SearchOption.AllDirectories).ToArray();
-				// c++ project is included in build but has no valid NuGet dependencies
-				if (packagesConfig.Length != 1 && Path.GetExtension(project.AbsolutePath).Equals(".vcxproj"))
+				string packagesConfigPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath), cPackagesConfig);
+				if (File.Exists(packagesConfigPath))
 				{
-					sLog.Write(LogLevel.Developer, "Found no valid NuGet dependencies for '{0}'", project.ProjectName);
-					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "", NuGetPackageDependency.NoDependencies));
+					// project uses packages.config
+					sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", packagesConfigPath, project.ProjectName);
+					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath,
+						packagesConfigPath, NuGetPackageDependency.PackagesConfig));
 					continue;
 				}
-				// project uses packages.config
-				if (packagesConfig.Length == 1)
+				if (Path.GetExtension(project.AbsolutePath).Equals(".vcxproj"))
 				{
-					sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", packagesConfig[0], project.ProjectName);
-					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath,
-						packagesConfig[0], NuGetPackageDependency.PackagesConfig));
+					// c++ project is included in build but has no valid NuGet dependencies
+					sLog.Write(LogLevel.Developer, "Found no valid NuGet dependencies for '{0}'", project.ProjectName);
+					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "", NuGetPackageDependency.NoDependencies));
 					continue;
 				}
 
@@ -168,25 +167,19 @@ namespace GriffinPlus.LicenseCollector
 						NuGetPackageDependency.NoDependencies));
 					continue;
 				}
+
 				sLog.Write(LogLevel.Developer, "Found BaseIntermediateOutputPath = '{0}'", baseIntermediateOutputPath);
 				// calculate path to 'project.assets.json' for given project
 				string projectAssetsPath = Path.Combine(baseIntermediateOutputPath, cProjectAssets);
 				if (!Path.IsPathRooted(projectAssetsPath))
 				{
-					projectAssetsPath = Path.Combine(Path.GetDirectoryName(mSolutionPath),
+					// 'BaseIntermediateOutputPath' is relative to project
+					projectAssetsPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath),
 						baseIntermediateOutputPath, cProjectAssets);
-					if (!File.Exists(projectAssetsPath))
-					{
-						sLog.Write(LogLevel.Developer,
-							"The file '{0}' does not exists for project '{1}'. Try relative from project folder...",
-							projectAssetsPath, project.ProjectName);
-						projectAssetsPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath),
-							baseIntermediateOutputPath, cProjectAssets);
-					}
 				}
-				// project does not use 'project.assets.json' or no NuGet package is present
 				if (!File.Exists(projectAssetsPath))
 				{
+					// project does not use 'project.assets.json' or no NuGet package is present
 					sLog.Write(LogLevel.Error, "No '{0}' found for '{1}'.", cProjectAssets,
 						project.ProjectName);
 					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
@@ -210,13 +203,13 @@ namespace GriffinPlus.LicenseCollector
 		/// </summary>
 		public void GetNuGetPackages()
 		{
-			// already finished processing
 			if (mFinishProcessing)
+				// already finished processing
 				return;
 
-			// no project to process.
 			if (mProjectsToProcess == null || mProjectsToProcess.Count == 0)
 			{
+				// no project to process.
 				sLog.Write(LogLevel.Note, "There are no projects to process.");
 				mFinishProcessing = true;
 				return;
@@ -227,29 +220,26 @@ namespace GriffinPlus.LicenseCollector
 			if (mProjectsToProcess.Any(x => x.Type == NuGetPackageDependency.PackagesConfig))
 			{
 				sLog.Write(LogLevel.Developer, "A 'packages.config' is included try to find 'packages' folder...");
-				// Enumerate all packages folder for solution directory
-				IEnumerable<string> solutionPackagesFolders = Directory.EnumerateDirectories(Path.GetDirectoryName(mSolutionPath), cPackagesFolder, SearchOption.AllDirectories);
-				if (solutionPackagesFolders != null)
+
+				string solutionPackagesFolder = Path.Combine(Path.GetDirectoryName(mSolutionPath), cPackagesFolder);
+				if (Directory.Exists(solutionPackagesFolder))
 				{
-					foreach (string packagesFolder in solutionPackagesFolders)
-					{
-						sLog.Write(LogLevel.Developer, "Under solution directory: Found '{0}'", packagesFolder);
-						foundPackagesFolders.Add(packagesFolder);
-					}
+					// 'packages' folder exist in solution directory
+					sLog.Write(LogLevel.Developer, "Under solution directory: Found '{0}'", solutionPackagesFolder);
+					foundPackagesFolders.Add(solutionPackagesFolder);
 				}
-				// Enumerate all packages folder for each project directory
+
 				foreach (ProjectInfo project in mProjectsToProcess)
 				{
 					if (project.Type != NuGetPackageDependency.PackagesConfig)
 						continue;
-					IEnumerable<string> projectPackagesFolders = Directory.EnumerateDirectories(Path.GetDirectoryName(project.ProjectAbsolutePath), cPackagesFolder,
-						SearchOption.AllDirectories);
-					if (projectPackagesFolders == null) continue;
-					foreach (string packagesFolder in projectPackagesFolders)
-					{
-						sLog.Write(LogLevel.Developer, "Under project directory: Found '{0}'", packagesFolder);
-						foundPackagesFolders.Add(packagesFolder);
-					}
+
+					string projectPackagesFolder = Path.Combine(Path.GetDirectoryName(project.ProjectAbsolutePath),
+						cPackagesFolder);
+					if (!Directory.Exists(projectPackagesFolder)) continue;
+					// 'packages' folder exist in project directory
+					sLog.Write(LogLevel.Developer, "Under project directory: Found '{0}'", projectPackagesFolder);
+					foundPackagesFolders.Add(projectPackagesFolder);
 				}
 
 				if (foundPackagesFolders.Count == 0)
@@ -259,6 +249,7 @@ namespace GriffinPlus.LicenseCollector
 				}
 			}
 
+			// process each project depending on their type
 			foreach (ProjectInfo project in mProjectsToProcess)
 			{
 				sLog.Write(LogLevel.Developer, "Determine NuGet packages for '{0}' from '{1}'.",
@@ -294,7 +285,7 @@ namespace GriffinPlus.LicenseCollector
 		private void GetNuGetPackageFromProjectAssets(ProjectInfo project)
 		{
 			// parse 'project.assets.json' file of project to get all included NuGet packages
-			var packageNuspecs = new List<string>();
+			var packageNuSpecs = new List<string>();
 			var packageFolders = new List<string>();
 			using (var reader = new StreamReader(project.NuGetInformationPath))
 			{
@@ -308,8 +299,8 @@ namespace GriffinPlus.LicenseCollector
 				{
 					switch (property.Path)
 					{
-						// collect all NuGet libraries used by this project
 						case "libraries":
+							// collect all NuGet libraries used by this project
 							foreach (JProperty library in property.Value)
 							{
 								// collect only packages and not project references
@@ -323,11 +314,12 @@ namespace GriffinPlus.LicenseCollector
 								if (nuSpec == null)
 									throw new ArgumentException(
 										$"The NuGet package '{packageId}' does not contain a *.nuspec file.");
-								packageNuspecs.Add(Path.Combine(packageId, nuSpec));
+								packageNuSpecs.Add(Path.Combine(packageId, nuSpec));
 							}
 							break;
-						// collect all package folders used by this project
+
 						case "packageFolders":
+							// collect all package folders used by this project
 							foreach (JToken packageFolder in property.Value)
 							{
 								packageFolders.Add((packageFolder as JProperty).Name);
@@ -340,11 +332,11 @@ namespace GriffinPlus.LicenseCollector
 			}
 
 			// combine nuspec and package folder to have absolute paths and store the result
-			foreach (string package in packageNuspecs)
+			foreach (string package in packageNuSpecs)
 			{
 				string packageId = package.Split('\\')[0];
-				// NuGet package dependency was already found within another project
 				if (mNuGetPackages.ContainsKey(packageId))
+					// NuGet package dependency was already found within another project
 					continue;
 
 				var isNuSpecPathExisting = false;
@@ -375,7 +367,7 @@ namespace GriffinPlus.LicenseCollector
 
 			var packagePaths = new Dictionary<string, string>();
 			// extract 'packages.config' and determine id and version
-			foreach (XElement element in XElement.Load(project.NuGetInformationPath).DescendantsAndSelf())
+			foreach (XElement element in XElement.Load(project.NuGetInformationPath).Descendants())
 			{
 				switch (element.Name.LocalName)
 				{
@@ -411,18 +403,19 @@ namespace GriffinPlus.LicenseCollector
 			// extract 'nuspec' file from package and store information
 			foreach (string nugetId in nugetPackages.Keys)
 			{
-				// NuGet package dependency was already found within another project
 				if (mNuGetPackages.ContainsKey(nugetId))
+					// NuGet package dependency was already found within another project
 					continue;
 
 				// extract nuspec file from package
 				using (var fs = new FileStream(nugetPackages[nugetId], FileMode.Open))
 				{
-					ZipArchive archive = new ZipArchive(fs, ZipArchiveMode.Read);
-					ZipArchiveEntry nuSpec = archive.Entries.First(x => x.Name.Contains(".nuspec"));
+					var archive = new ZipArchive(fs, ZipArchiveMode.Read);
+					ZipArchiveEntry nuSpec = archive.Entries.First(x => x.Name.EndsWith(".nuspec"));
 					if (nuSpec == null)
 					{
 						sLog.Write(LogLevel.Error, "The NuGet package '{0}' does not contains an '.nuspec' file.", nugetId);
+						continue;
 					}
 
 					string nuspecPath = Path.Combine(Path.GetDirectoryName(nugetPackages[nugetId]), $"{nugetId}.nuspec");
@@ -444,11 +437,12 @@ namespace GriffinPlus.LicenseCollector
 		public void GetNuGetLicenseInfo()
 		{
 			if (mFinishProcessing)
+				// already finished processing
 				return;
 
-			// no NuGet packages found to process.
 			if (mNuGetPackages == null || mNuGetPackages.Count == 0)
 			{
+				// no NuGet packages found to process.
 				sLog.Write(LogLevel.Note, "There are no NuGet packages found.");
 				return;
 			}
@@ -481,29 +475,52 @@ namespace GriffinPlus.LicenseCollector
 				{
 					switch (licenseNode.Attributes["type"].Value)
 					{
-						// SPDX expression as defined in https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
+						// TODO: Is there a better handling e.g. loading templates?
 						case "expression":
+							// SPDX expression as defined in https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
 							license = licenseNode.InnerText;
 							break;
-						// license is contained as file within the nuget package
+
 						case "file":
-							string licensePath = Path.Combine(Path.GetDirectoryName(nuSpecFilePath),
-								licenseNode.InnerText);
+							// license is contained as file within the nuget package
+							string directoryPath = Path.GetDirectoryName(nuSpecFilePath);
+							string licensePath = Path.Combine(directoryPath, licenseNode.InnerText);
 							if (!File.Exists(licensePath))
 							{
-								sLog.Write(LogLevel.Error,
-									"The path '{0}' to the license defined by the NuGet specification does not exists.",
-									licensePath);
-								break;
+								// License file does not exist, try to open NuGet package on same folder hierarchy
+								// this could happen if a packages.config was processed and only the nuspec was unzipped.
+								string nugetPackage = Path.Combine(directoryPath, $"{identifier}.{version}.nupkg");
+								if (!File.Exists(nugetPackage))
+								{
+									sLog.Write(LogLevel.Error,
+										"The path '{0}' to the license defined by the NuGet specification does not exists.",
+										licensePath);
+									break;
+								}
+								// try to extract license file from package
+								using (var fs = new FileStream(nugetPackage, FileMode.Open))
+								{
+									var archive = new ZipArchive(fs, ZipArchiveMode.Read);
+									ZipArchiveEntry licenseEntry = archive.Entries.First(x => x.Name.Contains(licenseNode.InnerText));
+									if (licenseEntry == null)
+									{
+										sLog.Write(LogLevel.Error, "The NuGet package '{0}' does not contains '{1}'", licenseNode.InnerText);
+										break;
+									}
+
+									using (var licenseStream = new FileStream(licensePath, FileMode.Create, FileAccess.Write))
+										licenseEntry.Open().CopyTo(licenseStream);
+								}
 							}
 							license = File.ReadAllText(licensePath);
 							break;
 					}
 				}
 
-				// download license when only url to license is given
+				// TODO: extend to download other url then from github.com
 				if (license == null && licenseUrl != null && licenseUrl.Contains("github.com"))
 				{
+					// download license when only url to license is given
 					string url = licenseUrl.Replace("/blob/", "/raw/");
 					try
 					{
@@ -542,6 +559,7 @@ namespace GriffinPlus.LicenseCollector
 		public void GetStaticLicenseInfo()
 		{
 			if (mFinishProcessing)
+				// already finished processing
 				return;
 
 			foreach (ProjectInfo project in mProjectsToProcess)
@@ -557,9 +575,9 @@ namespace GriffinPlus.LicenseCollector
 						sLog.Write(LogLevel.Developer, "Project '{0}': Found static license '{1}'", project.ProjectName, staticLicensePath);
 						string staticLicenseIdentifier = Path.GetFileNameWithoutExtension(staticLicensePath);
 						string license = File.ReadAllText(staticLicensePath);
-						// static license is already existing in another project
 						if (mLicenses.Any(x => x.PackageIdentifier == staticLicenseIdentifier))
 						{
+							// static license is already existing in another project
 							sLog.Write(LogLevel.Developer, "Static license '{0}' was already found in another project.", staticLicenseIdentifier);
 							continue;
 						}
@@ -593,6 +611,7 @@ namespace GriffinPlus.LicenseCollector
 			if (File.Exists(mOutputPath))
 				File.Delete(mOutputPath);
 
+			// TODO: Add option for third party license header or add path to razor template for generating customizable outputs
 			foreach (PackageLicenseInfo license in mLicenses)
 			{
 				var builder = new StringBuilder();

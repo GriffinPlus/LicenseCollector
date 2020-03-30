@@ -141,9 +141,9 @@ namespace GriffinPlus.LicenseCollector
 			}
 			// convert given relative paths to absolute paths if necessary
 			if (!Path.IsPathRooted(options.SolutionFilePath))
-				options.SolutionFilePath = Path.Combine(Environment.CurrentDirectory, options.SolutionFilePath);
+				options.SolutionFilePath = Path.GetFullPath(options.SolutionFilePath);
 			if (!Path.IsPathRooted(options.OutputLicensePath))
-				options.OutputLicensePath = Path.Combine(Environment.CurrentDirectory, options.OutputLicensePath);
+				options.OutputLicensePath = Path.GetFullPath(options.OutputLicensePath);
 
 			var app = new AppCore(options.SolutionFilePath, options.Configuration, options.Platform, options.OutputLicensePath, options.SearchPattern);
 			try
@@ -160,7 +160,7 @@ namespace GriffinPlus.LicenseCollector
 			}
 			catch (Exception ex)
 			{
-				sLog.Write(LogLevel.Error, "Caught exception during processing. Exception: {0}", ex.ToString());
+				sLog.Write(LogLevel.Error, "Caught exception during processing. Exception: {0}", ex);
 				return ExitCode.GeneralError;
 			}
 
