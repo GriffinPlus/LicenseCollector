@@ -53,6 +53,12 @@ namespace GriffinPlus.LicenseCollector
 			public string SearchPattern { get; set; }
 
 			/// <summary>
+			/// Gets and sets path to license template.
+			/// </summary>
+			[Option("licenseTemplatePath", Default = "")]
+			public string LicenseTemplatePath { get; set; }
+
+			/// <summary>
 			/// Gets and sets path to the output license file.
 			/// </summary>
 			[Value(0, Required = true)]
@@ -119,12 +125,13 @@ namespace GriffinPlus.LicenseCollector
 
 			sLog.Write(LogLevel.Developer, "LicenseCollector v{0}", Assembly.GetExecutingAssembly().GetName().Version);
 			sLog.Write(LogLevel.Developer, "--------------------------------------------------------------------------------");
-			sLog.Write(LogLevel.Developer, "Verbose:       '{0}'", options.Verbose);
-			sLog.Write(LogLevel.Developer, "SolutionFile:  '{0}'", options.SolutionFilePath);
-			sLog.Write(LogLevel.Developer, "Configuration: '{0}'", options.Configuration);
-			sLog.Write(LogLevel.Developer, "Platform:      '{0}'", options.Platform);
-			sLog.Write(LogLevel.Developer, "SearchPattern: '{0}'", options.SearchPattern);
-			sLog.Write(LogLevel.Developer, "OutputPath:    '{0}'", options.OutputLicensePath);
+			sLog.Write(LogLevel.Developer, "Verbose:            '{0}'", options.Verbose);
+			sLog.Write(LogLevel.Developer, "SolutionFile:       '{0}'", options.SolutionFilePath);
+			sLog.Write(LogLevel.Developer, "Configuration:      '{0}'", options.Configuration);
+			sLog.Write(LogLevel.Developer, "Platform:           '{0}'", options.Platform);
+			sLog.Write(LogLevel.Developer, "SearchPattern:      '{0}'", options.SearchPattern);
+			sLog.Write(LogLevel.Developer, "LicenseTemplatePath '{0}'", options.LicenseTemplatePath);
+			sLog.Write(LogLevel.Developer, "OutputPath:         '{0}'", options.OutputLicensePath);
 			sLog.Write(LogLevel.Developer, "--------------------------------------------------------------------------------");
 
 			// the given path for the solution does not exist
@@ -144,8 +151,11 @@ namespace GriffinPlus.LicenseCollector
 				options.SolutionFilePath = Path.GetFullPath(options.SolutionFilePath);
 			if (!Path.IsPathRooted(options.OutputLicensePath))
 				options.OutputLicensePath = Path.GetFullPath(options.OutputLicensePath);
+			if (!string.IsNullOrEmpty(options.LicenseTemplatePath) && !Path.IsPathRooted(options.LicenseTemplatePath))
+				options.LicenseTemplatePath = Path.GetFullPath(options.LicenseTemplatePath);
 
-			var app = new AppCore(options.SolutionFilePath, options.Configuration, options.Platform, options.OutputLicensePath, options.SearchPattern);
+			var app = new AppCore(options.SolutionFilePath, options.Configuration, options.Platform,
+				options.OutputLicensePath, options.SearchPattern, options.LicenseTemplatePath);
 			try
 			{
 				app.CollectProjects();
@@ -156,7 +166,7 @@ namespace GriffinPlus.LicenseCollector
 
 				app.GetStaticLicenseInfo();
 
-				app.GenerateOutputFile();
+				app.GenerateOutputFileAsync().Wait();
 			}
 			catch (Exception ex)
 			{
@@ -247,7 +257,8 @@ namespace GriffinPlus.LicenseCollector
 			writer.WriteLine();
 			writer.WriteLine("  USAGE:");
 			writer.WriteLine();
-			writer.WriteLine("    LicenseCollector.exe [-v] -s|--solutionFilePath <spath> -c|--configuration <conf> -p|--platform <platform> [--searchPattern <pattern>] <outpath>");
+			writer.WriteLine(
+				"    LicenseCollector.exe [-v] -s|--solutionFilePath <spath> -c|--configuration <conf> -p|--platform <platform> [--searchPattern <pattern>] [--licenseTemplatePath <templatePath>] <outpath>");
 			writer.WriteLine();
 			writer.WriteLine("    [-v]");
 			writer.WriteLine("      Sets output to verbose.");
@@ -263,6 +274,9 @@ namespace GriffinPlus.LicenseCollector
 			writer.WriteLine();
 			writer.WriteLine("    [--searchPattern <pattern>]");
 			writer.WriteLine("      The search pattern for static license files. Wildcards like '*' are supported.");
+			writer.WriteLine();
+			writer.WriteLine("    [--licenseTemplatePath <templatePath>]");
+			writer.WriteLine("      The path to a razor template file used when generating output file.");
 			writer.WriteLine();
 			writer.WriteLine("    <outpath>");
 			writer.WriteLine("      The path of the file where the results should be written to.");

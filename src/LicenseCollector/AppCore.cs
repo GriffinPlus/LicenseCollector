@@ -8,10 +8,12 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Build.Locator;
 using Newtonsoft.Json.Linq;
+using RazorLight;
 
 namespace GriffinPlus.LicenseCollector
 {
@@ -44,6 +46,10 @@ namespace GriffinPlus.LicenseCollector
 		/// Search pattern for static licenses to include.
 		/// </summary>
 		private readonly string mSearchPattern;
+		/// <summary>
+		/// Path to the license template.
+		/// </summary>
+		private readonly string mLicenseTemplatePath;
 
 		#endregion
 
@@ -80,7 +86,9 @@ namespace GriffinPlus.LicenseCollector
 		/// <param name="config">Solution configuration to examine.</param>
 		/// <param name="platform">Solution platform to examine.</param>
 		/// <param name="outputPath">Path to output third party license file.</param>
-		public AppCore(string solution, string config, string platform, string outputPath, string searchPattern)
+		/// <param name="searchPattern">Search pattern for static licenses.</param>
+		/// <param name="licenseTemplatePath">Path to the license template.</param>
+		public AppCore(string solution, string config, string platform, string outputPath, string searchPattern, string licenseTemplatePath)
 		{
 			// register default msbuild version to use.
 			MSBuildLocator.RegisterDefaults();
@@ -90,6 +98,7 @@ namespace GriffinPlus.LicenseCollector
 			mPlatform = platform;
 			mOutputPath = outputPath;
 			mSearchPattern = searchPattern;
+			mLicenseTemplatePath = licenseTemplatePath;
 
 			mFinishProcessing = false;
 			mProjectsToProcess = new List<ProjectInfo>();
@@ -173,9 +182,13 @@ namespace GriffinPlus.LicenseCollector
 				string projectAssetsPath = Path.Combine(baseIntermediateOutputPath, cProjectAssets);
 				if (!Path.IsPathRooted(projectAssetsPath))
 				{
-					// 'BaseIntermediateOutputPath' is relative to project
-					projectAssetsPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath),
+					// try 'BaseIntermediateOutputPath' is relative to solution
+					projectAssetsPath = Path.Combine(Path.GetDirectoryName(mSolutionPath),
 						baseIntermediateOutputPath, cProjectAssets);
+					if (!File.Exists(projectAssetsPath))
+						// 'BaseIntermediateOutputPath' is relative to project
+						projectAssetsPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath),
+							baseIntermediateOutputPath, cProjectAssets);
 				}
 				if (!File.Exists(projectAssetsPath))
 				{
@@ -461,16 +474,28 @@ namespace GriffinPlus.LicenseCollector
 				var namespaceManager = new XmlNamespaceManager(doc.NameTable);
 				namespaceManager.AddNamespace("nu", root.NamespaceURI);
 
-				string identifier = root.SelectSingleNode("/nu:package/nu:metadata/nu:id", namespaceManager)?.InnerText;
-				string version = root.SelectSingleNode("/nu:package/nu:metadata/nu:version", namespaceManager)?.InnerText;
-				string authors = root.SelectSingleNode("/nu:package/nu:metadata/nu:authors", namespaceManager)?.InnerText;
-				string licenseUrl = root.SelectSingleNode("/nu:package/nu:metadata/nu:licenseUrl", namespaceManager)?.InnerText;
+				string identifier =
+					root.SelectSingleNode("/nu:package/nu:metadata/nu:id", namespaceManager)?.InnerText ??
+					string.Empty;
+				string version =
+					root.SelectSingleNode("/nu:package/nu:metadata/nu:version", namespaceManager)?.InnerText ??
+					string.Empty;
+				string authors =
+					root.SelectSingleNode("/nu:package/nu:metadata/nu:authors", namespaceManager)?.InnerText ??
+					string.Empty;
+				string licenseUrl =
+					root.SelectSingleNode("/nu:package/nu:metadata/nu:licenseUrl", namespaceManager)?.InnerText ??
+					string.Empty;
 				if (licenseUrl == cDeprecatedLicenseUrl)
-					licenseUrl = null;
-				string projectUrl = root.SelectSingleNode("/nu:package/nu:metadata/nu:projectUrl", namespaceManager)?.InnerText;
-				string copyright = root.SelectSingleNode("/nu:package/nu:metadata/nu:copyright", namespaceManager)?.InnerText;
+					licenseUrl = string.Empty;
+				string projectUrl =
+					root.SelectSingleNode("/nu:package/nu:metadata/nu:projectUrl", namespaceManager)?.InnerText ??
+					string.Empty;
+				string copyright =
+					root.SelectSingleNode("/nu:package/nu:metadata/nu:copyright", namespaceManager)?.InnerText ??
+					string.Empty;
 				XmlNode licenseNode = root.SelectSingleNode("/nu:package/nu:metadata/nu:license", namespaceManager);
-				string license = null;
+				var license = string.Empty;
 				if (licenseNode != null)
 				{
 					switch (licenseNode.Attributes["type"].Value)
@@ -478,7 +503,7 @@ namespace GriffinPlus.LicenseCollector
 						// TODO: Is there a better handling e.g. loading templates?
 						case "expression":
 							// SPDX expression as defined in https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
-							license = licenseNode.InnerText;
+							license = licenseNode.InnerText ?? string.Empty;
 							break;
 
 						case "file":
@@ -512,16 +537,17 @@ namespace GriffinPlus.LicenseCollector
 										licenseEntry.Open().CopyTo(licenseStream);
 								}
 							}
-							license = File.ReadAllText(licensePath);
+							license = File.ReadAllText(licensePath) ?? string.Empty;
 							break;
 					}
 				}
 
 				// TODO: extend to download other url then from github.com
-				if (license == null && licenseUrl != null && licenseUrl.Contains("github.com"))
+				if (string.IsNullOrEmpty(license) && !string.IsNullOrEmpty(licenseUrl) &&
+				    (licenseUrl.Contains("github.com") || licenseUrl.Contains("/raw.githubusercontent.com/")))
 				{
 					// download license when only url to license is given
-					string url = licenseUrl.Replace("/blob/", "/raw/");
+					string url = licenseUrl.Contains("github.com") ? licenseUrl.Replace("/blob/", "/raw/") : licenseUrl;
 					try
 					{
 						using (var client = new WebClient())
@@ -536,7 +562,7 @@ namespace GriffinPlus.LicenseCollector
 					}
 				}
 
-				if (license == null && licenseUrl == null)
+				if (string.IsNullOrEmpty(license) && string.IsNullOrEmpty(licenseUrl))
 				{
 					sLog.Write(LogLevel.Error, "The NuGet specification file '{0}' does not contain valid license information", nuSpecFilePath);
 					continue;
@@ -596,10 +622,45 @@ namespace GriffinPlus.LicenseCollector
 		#endregion
 
 		#region Generate output file
+
+		private static string LicenseTemplate
+		{
+			get
+			{
+				var template = new StringBuilder();
+				template.AppendLine("@using RazorLight");
+				template.AppendLine("@using GriffinPlus.LicenseCollector");
+				template.AppendLine("@using System.Collections.Generic");
+				template.AppendLine("@inherits RazorLight.TemplatePage<List<PackageLicenseInfo>>");
+				template.AppendLine("Third party libraries");
+				template.AppendLine("========================================");
+				template.AppendLine();
+				template.AppendLine("Certain third-party software may be distributed, embedded, or bundled with this product or");
+				template.AppendLine("recommended for use in conjunction with the installation and operation of this product.");
+				template.AppendLine("Such third-party software is separately licensed by its copyright holder. Use of the third-party");
+				template.AppendLine("software must be in accordance with its license terms. This section contains the licenses which");
+				template.AppendLine("govern the use of third-party software and its copyright holder's proprietary notices.");
+				template.AppendLine();
+				template.AppendLine(
+					"-----------------------------------------------------------------------------------------------------------------------");
+				template.AppendLine("@{");
+				template.AppendLine("foreach (PackageLicenseInfo license in Model)");
+				template.AppendLine("{");
+				template.AppendLine(
+					"@:-----------------------------------------------------------------------------------------------------------------------");
+				template.AppendLine("@license.ToString();");
+				template.AppendLine(
+					"@:-----------------------------------------------------------------------------------------------------------------------");
+				template.AppendLine("}");
+				template.AppendLine("}");
+				return template.ToString();
+			}
+		}
+
 		/// <summary>
 		/// Generate output third party notice with collected license information.
 		/// </summary>
-		public void GenerateOutputFile()
+		public async Task GenerateOutputFileAsync()
 		{
 			if (mLicenses == null || mLicenses.Count == 0 || mFinishProcessing)
 			{
@@ -611,16 +672,22 @@ namespace GriffinPlus.LicenseCollector
 			if (File.Exists(mOutputPath))
 				File.Delete(mOutputPath);
 
-			// TODO: Add option for third party license header or add path to razor template for generating customizable outputs
-			foreach (PackageLicenseInfo license in mLicenses)
+			RazorLightEngine engine = new RazorLightEngineBuilder()
+				.UseEmbeddedResourcesProject(typeof(AppCore))
+				.UseMemoryCachingProvider()
+				.DisableEncoding()
+				.Build();
+
+			string template = LicenseTemplate;
+			if (!string.IsNullOrEmpty(mLicenseTemplatePath) && File.Exists(mLicenseTemplatePath))
 			{
-				var builder = new StringBuilder();
-				builder.AppendLine("--------------------------------------------------------------------------------");
-				builder.AppendLine(license.ToString());
-				builder.AppendLine("--------------------------------------------------------------------------------");
-				File.AppendAllText(mOutputPath, builder.ToString());
-				sLog.Write(LogLevel.Developer, "Append license information for '{0}'", license.PackageIdentifier);
+				sLog.Write(LogLevel.Note, "Load user defined razor template '{0}' for third party notices", mLicenseTemplatePath);
+				template = File.ReadAllText(mLicenseTemplatePath);
 			}
+
+			string patchedTemplate = await engine
+				.CompileRenderStringAsync("Third party notices", template, mLicenses).ConfigureAwait(false);
+			File.WriteAllText(mOutputPath, patchedTemplate);
 
 			sLog.Write(LogLevel.Note, "Successful write collected licenses to '{0}'", mOutputPath);
 			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
@@ -628,3 +695,4 @@ namespace GriffinPlus.LicenseCollector
 		#endregion
 	}
 }
+

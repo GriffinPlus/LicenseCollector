@@ -45,37 +45,37 @@ namespace GriffinPlus.LicenseCollector
 		/// <summary>
 		/// Gets and sets identifier of this package.
 		/// </summary>
-		public string PackageIdentifier { get; set; }
+		public string PackageIdentifier { get; }
 
 		/// <summary>
 		/// Gets and sets version of this package.
 		/// </summary>
-		public string PackageVersion { get; set; }
+		public string PackageVersion { get; }
 
 		/// <summary>
 		/// Gets and sets author of this package.
 		/// </summary>
-		public string Author { get; set; }
+		public string Author { get; }
 
 		/// <summary>
 		/// Gets and sets copyright of this package.
 		/// </summary>
-		public string Copyright { get; set; }
+		public string Copyright { get; }
 
 		/// <summary>
 		/// Gets and sets url to the license.
 		/// </summary>
-		public string LicenseUrl { get; set; }
+		public string LicenseUrl { get; }
 
 		/// <summary>
 		/// Gets and sets url to the project related to this package.
 		/// </summary>
-		public string ProjectUrl { get; set; }
+		public string ProjectUrl { get; }
 
 		/// <summary>
 		/// Get and sets license to this package.
 		/// </summary>
-		public string License { get; set; }
+		public string License { get; }
 
 		#endregion
 
@@ -109,6 +109,7 @@ namespace GriffinPlus.LicenseCollector
 			{
 				builder.AppendLine();
 				builder.AppendLine(License);
+				builder.AppendLine();
 			}
 			return builder.ToString();
 		}

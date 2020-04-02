@@ -12,10 +12,11 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.7.82" />
     <PackageReference Include="GriffinPlus.Lib.Logging" Version="1.1.9" />
-    <PackageReference Include="Microsoft.Build" Version="16.4.0" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build" Version="16.5.0" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.2.6" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.4.0" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.5.0" ExcludeAssets="runtime" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="RazorLight" Version="2.0.0-beta7" />
   </ItemGroup>
 
 </Project>
