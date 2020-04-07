@@ -3,13 +3,15 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-	<BuildVs_Override_IntermediateOutputPath>true</BuildVs_Override_IntermediateOutputPath>
-	<BuildVs_Override_OutputPath>true</BuildVs_Override_OutputPath>
-	<StartupObject>GriffinPlus.LicenseCollector.Program</StartupObject>
-	<RootNamespace>GriffinPlus.LicenseCollector</RootNamespace>
+    <BuildVs_Override_IntermediateOutputPath>true</BuildVs_Override_IntermediateOutputPath>
+    <BuildVs_Override_OutputPath>true</BuildVs_Override_OutputPath>
+    <StartupObject>GriffinPlus.LicenseCollector.Program</StartupObject>
+    <RootNamespace>GriffinPlus.LicenseCollector</RootNamespace>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
+    <TrimmerRootAssembly Include="netstandard20"/>
     <PackageReference Include="CommandLineParser" Version="2.7.82" />
     <PackageReference Include="GriffinPlus.Lib.Logging" Version="2.0.0-rc0002" />
     <PackageReference Include="Microsoft.Build" Version="16.5.0" ExcludeAssets="runtime" />

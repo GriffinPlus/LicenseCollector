@@ -38,7 +38,8 @@ steps:
             -r $target `
             -o "$(Build.ArtifactStagingDirectory)/$target" `
             /p:TargetFramework=netcoreapp3.1 `
-            /p:PublishSingleFile=true
+            /p:PublishSingleFile=true `
+            /p:PublishTrimmed=true
     }
   displayName: Build
   

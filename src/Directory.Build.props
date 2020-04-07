@@ -9,8 +9,4 @@
 
   <Import Project="..\build.vs\Directory.Build.props"/>
 
-  <PropertyGroup>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
-  </PropertyGroup>
-
 </Project>
