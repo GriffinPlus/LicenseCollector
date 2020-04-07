@@ -80,9 +80,11 @@ namespace GriffinPlus.LicenseCollector
 		{
 			// configure the log
 			Log.LogMessageProcessingPipeline = new ConsoleWriterPipelineStage()
-				.WithTimestamp()
-				.WithLogLevel()
-				.WithText();
+				.WithFormatter(new TableMessageFormatter()
+                    .WithTimestamp("yyyy-MM-dd HH:mm:ss.fff")
+                    .WithLogLevel()
+                    .WithText()
+                );
 
 			// configure command line parser
 			var parser = new Parser(with =>
