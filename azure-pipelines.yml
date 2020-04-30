@@ -32,24 +32,34 @@ steps:
 
 - powershell: |
     $env:DOTNET_CLI_TELEMETRY_OPTOUT = 'true'
+    dotnet publish `
+    -c $(buildConfiguration) `
+    -o "$(Build.ArtifactStagingDirectory)/portable" `
+    /p:TargetFramework=netcoreapp3.1
     foreach ($target in '$(targets)'.Split(',')) {
         dotnet publish `
             -c $(buildConfiguration) `
             -r $target `
-            -o "$(Build.ArtifactStagingDirectory)/$target" `
+            -o "$(Build.ArtifactStagingDirectory)/standalone/$target" `
             /p:TargetFramework=netcoreapp3.1 `
             /p:PublishSingleFile=true
     }
   displayName: Build
-  
+
 - powershell: |
+    Write-Host "Copying files for portable version..."
+    Copy-Item README.md "$(Build.ArtifactStagingDirectory)/portable"
+    Copy-Item LICENSE "$(Build.ArtifactStagingDirectory)/portable"
+    Copy-Item THIRD_PARTY_NOTICES "$(Build.ArtifactStagingDirectory)/portable"
+    Remove-Item "$(Build.ArtifactStagingDirectory)/portable/*.pdb"
+    Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/portable/" "$(Build.ArtifactStagingDirectory)/portable/LicenseCollector-portable-v$(GitVersion.SemVer).zip"
     foreach ($target in '$(targets)'.Split(',')) {
-        Write-Host "Copying files for target '$target'..."
-        Copy-Item README.md "$(Build.ArtifactStagingDirectory)/$target"
-        Copy-Item LICENSE "$(Build.ArtifactStagingDirectory)/$target"
-        Copy-Item THIRD_PARTY_NOTICES "$(Build.ArtifactStagingDirectory)/$target"
-        Remove-Item "$(Build.ArtifactStagingDirectory)/$target/*.pdb"
-        Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/$target/" "$(Build.ArtifactStagingDirectory)/$target/LicenseCollector-$target-v$(GitVersion.SemVer).zip"
+        Write-Host "Copying files for standalone version (target '$target')..."
+        Copy-Item README.md "$(Build.ArtifactStagingDirectory)/standalone/$target"
+        Copy-Item LICENSE "$(Build.ArtifactStagingDirectory)/standalone/$target"
+        Copy-Item THIRD_PARTY_NOTICES "$(Build.ArtifactStagingDirectory)/standalone/$target"
+        Remove-Item "$(Build.ArtifactStagingDirectory)/standalone/$target/*.pdb"
+        Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/standalone/$target/" "$(Build.ArtifactStagingDirectory)/standalone/$target/LicenseCollector-standalone-$target-v$(GitVersion.SemVer).zip"
     }
   condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
   displayName: Create Release Packages
