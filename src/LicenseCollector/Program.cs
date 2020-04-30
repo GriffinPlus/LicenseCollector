@@ -79,12 +79,13 @@ namespace GriffinPlus.LicenseCollector
 		static int Main(string[] args)
 		{
 			// configure the log
-			Log.LogMessageProcessingPipeline = new ConsoleWriterPipelineStage()
-				.WithFormatter(new TableMessageFormatter()
-                    .WithTimestamp("yyyy-MM-dd HH:mm:ss.fff")
-                    .WithLogLevel()
-                    .WithText()
-                );
+			var formatter = new TableMessageFormatter();
+			formatter.AddTimestampColumn("yyyy-MM-dd HH:mm:ss.fff");
+			formatter.AddLogLevelColumn();
+			formatter.AddTextColumn();
+			var consoleStage = new ConsoleWriterPipelineStage();
+			consoleStage.Formatter = formatter;
+			Log.LogMessageProcessingPipeline = consoleStage;
 
 			// configure command line parser
 			var parser = new Parser(with =>
@@ -114,16 +115,10 @@ namespace GriffinPlus.LicenseCollector
 		/// <returns>Exit code the application should return.</returns>
 		private static ExitCode RunOptionsAndReturnExitCode(Options options)
 		{
-			// configure the log, if more verbosity is required
-			if (options.Verbose)
-			{
-				var configuration = new LogConfiguration();
-				configuration.SetLogWriterSettings(
-					new LogConfiguration.LogWriter(
-						new LogConfiguration.WildcardLogWriterPattern("*"),
-						"All"));
-				Log.Configuration = configuration;
-			}
+			// configure the log verbosity
+			var configuration = new VolatileLogConfiguration();
+			configuration.AddLogWriterDefault(x => x.WithBaseLevel(options.Verbose ? LogLevel.All: LogLevel.Note));
+			Log.Configuration = configuration;
 
 			sLog.Write(LogLevel.Developer, "LicenseCollector v{0}", Assembly.GetExecutingAssembly().GetName().Version);
 			sLog.Write(LogLevel.Developer, "--------------------------------------------------------------------------------");
