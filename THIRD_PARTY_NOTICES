@@ -23,11 +23,11 @@ https://github.com/griffinplus/LicenseCollector
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: CommandLineParser (v2.7.82)
-- Author: gsscoder,nemec,ericnewton76
+- Package: CommandLineParser (v2.8.0)
+- Author: gsscoder,nemec,ericnewton76,moh-hassan
 - Project: https://github.com/commandlineparser/commandline
 
-  Copyright (c) 2005 - 2018 Giacomo Stelluti Scala & Contributors
+  Copyright (c) 2005 - 2020 Giacomo Stelluti Scala & Contributors
 
 
 The MIT License (MIT)
@@ -56,7 +56,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: GriffinPlus.Lib.Logging (v2.0.0-rc0002)
+- Package: GriffinPlus.Lib.Logging (v2.0.0-rc0004)
 - Author: Sascha Falk
 - Project: https://github.com/GriffinPlus/dotnet-libs-logging
 - License: https://github.com/GriffinPlus/dotnet-libs-logging/blob/master/LICENSE
