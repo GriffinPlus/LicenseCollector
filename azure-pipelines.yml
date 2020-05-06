@@ -20,11 +20,13 @@ steps:
 - task: GitVersion@5
   inputs:
     runtime: 'core'
-  displayName: 'Determine Version Number'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: build.vs\AssemblyInfoVersion.cs
+  displayName: 'Patching Version Number'
 
 - task: NuGetToolInstaller@1
   displayName: Install NuGet
-  
+
 - task: NuGetCommand@2
   displayName: Restore NuGet Packages
   inputs:
@@ -35,7 +37,7 @@ steps:
     dotnet publish `
     -c $(buildConfiguration) `
     -o "$(Build.ArtifactStagingDirectory)/portable" `
-    /p:TargetFramework=netcoreapp3.1
+    /p:TargetFramework=netcoreapp2.1
     foreach ($target in '$(targets)'.Split(',')) {
         dotnet publish `
             -c $(buildConfiguration) `
@@ -45,6 +47,17 @@ steps:
             /p:PublishSingleFile=true
     }
   displayName: Build
+
+- powershell: |
+    $ErrorActionPreference = "Stop"
+    Import-Module "$(Build.SourcesDirectory)/build.vs/LicenseCollector.psm1"
+    LicenseCollector `
+        -SolutionPath "LicenseCollector.sln" `
+        -Configuration "$(buildConfiguration)" `
+        -Platform "$(buildPlatform)" `
+        -TemplatePath "$(Build.SourcesDirectory)/THIRD_PARTY_NOTICES.template" `
+        -OutputPath "$(Build.SourcesDirectory)/THIRD_PARTY_NOTICES"
+  displayName: Collect Licenses
 
 - powershell: |
     Write-Host "Copying files for portable version..."
