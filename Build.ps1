@@ -51,12 +51,11 @@ Build `
 	-PauseOnError
 
 # collect license for release build
-LicenseCollector `
-	-SolutionPath "$SolutionPath" `
-	-Configuration "Release" `
-	-Platform "Any CPU" `
-	-TemplatePath "$LicenseTemplatePath" `
-	-OutputPath "$ScriptDir\THIRD_PARTY_NOTICES" `
-	-PauseOnError
+dotnet "_build\LicenseCollector\AnyCPU.Release\net5.0\LicenseCollector.dll" `
+  --SolutionFilePath "$SolutionPath" `
+  --Configuration "Release" `
+  --Platform "Any CPU" `
+  --LicenseTemplatePath "$LicenseTemplatePath" `
+  "$ScriptDir\THIRD_PARTY_NOTICES"
 
 Read-Host "Press ANY key..."

@@ -1,7 +1,0 @@
-﻿.\LicenseCollector.deps.json
-.\LicenseCollector.dll
-.\LicenseCollector.dll.config
-.\LicenseCollector.pdb
-.\LicenseCollector.runtimeconfig.dev.json
-.\LicenseCollector.runtimeconfig.json
-.\LicenseCollector.xml

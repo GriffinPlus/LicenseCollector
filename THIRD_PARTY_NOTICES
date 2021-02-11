@@ -56,276 +56,46 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: GriffinPlus.Lib.Logging (v2.0.0-rc0004)
+- Package: GriffinPlus.Lib.Logging (v3.0.0)
 - Author: Sascha Falk
 - Project: https://github.com/GriffinPlus/dotnet-libs-logging
-- License: https://github.com/GriffinPlus/dotnet-libs-logging/blob/master/LICENSE
+- License: https://licenses.nuget.org/MIT
 
-  Copyright (c) 2020 Sascha Falk
+  Copyright (c) 2021 Sascha Falk and Contributors
 
 
-MIT License
-
-Copyright (c) 2020 Sascha Falk <sascha@falk-online.eu>
-                   and Contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.AspNetCore.Hosting.Abstractions (v2.1.0)
+- Package: Microsoft.AspNetCore.Mvc.Razor.Extensions (v3.0.0)
 - Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- Project: https://github.com/aspnet/AspNetCore-Tooling
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.AspNetCore.Hosting.Server.Abstractions (v2.1.0)
+- Package: Microsoft.AspNetCore.Razor.Language (v3.0.0)
 - Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- Project: https://github.com/aspnet/AspNetCore-Tooling
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.AspNetCore.Html.Abstractions (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.AspNetCore.Http.Abstractions (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.AspNetCore.Http.Features (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.AspNetCore.Mvc.Razor.Extensions (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.AspNetCore.Razor (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.AspNetCore.Razor.Language (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.AspNetCore.Razor.Runtime (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Build (v16.5.0)
+- Package: Microsoft.Build (v16.8.0)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -338,7 +108,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build.Framework (v16.5.0)
+- Package: Microsoft.Build.Framework (v16.8.0)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -351,17 +121,20 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build.Locator (v1.2.6)
+- Package: Microsoft.Build.Locator (v1.4.1)
 - Author: Microsoft
-- Project: https://github.com/Microsoft/MSBuildLocator
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- Project: https://github.com/microsoft/MSBuildLocator
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
+
+MIT
+
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build.Utilities.Core (v16.5.0)
+- Package: Microsoft.Build.Utilities.Core (v16.8.0)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -374,62 +147,112 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.CodeAnalysis.Analyzers (v1.1.0)
+- Package: Microsoft.CodeAnalysis.Analyzers (v2.9.3)
 - Author: Microsoft
-- Project: http://msdn.com/roslyn
+- Project: https://github.com/dotnet/roslyn-analyzers
 - License: http://go.microsoft.com/fwlink/?LinkId=529443
 
+  © Microsoft Corporation. All rights reserved.
+
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.CodeAnalysis.Common (v2.8.0)
+- Package: Microsoft.CodeAnalysis.Common (v3.3.0)
 - Author: Microsoft
 - Project: https://github.com/dotnet/roslyn
-- License: http://go.microsoft.com/fwlink/?LinkId=529443
+- License: https://licenses.nuget.org/Apache-2.0
+
+  © Microsoft Corporation. All rights reserved.
+
+
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.CodeAnalysis.CSharp (v2.8.0)
+- Package: Microsoft.CodeAnalysis.CSharp (v3.3.0)
 - Author: Microsoft
 - Project: https://github.com/dotnet/roslyn
-- License: http://go.microsoft.com/fwlink/?LinkId=529443
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.CodeAnalysis.Razor (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.DotNet.PlatformAbstractions (v2.1.0)
-- Author: Microsoft.DotNet.PlatformAbstractions
+- Package: Microsoft.CodeAnalysis.Razor (v3.0.0)
+- Author: Microsoft
+- Project: https://github.com/aspnet/AspNetCore-Tooling
+- License: https://licenses.nuget.org/Apache-2.0
+
+  © Microsoft Corporation. All rights reserved.
+
+
+Apache-2.0
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.Extensions.Caching.Abstractions (v3.0.0)
+- Author: Microsoft
+- Project: https://asp.net/
+- License: https://licenses.nuget.org/Apache-2.0
+
+  © Microsoft Corporation. All rights reserved.
+
+
+Apache-2.0
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.Extensions.Caching.Memory (v3.0.0)
+- Author: Microsoft
+- Project: https://asp.net/
+- License: https://licenses.nuget.org/Apache-2.0
+
+  © Microsoft Corporation. All rights reserved.
+
+
+Apache-2.0
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.Extensions.DependencyInjection (v3.0.0)
+- Author: Microsoft
+- Project: https://asp.net/
+- License: https://licenses.nuget.org/Apache-2.0
+
+  © Microsoft Corporation. All rights reserved.
+
+
+Apache-2.0
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.Extensions.DependencyInjection.Abstractions (v3.0.0)
+- Author: Microsoft
+- Project: https://asp.net/
+- License: https://licenses.nuget.org/Apache-2.0
+
+  © Microsoft Corporation. All rights reserved.
+
+
+Apache-2.0
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.Extensions.DependencyModel (v3.0.0)
+- Author: Microsoft
 - Project: https://dot.net/
-- License: https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
 
 The MIT License (MIT)
@@ -460,571 +283,98 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.Caching.Abstractions (v2.1.0)
+- Package: Microsoft.Extensions.FileProviders.Abstractions (v3.0.0)
 - Author: Microsoft
 - Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.Caching.Memory (v2.1.0)
+- Package: Microsoft.Extensions.FileProviders.Physical (v3.0.0)
 - Author: Microsoft
 - Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.Configuration.Abstractions (v2.1.0)
+- Package: Microsoft.Extensions.FileSystemGlobbing (v3.0.0)
 - Author: Microsoft
 - Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.DependencyInjection (v2.1.0)
+- Package: Microsoft.Extensions.Logging.Abstractions (v3.0.0)
 - Author: Microsoft
 - Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.DependencyInjection.Abstractions (v2.1.0)
+- Package: Microsoft.Extensions.Options (v3.0.0)
 - Author: Microsoft
 - Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.DependencyModel (v2.1.0)
-- Author: Microsoft.Extensions.DependencyModel
-- Project: https://dot.net/
-- License: https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT
-
-  © Microsoft Corporation.  All rights reserved.
-
-
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Extensions.FileProviders.Abstractions (v2.1.0)
+- Package: Microsoft.Extensions.Primitives (v3.0.0)
 - Author: Microsoft
 - Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+Apache-2.0
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.FileProviders.Physical (v2.1.0)
+- Package: Microsoft.NETCore.Platforms (v3.1.0)
 - Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.FileSystemGlobbing (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Extensions.Hosting.Abstractions (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Extensions.Logging.Abstractions (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Extensions.Options (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Extensions.Primitives (v2.1.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.NETCore.App (v2.1.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT
-
-  © Microsoft Corporation.  All rights reserved.
-
-
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.NETCore.DotNetAppHost (v2.1.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT
-
-  © Microsoft Corporation.  All rights reserved.
-
-
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.NETCore.DotNetHostPolicy (v2.1.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT
-
-  © Microsoft Corporation.  All rights reserved.
-
-
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.NETCore.DotNetHostResolver (v2.1.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT
-
-  © Microsoft Corporation.  All rights reserved.
-
-
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.NETCore.Platforms (v2.1.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
-
-  © Microsoft Corporation.  All rights reserved.
-
-
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.NETCore.Targets (v2.1.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
-
-  © Microsoft Corporation.  All rights reserved.
-
-
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Win32.Primitives (v4.3.0)
+- Package: Microsoft.NETCore.Targets (v1.1.0)
 - Author: Microsoft
 - Project: https://dot.net/
 - License: http://go.microsoft.com/fwlink/?LinkId=329770
@@ -1044,38 +394,15 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: NETStandard.Library (v2.0.3)
+- Package: Microsoft.Win32.SystemEvents (v4.7.0)
 - Author: Microsoft
-- Project: https://dot.net/
-- License: https://github.com/dotnet/standard/blob/master/LICENSE.TXT
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
 
-  .NET Foundation and Contributors
+  © Microsoft Corporation. All rights reserved.
 
 
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -1303,176 +630,6 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.native.System (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.native.System.IO.Compression (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.native.System.Net.Http (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.native.System.Security.Cryptography.Apple (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.AppContext (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
 - Package: System.Buffers (v4.5.0)
 - Author: Microsoft
 - Project: https://dot.net/
@@ -1519,16 +676,6 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Collections.Concurrent (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
 - Package: System.Collections.Immutable (v1.5.0)
 - Author: Microsoft
 - Project: https://dot.net/
@@ -1565,82 +712,15 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Console (v4.3.0)
+- Package: System.Drawing.Common (v4.7.0)
 - Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Diagnostics.Debug (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Diagnostics.FileVersionInfo (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Diagnostics.StackTrace (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Diagnostics.Tools (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Diagnostics.TraceSource (v4.0.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Diagnostics.Tracing (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Dynamic.Runtime (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -1655,67 +735,7 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Globalization.Calendars (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
 - Package: System.IO (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.IO.Compression (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.IO.FileSystem (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.IO.FileSystem.Primitives (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Linq (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Linq.Expressions (v4.3.0)
 - Author: Microsoft
 - Project: https://dot.net/
 - License: http://go.microsoft.com/fwlink/?LinkId=329770
@@ -1761,57 +781,7 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.ObjectModel (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
 - Package: System.Reflection (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Reflection.Emit (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Reflection.Emit.ILGeneration (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Reflection.Emit.Lightweight (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Reflection.Extensions (v4.3.0)
 - Author: Microsoft
 - Project: https://dot.net/
 - License: http://go.microsoft.com/fwlink/?LinkId=329770
@@ -1867,16 +837,6 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Reflection.TypeExtensions (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
 - Package: System.Resources.ResourceManager (v4.3.0)
 - Author: Microsoft
 - Project: https://dot.net/
@@ -1897,12 +857,12 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Runtime.CompilerServices.Unsafe (v4.5.0)
+- Package: System.Runtime.CompilerServices.Unsafe (v4.5.2)
 - Author: Microsoft
 - Project: https://dot.net/
 - License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
 
 The MIT License (MIT)
@@ -1963,142 +923,41 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Runtime.InteropServices.RuntimeInformation (v4.0.0)
+- Package: System.Security.AccessControl (v4.7.0)
 - Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Runtime.Loader (v4.0.0)
+- Package: System.Security.Permissions (v4.7.0)
 - Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Runtime.Numerics (v4.3.0)
+- Package: System.Security.Principal.Windows (v4.7.0)
 - Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Runtime.Serialization.Primitives (v4.1.1)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Claims (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Cryptography.Algorithms (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Cryptography.Cng (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Cryptography.Csp (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Cryptography.Encoding (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Cryptography.OpenSsl (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Cryptography.Primitives (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Cryptography.X509Certificates (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Principal (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Principal.Windows (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -2113,32 +972,12 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Text.Encoding.CodePages (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Text.Encoding.Extensions (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Text.Encodings.Web (v4.5.0)
+- Package: System.Text.Encoding.CodePages (v4.5.1)
 - Author: Microsoft
 - Project: https://dot.net/
 - License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
 
 The MIT License (MIT)
@@ -2169,22 +1008,15 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Text.RegularExpressions (v4.3.0)
+- Package: System.Text.Json (v4.7.0)
 - Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Threading (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -2235,91 +1067,50 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Threading.Tasks.Extensions (v4.3.0)
+- Package: System.Threading.Tasks.Extensions (v4.5.3)
 - Author: Microsoft
 - Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
+
+
+The MIT License (MIT)
+
+Copyright (c) .NET Foundation and Contributors
+
+All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Threading.Tasks.Parallel (v4.3.0)
+- Package: System.Windows.Extensions (v4.7.0)
 - Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Threading.Thread (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.ValueTuple (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Xml.ReaderWriter (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Xml.XDocument (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Xml.XmlDocument (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Xml.XPath (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Xml.XPath.XDocument (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------

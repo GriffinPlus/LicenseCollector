@@ -37,26 +37,25 @@ steps:
     dotnet publish `
     -c $(buildConfiguration) `
     -o "$(Build.ArtifactStagingDirectory)/portable" `
-    /p:TargetFramework=netcoreapp2.1
+    /p:TargetFramework=net5.0
     foreach ($target in '$(targets)'.Split(',')) {
         dotnet publish `
             -c $(buildConfiguration) `
             -r $target `
             -o "$(Build.ArtifactStagingDirectory)/standalone/$target" `
-            /p:TargetFramework=netcoreapp3.1 `
+            /p:TargetFramework=net5.0 `
             /p:PublishSingleFile=true
     }
   displayName: Build
 
 - powershell: |
     $ErrorActionPreference = "Stop"
-    Import-Module "$(Build.SourcesDirectory)/build.vs/LicenseCollector.psm1"
-    LicenseCollector `
-        -SolutionPath "LicenseCollector.sln" `
-        -Configuration "$(buildConfiguration)" `
-        -Platform "$(buildPlatform)" `
-        -TemplatePath "$(Build.SourcesDirectory)/THIRD_PARTY_NOTICES.template" `
-        -OutputPath "$(Build.SourcesDirectory)/THIRD_PARTY_NOTICES"
+    dotnet "$(Build.ArtifactStagingDirectory)/portable/LicenseCollector.dll" `
+        --SolutionFilePath "LicenseCollector.sln" `
+        --Configuration "$(buildConfiguration)" `
+        --Platform "$(buildPlatform)" `
+        --LicenseTemplatePath "$(Build.SourcesDirectory)/THIRD_PARTY_NOTICES.template" `
+        "$(Build.SourcesDirectory)/THIRD_PARTY_NOTICES"
   displayName: Collect Licenses
 
 - powershell: |
@@ -65,17 +64,25 @@ steps:
     Copy-Item LICENSE "$(Build.ArtifactStagingDirectory)/portable"
     Copy-Item THIRD_PARTY_NOTICES "$(Build.ArtifactStagingDirectory)/portable"
     Remove-Item "$(Build.ArtifactStagingDirectory)/portable/*.pdb"
-    Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/portable/*" "$(Build.ArtifactStagingDirectory)/portable/LicenseCollector-portable-v$(GitVersion.SemVer).zip"
+    Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/portable/*" "$(Build.ArtifactStagingDirectory)/LicenseCollector-portable-v$(GitVersion.SemVer).zip"
+    Remove-Item -Recurse -Force "$(Build.ArtifactStagingDirectory)/portable"
     foreach ($target in '$(targets)'.Split(',')) {
         Write-Host "Copying files for standalone version (target '$target')..."
         Copy-Item README.md "$(Build.ArtifactStagingDirectory)/standalone/$target"
         Copy-Item LICENSE "$(Build.ArtifactStagingDirectory)/standalone/$target"
         Copy-Item THIRD_PARTY_NOTICES "$(Build.ArtifactStagingDirectory)/standalone/$target"
         Remove-Item "$(Build.ArtifactStagingDirectory)/standalone/$target/*.pdb"
-        Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/standalone/$target/*" "$(Build.ArtifactStagingDirectory)/standalone/$target/LicenseCollector-standalone-$target-v$(GitVersion.SemVer).zip"
+        Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/standalone/$target/*" "$(Build.ArtifactStagingDirectory)/LicenseCollector-standalone-$target-v$(GitVersion.SemVer).zip"
+        Remove-Item -Recurse -Force "$(Build.ArtifactStagingDirectory)/standalone/$target"
     }
-  condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+    Remove-Item -Recurse -Force "$(Build.ArtifactStagingDirectory)/standalone"
   displayName: Create Release Packages
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Pipeline Artifacts'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'Packages'
 
 - task: GitHubRelease@1
   displayName: Publish to Github Releases

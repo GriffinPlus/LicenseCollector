@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFrameworks>net5.0</TargetFrameworks>
     <BuildVs_Override_IntermediateOutputPath>true</BuildVs_Override_IntermediateOutputPath>
     <BuildVs_Override_OutputPath>true</BuildVs_Override_OutputPath>
     <StartupObject>GriffinPlus.LicenseCollector.Program</StartupObject>
@@ -12,10 +12,10 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="GriffinPlus.Lib.Logging" Version="2.0.0-rc0004" />
-    <PackageReference Include="Microsoft.Build" Version="16.5.0" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.2.6" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.5.0" ExcludeAssets="runtime" />
+    <PackageReference Include="GriffinPlus.Lib.Logging" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Build" Version="16.8.0" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.8.0" ExcludeAssets="runtime" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="RazorLight" Version="2.0.0-beta7" />
   </ItemGroup>

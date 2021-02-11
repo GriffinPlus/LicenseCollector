@@ -75,7 +75,6 @@ namespace GriffinPlus.LicenseCollector
 			GeneralError = 2,
 			FileNotFound = 3
 		}
-
 		static int Main(string[] args)
 		{
 			// configure the log
@@ -83,9 +82,8 @@ namespace GriffinPlus.LicenseCollector
 			formatter.AddTimestampColumn("yyyy-MM-dd HH:mm:ss.fff");
 			formatter.AddLogLevelColumn();
 			formatter.AddTextColumn();
-			var consoleStage = new ConsoleWriterPipelineStage();
-			consoleStage.Formatter = formatter;
-			Log.LogMessageProcessingPipeline = consoleStage;
+			var consoleStage = new ConsoleWriterPipelineStage("Console") { Formatter = formatter };
+			Log.ProcessingPipeline = consoleStage;
 
 			// configure command line parser
 			var parser = new Parser(with =>
