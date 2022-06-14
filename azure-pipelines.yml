@@ -17,33 +17,60 @@ variables:
   targets: 'win10-x86,win10-x64'
 
 steps:
-- task: GitVersion@5
+
+- task: UseDotNet@2
+  displayName: 'Use .NET 6.0 SDK'
   inputs:
-    runtime: 'core'
-    updateAssemblyInfo: true
-    updateAssemblyInfoFilename: build.vs\AssemblyInfoVersion.cs
-  displayName: 'Patching Version Number'
+    packageType: 'sdk'
+    version: '6.0.x'
+    installationPath: '$(Agent.ToolsDirectory)/dotnet'
 
 - task: NuGetToolInstaller@1
-  displayName: Install NuGet
-
-- task: NuGetCommand@2
-  displayName: Restore NuGet Packages
+  displayName: 'Install NuGet'
   inputs:
-    restoreSolution: '$(solution)'
+    versionSpec: '5.x'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Install GitVersion'
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install -g gitversion.tool'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Show GitVersion Version'
+  inputs:
+    command: 'custom'
+    custom: 'gitversion'
+    arguments: 'version'
+
+- task: DotNetCoreCLI@2
+  name: 'GitVersion'
+  displayName: 'Run GitVersion'
+  inputs:
+    command: 'custom'
+    custom: 'gitversion'
+    arguments: '/output buildserver /updateassemblyinfo src/CommonAssemblyInfo.cs'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
 
 - powershell: |
     $env:DOTNET_CLI_TELEMETRY_OPTOUT = 'true'
     dotnet publish `
     -c $(buildConfiguration) `
     -o "$(Build.ArtifactStagingDirectory)/portable" `
-    /p:TargetFramework=net5.0
+    /p:TargetFramework=net6.0
     foreach ($target in '$(targets)'.Split(',')) {
         dotnet publish `
-            -c $(buildConfiguration) `
-            -r $target `
-            -o "$(Build.ArtifactStagingDirectory)/standalone/$target" `
-            /p:TargetFramework=net5.0 `
+            --configuration $(buildConfiguration) `
+            --runtime $target `
+            --self-contained `
+            --output "$(Build.ArtifactStagingDirectory)/standalone/$target" `
+            /p:TargetFramework=net6.0 `
             /p:PublishSingleFile=true
     }
   displayName: Build
