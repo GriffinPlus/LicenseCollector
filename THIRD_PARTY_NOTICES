@@ -23,7 +23,7 @@ https://github.com/griffinplus/LicenseCollector
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: CommandLineParser (v2.8.0)
+- Package: CommandLineParser (v2.9.1)
 - Author: gsscoder,nemec,ericnewton76,moh-hassan
 - Project: https://github.com/commandlineparser/commandline
 
@@ -56,9 +56,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: GriffinPlus.Lib.Logging (v3.0.0)
+- Package: GriffinPlus.Lib.Common (v2.0.1)
 - Author: Sascha Falk
-- Project: https://github.com/GriffinPlus/dotnet-libs-logging
+- Project: https://github.com/GriffinPlus/dotnet-libs-common
 - License: https://licenses.nuget.org/MIT
 
   Copyright (c) 2021 Sascha Falk and Contributors
@@ -69,33 +69,59 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.AspNetCore.Mvc.Razor.Extensions (v3.0.0)
+- Package: GriffinPlus.Lib.Logging (v5.1.0)
+- Author: Sascha Falk
+- Project: https://github.com/GriffinPlus/dotnet-libs-logging
+- License: https://licenses.nuget.org/MIT
+
+  Copyright (c) 2022 Sascha Falk and Contributors
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: GriffinPlus.Lib.Logging.Interface (v1.1.0)
+- Author: Sascha Falk
+- Project: https://github.com/GriffinPlus/dotnet-libs-logging-interface
+- License: https://licenses.nuget.org/MIT
+
+  Copyright (c) 2022 Sascha Falk and Contributors
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.AspNetCore.Mvc.Razor.Extensions (v6.0.0)
 - Author: Microsoft
-- Project: https://github.com/aspnet/AspNetCore-Tooling
-- License: https://licenses.nuget.org/Apache-2.0
+- Project: https://asp.net/
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.AspNetCore.Razor.Language (v3.0.0)
+- Package: Microsoft.AspNetCore.Razor.Language (v6.0.0)
 - Author: Microsoft
-- Project: https://github.com/aspnet/AspNetCore-Tooling
-- License: https://licenses.nuget.org/Apache-2.0
+- Project: https://asp.net/
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build (v16.8.0)
+- Package: Microsoft.Build (v17.2.0)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -108,7 +134,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build.Framework (v16.8.0)
+- Package: Microsoft.Build.Framework (v17.2.0)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -134,7 +160,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build.Utilities.Core (v16.8.0)
+- Package: Microsoft.Build.Utilities.Core (v17.2.0)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -147,216 +173,210 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.CodeAnalysis.Analyzers (v2.9.3)
+- Package: Microsoft.CodeAnalysis.Analyzers (v3.3.2)
 - Author: Microsoft
 - Project: https://github.com/dotnet/roslyn-analyzers
-- License: http://go.microsoft.com/fwlink/?LinkId=529443
+- License: https://licenses.nuget.org/Apache-2.0
 
   © Microsoft Corporation. All rights reserved.
 
+
+Apache-2.0
+
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.CodeAnalysis.Common (v3.3.0)
+- Package: Microsoft.CodeAnalysis.Common (v4.0.0)
 - Author: Microsoft
 - Project: https://github.com/dotnet/roslyn
-- License: https://licenses.nuget.org/Apache-2.0
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.CodeAnalysis.CSharp (v3.3.0)
+- Package: Microsoft.CodeAnalysis.CSharp (v4.0.0)
 - Author: Microsoft
 - Project: https://github.com/dotnet/roslyn
-- License: https://licenses.nuget.org/Apache-2.0
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.CodeAnalysis.Razor (v3.0.0)
-- Author: Microsoft
-- Project: https://github.com/aspnet/AspNetCore-Tooling
-- License: https://licenses.nuget.org/Apache-2.0
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Apache-2.0
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Extensions.Caching.Abstractions (v3.0.0)
+- Package: Microsoft.CodeAnalysis.Razor (v6.0.0)
 - Author: Microsoft
 - Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.Caching.Memory (v3.0.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Apache-2.0
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Extensions.DependencyInjection (v3.0.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Apache-2.0
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Extensions.DependencyInjection.Abstractions (v3.0.0)
-- Author: Microsoft
-- Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
-
-  © Microsoft Corporation. All rights reserved.
-
-
-Apache-2.0
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Extensions.DependencyModel (v3.0.0)
+- Package: Microsoft.Extensions.Caching.Abstractions (v6.0.0)
 - Author: Microsoft
 - Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.FileProviders.Abstractions (v3.0.0)
+- Package: Microsoft.Extensions.Caching.Memory (v6.0.0)
 - Author: Microsoft
-- Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.FileProviders.Physical (v3.0.0)
+- Package: Microsoft.Extensions.DependencyInjection (v6.0.0)
 - Author: Microsoft
-- Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.FileSystemGlobbing (v3.0.0)
+- Package: Microsoft.Extensions.DependencyInjection.Abstractions (v6.0.0)
 - Author: Microsoft
-- Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.Logging.Abstractions (v3.0.0)
+- Package: Microsoft.Extensions.DependencyModel (v6.0.0)
 - Author: Microsoft
-- Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.Options (v3.0.0)
+- Package: Microsoft.Extensions.FileProviders.Abstractions (v6.0.0)
 - Author: Microsoft
-- Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Extensions.Primitives (v3.0.0)
+- Package: Microsoft.Extensions.FileProviders.Physical (v6.0.0)
 - Author: Microsoft
-- Project: https://asp.net/
-- License: https://licenses.nuget.org/Apache-2.0
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-Apache-2.0
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.Extensions.FileSystemGlobbing (v6.0.0)
+- Author: Microsoft
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
+
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.Extensions.Logging.Abstractions (v6.0.0)
+- Author: Microsoft
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
+
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.Extensions.Options (v6.0.0)
+- Author: Microsoft
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
+
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.Extensions.Primitives (v6.0.0)
+- Author: Microsoft
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
+
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: Microsoft.NET.StringTools (v1.0.0)
+- Author: Microsoft
+- Project: http://go.microsoft.com/fwlink/?LinkId=624683
+- License: https://licenses.nuget.org/MIT
+
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -407,7 +427,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Newtonsoft.Json (v12.0.3)
+- Package: Newtonsoft.Json (v13.0.1)
 - Author: James Newton-King
 - Project: https://www.newtonsoft.com/json
 - License: https://licenses.nuget.org/MIT
@@ -420,7 +440,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: RazorLight (v2.0.0-beta7)
+- Package: RazorLight (v2.0.0)
 - Author: toddams
 
 
@@ -630,12 +650,12 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Buffers (v4.5.0)
+- Package: System.Buffers (v4.5.1)
 - Author: Microsoft
 - Project: https://dot.net/
 - License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
 
 The MIT License (MIT)
@@ -676,38 +696,41 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Collections.Immutable (v1.5.0)
+- Package: System.Collections.Immutable (v5.0.0)
+- Author: Microsoft
+- Project: https://github.com/dotnet/runtime
+- License: https://licenses.nuget.org/MIT
+
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: System.Configuration.ConfigurationManager (v4.7.0)
+- Author: Microsoft
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
+
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: System.Diagnostics.EventLog (v6.0.0)
 - Author: Microsoft
 - Project: https://dot.net/
-- License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
 
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -745,7 +768,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Memory (v4.5.3)
+- Package: System.Memory (v4.5.4)
 - Author: Microsoft
 - Project: https://dot.net/
 - License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
@@ -791,38 +814,15 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Reflection.Metadata (v1.6.0)
+- Package: System.Reflection.Metadata (v5.0.0)
 - Author: Microsoft
-- Project: https://dot.net/
-- License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
+- Project: https://github.com/dotnet/runtime
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
 
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -857,38 +857,15 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Runtime.CompilerServices.Unsafe (v4.5.2)
+- Package: System.Runtime.CompilerServices.Unsafe (v6.0.0)
 - Author: Microsoft
 - Project: https://dot.net/
-- License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
+- License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -924,6 +901,19 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 
 - Package: System.Security.AccessControl (v4.7.0)
+- Author: Microsoft
+- Project: https://github.com/dotnet/corefx
+- License: https://licenses.nuget.org/MIT
+
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: System.Security.Cryptography.ProtectedData (v4.7.0)
 - Author: Microsoft
 - Project: https://github.com/dotnet/corefx
 - License: https://licenses.nuget.org/MIT
@@ -1008,9 +998,22 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Text.Json (v4.7.0)
+- Package: System.Text.Encodings.Web (v6.0.0)
 - Author: Microsoft
-- Project: https://github.com/dotnet/corefx
+- Project: https://dot.net/
+- License: https://licenses.nuget.org/MIT
+
+  © Microsoft Corporation. All rights reserved.
+
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package: System.Text.Json (v6.0.0)
+- Author: Microsoft
+- Project: https://dot.net/
 - License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
@@ -1031,43 +1034,20 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Threading.Tasks.Dataflow (v4.9.0)
+- Package: System.Threading.Tasks.Dataflow (v6.0.0)
 - Author: Microsoft
 - Project: https://dot.net/
-- License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
 
-The MIT License (MIT)
-
-Copyright (c) .NET Foundation and Contributors
-
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Threading.Tasks.Extensions (v4.5.3)
+- Package: System.Threading.Tasks.Extensions (v4.5.4)
 - Author: Microsoft
 - Project: https://dot.net/
 - License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
