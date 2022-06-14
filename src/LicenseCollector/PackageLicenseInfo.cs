@@ -2,6 +2,7 @@
 
 namespace GriffinPlus.LicenseCollector
 {
+
 	/// <summary>
 	/// Information of a 3rd party package and its license.
 	/// </summary>
@@ -14,7 +15,7 @@ namespace GriffinPlus.LicenseCollector
 		/// </summary>
 		/// <param name="id">Identifier of the package.</param>
 		/// <param name="license">License of the package.</param>
-		public PackageLicenseInfo(string id, string license) : this(id, "","", "", "", "", license) { }
+		public PackageLicenseInfo(string id, string license) : this(id, "", "", "", "", "", license) { }
 
 
 		/// <summary>
@@ -27,7 +28,14 @@ namespace GriffinPlus.LicenseCollector
 		/// <param name="licenseUrl">Url to license.</param>
 		/// <param name="projectUrl">Url to project.</param>
 		/// <param name="license">License of the package.</param>
-		public PackageLicenseInfo(string id, string version, string author, string copyright, string licenseUrl, string projectUrl, string license)
+		public PackageLicenseInfo(
+			string id,
+			string version,
+			string author,
+			string copyright,
+			string licenseUrl,
+			string projectUrl,
+			string license)
 		{
 			PackageIdentifier = id;
 			PackageVersion = version;
@@ -111,7 +119,9 @@ namespace GriffinPlus.LicenseCollector
 				builder.AppendLine(License);
 				builder.AppendLine();
 			}
+
 			return builder.ToString();
 		}
 	}
+
 }

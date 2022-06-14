@@ -1,5 +1,6 @@
 ﻿namespace GriffinPlus.LicenseCollector
 {
+
 	/// <summary>
 	/// Lists different supported project types
 	/// </summary>
@@ -9,10 +10,12 @@
 		/// Defines that project uses 'project.assets.json'.
 		/// </summary>
 		PackageReference,
+
 		/// <summary>
 		/// Defines that project uses 'packages.config'.
 		/// </summary>
 		PackagesConfig,
+
 		/// <summary>
 		/// No 'packages.config' or 'project.assets.json' found.
 		/// </summary>
@@ -33,7 +36,11 @@
 		/// <param name="absolutePath">Absolute path to the project file.</param>
 		/// <param name="nugetInfo">Path to the NuGet information.</param>
 		/// <param name="type">Used NuGet style.</param>
-		public ProjectInfo(string name, string absolutePath, string nugetInfo, NuGetPackageDependency type)
+		public ProjectInfo(
+			string                 name,
+			string                 absolutePath,
+			string                 nugetInfo,
+			NuGetPackageDependency type)
 		{
 			ProjectName = name;
 			ProjectAbsolutePath = absolutePath;
@@ -77,4 +84,5 @@
 			return ProjectName;
 		}
 	}
+
 }

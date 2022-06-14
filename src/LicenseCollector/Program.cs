@@ -4,23 +4,26 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+
 using CommandLine;
+
 using GriffinPlus.Lib.Logging;
 
 namespace GriffinPlus.LicenseCollector
 {
+
 	/// <summary>
 	/// Main entry and starting point of application.
 	/// </summary>
 	class Program
 	{
-		private static readonly LogWriter sLog = Log.GetWriter<Program>();
+		private static readonly LogWriter sLog = LogWriter.Get<Program>();
 
 		/// <summary>
 		/// Command line argument mapping class
 		/// (see https://github.com/commandlineparser/commandline for details).
 		/// </summary>
-		class Options
+		private class Options
 		{
 			/// <summary>
 			/// Gets and sets verbosity of this tool.
@@ -70,42 +73,37 @@ namespace GriffinPlus.LicenseCollector
 		/// </summary>
 		internal enum ExitCode
 		{
-			Success = 0,
+			Success       = 0,
 			ArgumentError = 1,
-			GeneralError = 2,
-			FileNotFound = 3
+			GeneralError  = 2,
+			FileNotFound  = 3
 		}
-		static int Main(string[] args)
-		{
-			// configure the log
-			var formatter = new TableMessageFormatter();
-			formatter.AddTimestampColumn("yyyy-MM-dd HH:mm:ss.fff");
-			formatter.AddLogLevelColumn();
-			formatter.AddTextColumn();
-			var consoleStage = new ConsoleWriterPipelineStage("Console") { Formatter = formatter };
-			Log.ProcessingPipeline = consoleStage;
 
+		private static int Main(string[] args)
+		{
 			// configure command line parser
-			var parser = new Parser(with =>
-			{
-				with.CaseInsensitiveEnumValues = true;
-				with.CaseSensitive = false;
-				with.EnableDashDash = true;
-				with.IgnoreUnknownArguments = false;
-				with.ParsingCulture = CultureInfo.InvariantCulture;
-				with.HelpWriter = null;
-			});
+			var parser = new Parser(
+				with =>
+				{
+					with.CaseInsensitiveEnumValues = true;
+					with.CaseSensitive = false;
+					with.EnableDashDash = true;
+					with.IgnoreUnknownArguments = false;
+					with.ParsingCulture = CultureInfo.InvariantCulture;
+					with.HelpWriter = null;
+				});
 
 			//process command line
 			int exitCode = parser.ParseArguments<Options>(args)
 				.MapResult(
-					options => (int) RunOptionsAndReturnExitCode(options),
-					errors => (int) HandleParseError(errors));
+					options => (int)RunOptionsAndReturnExitCode(options),
+					errors => (int)HandleParseError(errors));
 
 			return exitCode;
 		}
 
 		#region Command Line Processing
+
 		/// <summary>
 		/// Is called, if specified command line arguments have successfully been validated.
 		/// </summary>
@@ -113,21 +111,37 @@ namespace GriffinPlus.LicenseCollector
 		/// <returns>Exit code the application should return.</returns>
 		private static ExitCode RunOptionsAndReturnExitCode(Options options)
 		{
-			// configure the log verbosity
-			var configuration = new VolatileLogConfiguration();
-			configuration.AddLogWriterDefault(x => x.WithBaseLevel(options.Verbose ? LogLevel.All: LogLevel.Note));
-			Log.Configuration = configuration;
+			// configure the log
+			Log.Initialize<VolatileLogConfiguration>(
+				configuration =>
+				{
+					configuration.AddLogWriterDefault(
+						config =>
+						{
+							config.WithBaseLevel(options.Verbose ? LogLevel.All : LogLevel.Notice);
+						});
+				},
+				builder => builder.Add<ConsoleWriterPipelineStage>(
+					"Console",
+					stage =>
+					{
+						var formatter = new TableMessageFormatter();
+						formatter.AddTimestampColumn("yyyy-MM-dd HH:mm:ss.fff");
+						formatter.AddLogLevelColumn();
+						formatter.AddTextColumn();
+						stage.Formatter = formatter;
+					}));
 
-			sLog.Write(LogLevel.Developer, "LicenseCollector v{0}", Assembly.GetExecutingAssembly().GetName().Version);
-			sLog.Write(LogLevel.Developer, "--------------------------------------------------------------------------------");
-			sLog.Write(LogLevel.Developer, "Verbose:            '{0}'", options.Verbose);
-			sLog.Write(LogLevel.Developer, "SolutionFile:       '{0}'", options.SolutionFilePath);
-			sLog.Write(LogLevel.Developer, "Configuration:      '{0}'", options.Configuration);
-			sLog.Write(LogLevel.Developer, "Platform:           '{0}'", options.Platform);
-			sLog.Write(LogLevel.Developer, "SearchPattern:      '{0}'", options.SearchPattern);
-			sLog.Write(LogLevel.Developer, "LicenseTemplatePath '{0}'", options.LicenseTemplatePath);
-			sLog.Write(LogLevel.Developer, "OutputPath:         '{0}'", options.OutputLicensePath);
-			sLog.Write(LogLevel.Developer, "--------------------------------------------------------------------------------");
+			sLog.Write(LogLevel.Debug, "LicenseCollector v{0}", Assembly.GetExecutingAssembly().GetName().Version);
+			sLog.Write(LogLevel.Debug, "--------------------------------------------------------------------------------");
+			sLog.Write(LogLevel.Debug, "Verbose:            '{0}'", options.Verbose);
+			sLog.Write(LogLevel.Debug, "SolutionFile:       '{0}'", options.SolutionFilePath);
+			sLog.Write(LogLevel.Debug, "Configuration:      '{0}'", options.Configuration);
+			sLog.Write(LogLevel.Debug, "Platform:           '{0}'", options.Platform);
+			sLog.Write(LogLevel.Debug, "SearchPattern:      '{0}'", options.SearchPattern);
+			sLog.Write(LogLevel.Debug, "LicenseTemplatePath '{0}'", options.LicenseTemplatePath);
+			sLog.Write(LogLevel.Debug, "OutputPath:         '{0}'", options.OutputLicensePath);
+			sLog.Write(LogLevel.Debug, "--------------------------------------------------------------------------------");
 
 			// the given path for the solution does not exist
 			if (!File.Exists(options.SolutionFilePath))
@@ -135,12 +149,14 @@ namespace GriffinPlus.LicenseCollector
 				sLog.Write(LogLevel.Error, "The path to the solution file under '{0}' does not exist.", options.SolutionFilePath);
 				return ExitCode.FileNotFound;
 			}
+
 			// the given path is not a solution file
 			if (!Path.GetExtension(options.SolutionFilePath).Equals(".sln"))
 			{
 				sLog.Write(LogLevel.Error, "The path '{0}' is not a solution file.", options.SolutionFilePath);
 				return ExitCode.ArgumentError;
 			}
+
 			// convert given relative paths to absolute paths if necessary
 			if (!Path.IsPathRooted(options.SolutionFilePath))
 				options.SolutionFilePath = Path.GetFullPath(options.SolutionFilePath);
@@ -149,8 +165,13 @@ namespace GriffinPlus.LicenseCollector
 			if (!string.IsNullOrEmpty(options.LicenseTemplatePath) && !Path.IsPathRooted(options.LicenseTemplatePath))
 				options.LicenseTemplatePath = Path.GetFullPath(options.LicenseTemplatePath);
 
-			var app = new AppCore(options.SolutionFilePath, options.Configuration, options.Platform,
-				options.OutputLicensePath, options.SearchPattern, options.LicenseTemplatePath);
+			var app = new AppCore(
+				options.SolutionFilePath,
+				options.Configuration,
+				options.Platform,
+				options.OutputLicensePath,
+				options.SearchPattern,
+				options.LicenseTemplatePath);
 			try
 			{
 				app.CollectProjects();
@@ -179,6 +200,7 @@ namespace GriffinPlus.LicenseCollector
 				PrintUsage(null, Console.Out);
 				return ExitCode.Success;
 			}
+
 			if (errors.Any(x => x.Tag == ErrorType.VersionRequestedError))
 			{
 				PrintVersion(Console.Out);
@@ -192,6 +214,7 @@ namespace GriffinPlus.LicenseCollector
 		#endregion
 
 		#region Usage Information / Error Reporting
+
 		/// <summary>
 		/// Writes usage text (with an optional error section).
 		/// </summary>
@@ -214,29 +237,33 @@ namespace GriffinPlus.LicenseCollector
 					{
 						case ErrorType.UnknownOptionError:
 						{
-							var err = (UnknownOptionError) error;
+							var err = (UnknownOptionError)error;
 							writer.WriteLine($"    - Unknown option: {err.Token}");
 							break;
 						}
+
 						case ErrorType.RepeatedOptionError:
 						{
-							var err = (RepeatedOptionError) error;
+							var err = (RepeatedOptionError)error;
 							writer.WriteLine($"    - Repeated option: -{err.NameInfo.ShortName}, --{err.NameInfo.LongName}");
 							break;
 						}
+
 						case ErrorType.MissingRequiredOptionError:
 						{
-							var err = (MissingRequiredOptionError) error;
+							var err = (MissingRequiredOptionError)error;
 							if (string.IsNullOrEmpty(err.NameInfo.LongName) && string.IsNullOrEmpty(err.NameInfo.ShortName))
 							{
-								writer.WriteLine($"    - Missing required value: <outpath>");
+								writer.WriteLine("    - Missing required value: <outpath>");
 							}
 							else
 							{
 								writer.WriteLine($"    - Missing required option: -{err.NameInfo.ShortName}, --{err.NameInfo.LongName}");
 							}
+
 							break;
 						}
+
 						default:
 						{
 							writer.WriteLine("    - Unspecified command line error");
@@ -252,8 +279,7 @@ namespace GriffinPlus.LicenseCollector
 			writer.WriteLine();
 			writer.WriteLine("  USAGE:");
 			writer.WriteLine();
-			writer.WriteLine(
-				"    LicenseCollector.exe [-v] -s|--solutionFilePath <spath> -c|--configuration <conf> -p|--platform <platform> [--searchPattern <pattern>] [--licenseTemplatePath <templatePath>] <outpath>");
+			writer.WriteLine("    LicenseCollector.exe [-v] -s|--solutionFilePath <spath> -c|--configuration <conf> -p|--platform <platform> [--searchPattern <pattern>] [--licenseTemplatePath <templatePath>] <outpath>");
 			writer.WriteLine();
 			writer.WriteLine("    [-v]");
 			writer.WriteLine("      Sets output to verbose.");
@@ -287,6 +313,8 @@ namespace GriffinPlus.LicenseCollector
 		{
 			writer.WriteLine($"  LicenseCollector v{Assembly.GetExecutingAssembly().GetName().Version}");
 		}
+
 		#endregion
 	}
+
 }

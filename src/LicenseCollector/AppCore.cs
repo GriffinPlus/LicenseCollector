@@ -1,7 +1,4 @@
-﻿using GriffinPlus.Lib.Logging;
-using Microsoft.Build.Construction;
-using Microsoft.Build.Evaluation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -11,18 +8,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+
+using GriffinPlus.Lib.Logging;
+
+using Microsoft.Build.Construction;
+using Microsoft.Build.Evaluation;
 using Microsoft.Build.Locator;
+
 using Newtonsoft.Json.Linq;
+
 using RazorLight;
 
 namespace GriffinPlus.LicenseCollector
 {
+
 	/// <summary>
 	/// The application's core logic.
 	/// </summary>
 	public class AppCore
 	{
-		private static readonly LogWriter sLog = Log.GetWriter<AppCore>();
+		private static readonly LogWriter sLog = LogWriter.Get<AppCore>();
 
 		#region Internal members for input
 
@@ -30,22 +35,27 @@ namespace GriffinPlus.LicenseCollector
 		/// Solution file to process.
 		/// </summary>
 		private readonly string mSolutionPath;
+
 		/// <summary>
 		/// Configuration of solution to consider.
 		/// </summary>
 		private readonly string mConfiguration;
+
 		/// <summary>
 		/// Platform of solution to consider.
 		/// </summary>
 		private readonly string mPlatform;
+
 		/// <summary>
 		/// Output path to generate 3rd party notices.
 		/// </summary>
 		private readonly string mOutputPath;
+
 		/// <summary>
 		/// Search pattern for static licenses to include.
 		/// </summary>
 		private readonly string mSearchPattern;
+
 		/// <summary>
 		/// Path to the license template.
 		/// </summary>
@@ -59,14 +69,17 @@ namespace GriffinPlus.LicenseCollector
 		/// Determines if processing is already completed because nothing needs to be done.
 		/// </summary>
 		private bool mFinishProcessing;
+
 		/// <summary>
 		/// Contains msbuild projects to process by this application.
 		/// </summary>
 		private readonly List<ProjectInfo> mProjectsToProcess;
+
 		/// <summary>
 		/// Contains 'id/version' of NuGet package as key and the path to the corresponding .nuspec file as value.
 		/// </summary>
 		private readonly Dictionary<string, string> mNuGetPackages;
+
 		/// <summary>
 		/// Contains license infos for included packages.
 		/// </summary>
@@ -74,9 +87,9 @@ namespace GriffinPlus.LicenseCollector
 
 		#endregion
 
-		private const string cProjectAssets = "project.assets.json";
-		private const string cPackagesConfig = "packages.config";
-		private const string cPackagesFolder = "packages";
+		private const string cProjectAssets        = "project.assets.json";
+		private const string cPackagesConfig       = "packages.config";
+		private const string cPackagesFolder       = "packages";
 		private const string cDeprecatedLicenseUrl = "https://aka.ms/deprecateLicenseUrl";
 
 		/// <summary>
@@ -88,7 +101,13 @@ namespace GriffinPlus.LicenseCollector
 		/// <param name="outputPath">Path to output third party license file.</param>
 		/// <param name="searchPattern">Search pattern for static licenses.</param>
 		/// <param name="licenseTemplatePath">Path to the license template.</param>
-		public AppCore(string solution, string config, string platform, string outputPath, string searchPattern, string licenseTemplatePath)
+		public AppCore(
+			string solution,
+			string config,
+			string platform,
+			string outputPath,
+			string searchPattern,
+			string licenseTemplatePath)
 		{
 			// register default msbuild version to use.
 			MSBuildLocator.RegisterDefaults();
@@ -118,21 +137,18 @@ namespace GriffinPlus.LicenseCollector
 
 			if (solution == null)
 			{
-				throw new ArgumentException(
-					$"The given path '{mSolutionPath}' does not define a visual studio solution.");
+				throw new ArgumentException($"The given path '{mSolutionPath}' does not define a visual studio solution.");
 			}
 
 			if (solution.SolutionConfigurations == null ||
-			    !solution.SolutionConfigurations.Any(
-				    x => x.ConfigurationName.Equals(mConfiguration) && x.PlatformName.Equals(mPlatform)))
+			    !solution.SolutionConfigurations.Any(x => x.ConfigurationName.Equals(mConfiguration) && x.PlatformName.Equals(mPlatform)))
 			{
-				throw new ArgumentOutOfRangeException(
-					$"The given parameter set '{mConfiguration}|{mPlatform}' does not match an existing solution configuration.");
+				throw new ArgumentOutOfRangeException($"The given parameter set '{mConfiguration}|{mPlatform}' does not match an existing solution configuration.");
 			}
 
 			if (solution.ProjectsInOrder == null || solution.ProjectsInOrder.Count == 0)
 			{
-				sLog.Write(LogLevel.Note, "The given solution file does not contain any projects.");
+				sLog.Write(LogLevel.Notice, "The given solution file does not contain any projects.");
 				mFinishProcessing = true;
 				return;
 			}
@@ -144,73 +160,103 @@ namespace GriffinPlus.LicenseCollector
 				                           Path.GetExtension(project.AbsolutePath).Equals(".vcxproj")) &&
 				                          project.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat;
 				if (!isProjectSupported) continue;
-				bool isConfigurationBuild = project.ProjectConfigurations.Keys.Any(x =>
-					x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild);
+				bool isConfigurationBuild = project.ProjectConfigurations.Keys.Any(
+					x =>
+						x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild);
 				if (!isConfigurationBuild) continue;
 
 				string packagesConfigPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath), cPackagesConfig);
 				if (File.Exists(packagesConfigPath))
 				{
 					// project uses packages.config
-					sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", packagesConfigPath, project.ProjectName);
-					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath,
-						packagesConfigPath, NuGetPackageDependency.PackagesConfig));
+					sLog.Write(LogLevel.Debug, "Found '{0}' for '{1}'.", packagesConfigPath, project.ProjectName);
+					mProjectsToProcess.Add(
+						new ProjectInfo(
+							project.ProjectName,
+							project.AbsolutePath,
+							packagesConfigPath,
+							NuGetPackageDependency.PackagesConfig));
 					continue;
 				}
+
 				if (Path.GetExtension(project.AbsolutePath).Equals(".vcxproj"))
 				{
 					// c++ project is included in build but has no valid NuGet dependencies
-					sLog.Write(LogLevel.Developer, "Found no valid NuGet dependencies for '{0}'", project.ProjectName);
+					sLog.Write(LogLevel.Debug, "Found no valid NuGet dependencies for '{0}'", project.ProjectName);
 					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "", NuGetPackageDependency.NoDependencies));
 					continue;
 				}
 
 				// project seems to use package reference
-				sLog.Write(LogLevel.Developer, "Calculate path to '{0}' for '{1}'.", cProjectAssets, project.ProjectName);
+				sLog.Write(LogLevel.Debug, "Calculate path to '{0}' for '{1}'.", cProjectAssets, project.ProjectName);
 				var msBuildProject = new Project(project.AbsolutePath);
 				string baseIntermediateOutputPath = msBuildProject.GetPropertyValue("BaseIntermediateOutputPath");
 				if (baseIntermediateOutputPath == null)
 				{
 					sLog.Write(LogLevel.Error, "The project '{0}' does not define a 'BaseIntermediateOutputPath'", project.ProjectName);
-					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
-						NuGetPackageDependency.NoDependencies));
+					mProjectsToProcess.Add(
+						new ProjectInfo(
+							project.ProjectName,
+							project.AbsolutePath,
+							"",
+							NuGetPackageDependency.NoDependencies));
 					continue;
 				}
 
-				sLog.Write(LogLevel.Developer, "Found BaseIntermediateOutputPath = '{0}'", baseIntermediateOutputPath);
+				sLog.Write(LogLevel.Debug, "Found BaseIntermediateOutputPath = '{0}'", baseIntermediateOutputPath);
 				// calculate path to 'project.assets.json' for given project
 				string projectAssetsPath = Path.Combine(baseIntermediateOutputPath, cProjectAssets);
 				if (!Path.IsPathRooted(projectAssetsPath))
 				{
 					// try 'BaseIntermediateOutputPath' is relative to solution
-					projectAssetsPath = Path.Combine(Path.GetDirectoryName(mSolutionPath),
-						baseIntermediateOutputPath, cProjectAssets);
+					projectAssetsPath = Path.Combine(
+						Path.GetDirectoryName(mSolutionPath),
+						baseIntermediateOutputPath,
+						cProjectAssets);
 					if (!File.Exists(projectAssetsPath))
 						// 'BaseIntermediateOutputPath' is relative to project
-						projectAssetsPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath),
-							baseIntermediateOutputPath, cProjectAssets);
+					{
+						projectAssetsPath = Path.Combine(
+							Path.GetDirectoryName(project.AbsolutePath),
+							baseIntermediateOutputPath,
+							cProjectAssets);
+					}
 				}
+
 				if (!File.Exists(projectAssetsPath))
 				{
 					// project does not use 'project.assets.json' or no NuGet package is present
-					sLog.Write(LogLevel.Error, "No '{0}' found for '{1}'.", cProjectAssets,
+					sLog.Write(
+						LogLevel.Error,
+						"No '{0}' found for '{1}'.",
+						cProjectAssets,
 						project.ProjectName);
-					mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "",
-						NuGetPackageDependency.NoDependencies));
+					mProjectsToProcess.Add(
+						new ProjectInfo(
+							project.ProjectName,
+							project.AbsolutePath,
+							"",
+							NuGetPackageDependency.NoDependencies));
 					continue;
 				}
 
-				mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, projectAssetsPath,
-					NuGetPackageDependency.PackageReference));
-				sLog.Write(LogLevel.Developer, "Found '{0}' for '{1}'.", projectAssetsPath, project.ProjectName);
+				mProjectsToProcess.Add(
+					new ProjectInfo(
+						project.ProjectName,
+						project.AbsolutePath,
+						projectAssetsPath,
+						NuGetPackageDependency.PackageReference));
+				sLog.Write(LogLevel.Debug, "Found '{0}' for '{1}'.", projectAssetsPath, project.ProjectName);
 			}
-			sLog.Write(LogLevel.Note, "Successful collect all projects for solution.");
-			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
+
+			sLog.Write(LogLevel.Notice, "Successful collect all projects for solution.");
+			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
 		}
 
 		#endregion
 
 		#region Retrieve used NuGet packages
+
 		/// <summary>
 		/// Analyze each given project and get all used packages and local feeds.
 		/// </summary>
@@ -223,7 +269,7 @@ namespace GriffinPlus.LicenseCollector
 			if (mProjectsToProcess == null || mProjectsToProcess.Count == 0)
 			{
 				// no project to process.
-				sLog.Write(LogLevel.Note, "There are no projects to process.");
+				sLog.Write(LogLevel.Notice, "There are no projects to process.");
 				mFinishProcessing = true;
 				return;
 			}
@@ -232,13 +278,13 @@ namespace GriffinPlus.LicenseCollector
 			var foundPackagesFolders = new HashSet<string>();
 			if (mProjectsToProcess.Any(x => x.Type == NuGetPackageDependency.PackagesConfig))
 			{
-				sLog.Write(LogLevel.Developer, "A 'packages.config' is included try to find 'packages' folder...");
+				sLog.Write(LogLevel.Debug, "A 'packages.config' is included try to find 'packages' folder...");
 
 				string solutionPackagesFolder = Path.Combine(Path.GetDirectoryName(mSolutionPath), cPackagesFolder);
 				if (Directory.Exists(solutionPackagesFolder))
 				{
 					// 'packages' folder exist in solution directory
-					sLog.Write(LogLevel.Developer, "Under solution directory: Found '{0}'", solutionPackagesFolder);
+					sLog.Write(LogLevel.Debug, "Under solution directory: Found '{0}'", solutionPackagesFolder);
 					foundPackagesFolders.Add(solutionPackagesFolder);
 				}
 
@@ -247,17 +293,19 @@ namespace GriffinPlus.LicenseCollector
 					if (project.Type != NuGetPackageDependency.PackagesConfig)
 						continue;
 
-					string projectPackagesFolder = Path.Combine(Path.GetDirectoryName(project.ProjectAbsolutePath),
+					string projectPackagesFolder = Path.Combine(
+						Path.GetDirectoryName(project.ProjectAbsolutePath),
 						cPackagesFolder);
 					if (!Directory.Exists(projectPackagesFolder)) continue;
 					// 'packages' folder exist in project directory
-					sLog.Write(LogLevel.Developer, "Under project directory: Found '{0}'", projectPackagesFolder);
+					sLog.Write(LogLevel.Debug, "Under project directory: Found '{0}'", projectPackagesFolder);
 					foundPackagesFolders.Add(projectPackagesFolder);
 				}
 
 				if (foundPackagesFolders.Count == 0)
 				{
-					sLog.Write(LogLevel.Error,
+					sLog.Write(
+						LogLevel.Error,
 						"No 'packages' folder found for given solution and projects. Cannot access NuGet information for 'packages.config' based projects.");
 				}
 			}
@@ -265,7 +313,9 @@ namespace GriffinPlus.LicenseCollector
 			// process each project depending on their type
 			foreach (ProjectInfo project in mProjectsToProcess)
 			{
-				sLog.Write(LogLevel.Developer, "Determine NuGet packages for '{0}' from '{1}'.",
+				sLog.Write(
+					LogLevel.Debug,
+					"Determine NuGet packages for '{0}' from '{1}'.",
 					project.ProjectName,
 					project.NuGetInformationPath);
 				switch (project.Type)
@@ -275,20 +325,24 @@ namespace GriffinPlus.LicenseCollector
 						GetNuGetPackageFromProjectAssets(project);
 						break;
 					}
+
 					case NuGetPackageDependency.PackagesConfig:
 					{
 						if (foundPackagesFolders.Count > 0)
 							GetNuGetPackagesFromPackagesConfig(project, foundPackagesFolders);
 						break;
 					}
+
 					case NuGetPackageDependency.NoDependencies:
 						continue;
+
 					default:
 						throw new FormatException($"The project type of '{project.ProjectAbsolutePath}' is not supported.");
 				}
 			}
-			sLog.Write(LogLevel.Note, "Successful collect NuGet packages for solution.");
-			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
+
+			sLog.Write(LogLevel.Notice, "Successful collect NuGet packages for solution.");
+			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
 		}
 
 		/// <summary>
@@ -305,7 +359,7 @@ namespace GriffinPlus.LicenseCollector
 				string json = reader.ReadToEnd();
 				JObject jsonObject = JObject.Parse(json);
 
-				if(jsonObject == null)
+				if (jsonObject == null)
 					throw new ArgumentException($"The project '{project.ProjectName}' does not contain a valid 'project.assets.json' file.");
 
 				foreach (JProperty property in jsonObject.Properties())
@@ -325,10 +379,13 @@ namespace GriffinPlus.LicenseCollector
 								var nuSpec = files.First(x => ((x as JValue).Value as string).Contains(".nuspec"))
 									.Value<string>();
 								if (nuSpec == null)
-									throw new ArgumentException(
-										$"The NuGet package '{packageId}' does not contain a *.nuspec file.");
+								{
+									throw new ArgumentException($"The NuGet package '{packageId}' does not contain a *.nuspec file.");
+								}
+
 								packageNuSpecs.Add(Path.Combine(packageId, nuSpec));
 							}
+
 							break;
 
 						case "packageFolders":
@@ -337,7 +394,9 @@ namespace GriffinPlus.LicenseCollector
 							{
 								packageFolders.Add((packageFolder as JProperty).Name);
 							}
+
 							break;
+
 						default:
 							continue;
 					}
@@ -359,7 +418,7 @@ namespace GriffinPlus.LicenseCollector
 					if (!File.Exists(nuSpecFilePath)) continue;
 
 					mNuGetPackages.Add(packageId, nuSpecFilePath);
-					sLog.Write(LogLevel.Developer, "Add NuGet package '{0}' to processing...", packageId);
+					sLog.Write(LogLevel.Debug, "Add NuGet package '{0}' to processing...", packageId);
 					isNuSpecPathExisting = true;
 					break;
 				}
@@ -376,7 +435,7 @@ namespace GriffinPlus.LicenseCollector
 		/// <param name="packagesFolders">Possible 'packages' folders inside solution or project directories.</param>
 		private void GetNuGetPackagesFromPackagesConfig(ProjectInfo project, HashSet<string> packagesFolders)
 		{
-			sLog.Write(LogLevel.Developer, "Get nuspec files for '{0}'", project.ProjectName);
+			sLog.Write(LogLevel.Debug, "Get nuspec files for '{0}'", project.ProjectName);
 
 			var packagePaths = new Dictionary<string, string>();
 			// extract 'packages.config' and determine id and version
@@ -407,7 +466,8 @@ namespace GriffinPlus.LicenseCollector
 					{
 						continue;
 					}
-					sLog.Write(LogLevel.Developer, "{0}: Found NuGet package '{1}'.", project.ProjectName, nugetPackagePath);
+
+					sLog.Write(LogLevel.Debug, "{0}: Found NuGet package '{1}'.", project.ProjectName, nugetPackagePath);
 					nugetPackages.Add(id, nugetPackagePath);
 					break;
 				}
@@ -433,9 +493,11 @@ namespace GriffinPlus.LicenseCollector
 
 					string nuspecPath = Path.Combine(Path.GetDirectoryName(nugetPackages[nugetId]), $"{nugetId}.nuspec");
 					using (var nuspecStream = new FileStream(nuspecPath, FileMode.Create, FileAccess.Write))
+					{
 						nuSpec.Open().CopyTo(nuspecStream);
+					}
 
-					sLog.Write(LogLevel.Developer, "Add NuGet package '{0}' to processing...", nugetId);
+					sLog.Write(LogLevel.Debug, "Add NuGet package '{0}' to processing...", nugetId);
 					mNuGetPackages.Add(nugetId, nuspecPath);
 				}
 			}
@@ -444,6 +506,7 @@ namespace GriffinPlus.LicenseCollector
 		#endregion
 
 		#region Get license information from NuGet packages
+
 		/// <summary>
 		/// Inspect each given nuget package for either license or licenseUrl tags. Download license if necessary.
 		/// </summary>
@@ -456,13 +519,13 @@ namespace GriffinPlus.LicenseCollector
 			if (mNuGetPackages == null || mNuGetPackages.Count == 0)
 			{
 				// no NuGet packages found to process.
-				sLog.Write(LogLevel.Note, "There are no NuGet packages found.");
+				sLog.Write(LogLevel.Notice, "There are no NuGet packages found.");
 				return;
 			}
 
 			foreach (string nuSpecFilePath in mNuGetPackages.Values)
 			{
-				sLog.Write(LogLevel.Developer, "Begin retrieving NuGet specification information from '{0}'...", nuSpecFilePath);
+				sLog.Write(LogLevel.Debug, "Begin retrieving NuGet specification information from '{0}'...", nuSpecFilePath);
 
 				// extract important information from NuGet specification file
 				var doc = new XmlDocument();
@@ -517,11 +580,13 @@ namespace GriffinPlus.LicenseCollector
 								string nugetPackage = Path.Combine(directoryPath, $"{identifier}.{version}.nupkg");
 								if (!File.Exists(nugetPackage))
 								{
-									sLog.Write(LogLevel.Error,
+									sLog.Write(
+										LogLevel.Error,
 										"The path '{0}' to the license defined by the NuGet specification does not exists.",
 										licensePath);
 									break;
 								}
+
 								// try to extract license file from package
 								using (var fs = new FileStream(nugetPackage, FileMode.Open))
 								{
@@ -534,9 +599,12 @@ namespace GriffinPlus.LicenseCollector
 									}
 
 									using (var licenseStream = new FileStream(licensePath, FileMode.Create, FileAccess.Write))
+									{
 										licenseEntry.Open().CopyTo(licenseStream);
+									}
 								}
 							}
+
 							license = File.ReadAllText(licensePath) ?? string.Empty;
 							break;
 					}
@@ -553,7 +621,7 @@ namespace GriffinPlus.LicenseCollector
 						using (var client = new WebClient())
 						{
 							license = client.DownloadString(url);
-							sLog.Write(LogLevel.Developer, "Successful downloaded license '{0}' for {1}", url, identifier);
+							sLog.Write(LogLevel.Debug, "Successful downloaded license '{0}' for {1}", url, identifier);
 						}
 					}
 					catch (WebException ex)
@@ -570,15 +638,17 @@ namespace GriffinPlus.LicenseCollector
 
 				var package = new PackageLicenseInfo(identifier, version, authors, copyright, licenseUrl, projectUrl, license);
 				mLicenses.Add(package);
-				sLog.Write(LogLevel.Developer, "Successful extract license information for '{0} v{1}'.", identifier, version);
+				sLog.Write(LogLevel.Debug, "Successful extract license information for '{0} v{1}'.", identifier, version);
 			}
-			sLog.Write(LogLevel.Note, "Successful extract license information from found NuGet packages.");
-			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
+
+			sLog.Write(LogLevel.Notice, "Successful extract license information from found NuGet packages.");
+			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
 		}
 
 		#endregion
 
 		#region Get static license information project folder
+
 		/// <summary>
 		/// Inspect given project folders for static licenses and load them.
 		/// </summary>
@@ -598,25 +668,27 @@ namespace GriffinPlus.LicenseCollector
 				{
 					foreach (string staticLicensePath in staticProjectLicenses)
 					{
-						sLog.Write(LogLevel.Developer, "Project '{0}': Found static license '{1}'", project.ProjectName, staticLicensePath);
+						sLog.Write(LogLevel.Debug, "Project '{0}': Found static license '{1}'", project.ProjectName, staticLicensePath);
 						string staticLicenseIdentifier = Path.GetFileNameWithoutExtension(staticLicensePath);
 						string license = File.ReadAllText(staticLicensePath);
 						if (mLicenses.Any(x => x.PackageIdentifier == staticLicenseIdentifier))
 						{
 							// static license is already existing in another project
-							sLog.Write(LogLevel.Developer, "Static license '{0}' was already found in another project.", staticLicenseIdentifier);
+							sLog.Write(LogLevel.Debug, "Static license '{0}' was already found in another project.", staticLicenseIdentifier);
 							continue;
 						}
+
 						mLicenses.Add(new PackageLicenseInfo(staticLicenseIdentifier, license));
 					}
 				}
 				else
 				{
-					sLog.Write(LogLevel.Developer, "No static licenses found under project directory '{0}'", projectDir);
+					sLog.Write(LogLevel.Debug, "No static licenses found under project directory '{0}'", projectDir);
 				}
 			}
-			sLog.Write(LogLevel.Note, "Successful scan project directories for static licenses.");
-			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
+
+			sLog.Write(LogLevel.Notice, "Successful scan project directories for static licenses.");
+			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
 		}
 
 		#endregion
@@ -641,16 +713,13 @@ namespace GriffinPlus.LicenseCollector
 				template.AppendLine("software must be in accordance with its license terms. This section contains the licenses which");
 				template.AppendLine("govern the use of third-party software and its copyright holder's proprietary notices.");
 				template.AppendLine();
-				template.AppendLine(
-					"-----------------------------------------------------------------------------------------------------------------------");
+				template.AppendLine("-----------------------------------------------------------------------------------------------------------------------");
 				template.AppendLine("@{");
 				template.AppendLine("foreach (PackageLicenseInfo license in Model)");
 				template.AppendLine("{");
-				template.AppendLine(
-					"@:-----------------------------------------------------------------------------------------------------------------------");
+				template.AppendLine("@:-----------------------------------------------------------------------------------------------------------------------");
 				template.AppendLine("@license.ToString();");
-				template.AppendLine(
-					"@:-----------------------------------------------------------------------------------------------------------------------");
+				template.AppendLine("@:-----------------------------------------------------------------------------------------------------------------------");
 				template.AppendLine("}");
 				template.AppendLine("}");
 				return template.ToString();
@@ -664,7 +733,7 @@ namespace GriffinPlus.LicenseCollector
 		{
 			if (mLicenses == null || mLicenses.Count == 0 || mFinishProcessing)
 			{
-				sLog.Write(LogLevel.Note, "Nothing to store, because there are no licenses found.");
+				sLog.Write(LogLevel.Notice, "Nothing to store, because there are no licenses found.");
 				return;
 			}
 
@@ -681,18 +750,20 @@ namespace GriffinPlus.LicenseCollector
 			string template = LicenseTemplate;
 			if (!string.IsNullOrEmpty(mLicenseTemplatePath) && File.Exists(mLicenseTemplatePath))
 			{
-				sLog.Write(LogLevel.Note, "Load user defined razor template '{0}' for third party notices", mLicenseTemplatePath);
+				sLog.Write(LogLevel.Notice, "Load user defined razor template '{0}' for third party notices", mLicenseTemplatePath);
 				template = File.ReadAllText(mLicenseTemplatePath);
 			}
 
 			string patchedTemplate = await engine
-				.CompileRenderStringAsync("Third party notices", template, mLicenses).ConfigureAwait(false);
+				                         .CompileRenderStringAsync("Third party notices", template, mLicenses)
+				                         .ConfigureAwait(false);
 			File.WriteAllText(mOutputPath, patchedTemplate);
 
-			sLog.Write(LogLevel.Note, "Successful write collected licenses to '{0}'", mOutputPath);
-			sLog.Write(LogLevel.Note, "--------------------------------------------------------------------------------");
+			sLog.Write(LogLevel.Notice, "Successful write collected licenses to '{0}'", mOutputPath);
+			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
 		}
+
 		#endregion
 	}
-}
 
+}
