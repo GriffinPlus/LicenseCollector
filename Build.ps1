@@ -51,7 +51,7 @@ Build `
 	-PauseOnError
 
 # collect license for release build
-dotnet "_build\LicenseCollector\AnyCPU.Release\net5.0\LicenseCollector.dll" `
+dotnet "_build\.out\LicenseCollector\AnyCPU.Release\net6.0\LicenseCollector.dll" `
   --SolutionFilePath "$SolutionPath" `
   --Configuration "Release" `
   --Platform "Any CPU" `

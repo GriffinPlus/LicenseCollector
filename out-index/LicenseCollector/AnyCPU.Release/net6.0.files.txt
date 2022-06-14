@@ -1,11 +1,12 @@
 ﻿.\CommandLine.dll
+.\GriffinPlus.Lib.Common.dll
 .\GriffinPlus.Lib.Logging.dll
+.\GriffinPlus.Lib.Logging.Interface.dll
 .\LicenseCollector.deps.json
 .\LicenseCollector.dll
 .\LicenseCollector.dll.config
 .\LicenseCollector.exe
 .\LicenseCollector.pdb
-.\LicenseCollector.runtimeconfig.dev.json
 .\LicenseCollector.runtimeconfig.json
 .\LicenseCollector.xml
 .\Microsoft.AspNetCore.Mvc.Razor.Extensions.dll
@@ -35,7 +36,6 @@
 .\pl\Microsoft.CodeAnalysis.resources.dll
 .\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
 .\pt-BR\Microsoft.CodeAnalysis.resources.dll
-.\ref\LicenseCollector.dll
 .\refs\Microsoft.AspNetCore.Antiforgery.dll
 .\refs\Microsoft.AspNetCore.Authentication.Abstractions.dll
 .\refs\Microsoft.AspNetCore.Authentication.Cookies.dll
@@ -72,6 +72,8 @@
 .\refs\Microsoft.AspNetCore.Http.dll
 .\refs\Microsoft.AspNetCore.Http.Extensions.dll
 .\refs\Microsoft.AspNetCore.Http.Features.dll
+.\refs\Microsoft.AspNetCore.Http.Results.dll
+.\refs\Microsoft.AspNetCore.HttpLogging.dll
 .\refs\Microsoft.AspNetCore.HttpOverrides.dll
 .\refs\Microsoft.AspNetCore.HttpsPolicy.dll
 .\refs\Microsoft.AspNetCore.Identity.dll
@@ -104,6 +106,7 @@
 .\refs\Microsoft.AspNetCore.Server.IISIntegration.dll
 .\refs\Microsoft.AspNetCore.Server.Kestrel.Core.dll
 .\refs\Microsoft.AspNetCore.Server.Kestrel.dll
+.\refs\Microsoft.AspNetCore.Server.Kestrel.Transport.Quic.dll
 .\refs\Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll
 .\refs\Microsoft.AspNetCore.Session.dll
 .\refs\Microsoft.AspNetCore.SignalR.Common.dll
@@ -131,6 +134,7 @@
 .\refs\Microsoft.Extensions.DependencyInjection.dll
 .\refs\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
 .\refs\Microsoft.Extensions.Diagnostics.HealthChecks.dll
+.\refs\Microsoft.Extensions.Features.dll
 .\refs\Microsoft.Extensions.FileProviders.Abstractions.dll
 .\refs\Microsoft.Extensions.FileProviders.Composite.dll
 .\refs\Microsoft.Extensions.FileProviders.Embedded.dll
@@ -208,6 +212,7 @@
 .\refs\System.IO.Compression.FileSystem.dll
 .\refs\System.IO.Compression.ZipFile.dll
 .\refs\System.IO.dll
+.\refs\System.IO.FileSystem.AccessControl.dll
 .\refs\System.IO.FileSystem.dll
 .\refs\System.IO.FileSystem.DriveInfo.dll
 .\refs\System.IO.FileSystem.Primitives.dll
@@ -215,6 +220,7 @@
 .\refs\System.IO.IsolatedStorage.dll
 .\refs\System.IO.MemoryMappedFiles.dll
 .\refs\System.IO.Pipelines.dll
+.\refs\System.IO.Pipes.AccessControl.dll
 .\refs\System.IO.Pipes.dll
 .\refs\System.IO.UnmanagedMemoryStream.dll
 .\refs\System.Linq.dll
@@ -276,11 +282,11 @@
 .\refs\System.Security.Cryptography.Cng.dll
 .\refs\System.Security.Cryptography.Csp.dll
 .\refs\System.Security.Cryptography.Encoding.dll
+.\refs\System.Security.Cryptography.OpenSsl.dll
 .\refs\System.Security.Cryptography.Primitives.dll
 .\refs\System.Security.Cryptography.X509Certificates.dll
 .\refs\System.Security.Cryptography.Xml.dll
 .\refs\System.Security.dll
-.\refs\System.Security.Permissions.dll
 .\refs\System.Security.Principal.dll
 .\refs\System.Security.Principal.Windows.dll
 .\refs\System.Security.SecureString.dll
@@ -308,7 +314,6 @@
 .\refs\System.Web.dll
 .\refs\System.Web.HttpUtility.dll
 .\refs\System.Windows.dll
-.\refs\System.Windows.Extensions.dll
 .\refs\System.Xml.dll
 .\refs\System.Xml.Linq.dll
 .\refs\System.Xml.ReaderWriter.dll
