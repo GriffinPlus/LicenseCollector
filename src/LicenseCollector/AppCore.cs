@@ -4,12 +4,14 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
 using GriffinPlus.Lib.Logging;
+using GriffinPlus.Lib.Threading;
 
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
@@ -87,10 +89,10 @@ namespace GriffinPlus.LicenseCollector
 
 		#endregion
 
-		private const string cProjectAssets        = "project.assets.json";
-		private const string cPackagesConfig       = "packages.config";
-		private const string cPackagesFolder       = "packages";
-		private const string cDeprecatedLicenseUrl = "https://aka.ms/deprecateLicenseUrl";
+		private const string ProjectAssets        = "project.assets.json";
+		private const string PackagesConfig       = "packages.config";
+		private const string PackagesFolder       = "packages";
+		private const string DeprecatedLicenseUrl = "https://aka.ms/deprecateLicenseUrl";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AppCore"/> class.
@@ -156,8 +158,9 @@ namespace GriffinPlus.LicenseCollector
 			foreach (ProjectInSolution project in solution.ProjectsInOrder)
 			{
 				// only c# and c++ projects get processed which are build with given "configuration|platform"
-				bool isProjectSupported = (Path.GetExtension(project.AbsolutePath).Equals(".csproj") ||
-				                           Path.GetExtension(project.AbsolutePath).Equals(".vcxproj")) &&
+				string absolutePathExtension = Path.GetExtension(project.AbsolutePath);
+				string absolutePathDirectoryName = Path.GetDirectoryName(project.AbsolutePath) ?? "";
+				bool isProjectSupported = absolutePathExtension is ".csproj" or ".vcxproj" &&
 				                          project.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat;
 				if (!isProjectSupported) continue;
 				bool isConfigurationBuild = project.ProjectConfigurations.Keys.Any(
@@ -165,7 +168,7 @@ namespace GriffinPlus.LicenseCollector
 						x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild);
 				if (!isConfigurationBuild) continue;
 
-				string packagesConfigPath = Path.Combine(Path.GetDirectoryName(project.AbsolutePath), cPackagesConfig);
+				string packagesConfigPath = Path.Combine(absolutePathDirectoryName, PackagesConfig);
 				if (File.Exists(packagesConfigPath))
 				{
 					// project uses packages.config
@@ -179,7 +182,7 @@ namespace GriffinPlus.LicenseCollector
 					continue;
 				}
 
-				if (Path.GetExtension(project.AbsolutePath).Equals(".vcxproj"))
+				if (absolutePathExtension.Equals(".vcxproj"))
 				{
 					// c++ project is included in build but has no valid NuGet dependencies
 					sLog.Write(LogLevel.Debug, "Found no valid NuGet dependencies for '{0}'", project.ProjectName);
@@ -188,7 +191,7 @@ namespace GriffinPlus.LicenseCollector
 				}
 
 				// project seems to use package reference
-				sLog.Write(LogLevel.Debug, "Calculate path to '{0}' for '{1}'.", cProjectAssets, project.ProjectName);
+				sLog.Write(LogLevel.Debug, "Calculate path to '{0}' for '{1}'.", ProjectAssets, project.ProjectName);
 				var msBuildProject = new Project(project.AbsolutePath);
 				string baseIntermediateOutputPath = msBuildProject.GetPropertyValue("BaseIntermediateOutputPath");
 				if (baseIntermediateOutputPath == null)
@@ -205,21 +208,21 @@ namespace GriffinPlus.LicenseCollector
 
 				sLog.Write(LogLevel.Debug, "Found BaseIntermediateOutputPath = '{0}'", baseIntermediateOutputPath);
 				// calculate path to 'project.assets.json' for given project
-				string projectAssetsPath = Path.Combine(baseIntermediateOutputPath, cProjectAssets);
+				string projectAssetsPath = Path.Combine(baseIntermediateOutputPath, ProjectAssets);
 				if (!Path.IsPathRooted(projectAssetsPath))
 				{
 					// try 'BaseIntermediateOutputPath' is relative to solution
 					projectAssetsPath = Path.Combine(
-						Path.GetDirectoryName(mSolutionPath),
+						Path.GetDirectoryName(mSolutionPath) ?? "",
 						baseIntermediateOutputPath,
-						cProjectAssets);
+						ProjectAssets);
 					if (!File.Exists(projectAssetsPath))
 						// 'BaseIntermediateOutputPath' is relative to project
 					{
 						projectAssetsPath = Path.Combine(
-							Path.GetDirectoryName(project.AbsolutePath),
+							absolutePathDirectoryName,
 							baseIntermediateOutputPath,
-							cProjectAssets);
+							ProjectAssets);
 					}
 				}
 
@@ -229,7 +232,7 @@ namespace GriffinPlus.LicenseCollector
 					sLog.Write(
 						LogLevel.Error,
 						"No '{0}' found for '{1}'.",
-						cProjectAssets,
+						ProjectAssets,
 						project.ProjectName);
 					mProjectsToProcess.Add(
 						new ProjectInfo(
@@ -280,7 +283,7 @@ namespace GriffinPlus.LicenseCollector
 			{
 				sLog.Write(LogLevel.Debug, "A 'packages.config' is included try to find 'packages' folder...");
 
-				string solutionPackagesFolder = Path.Combine(Path.GetDirectoryName(mSolutionPath), cPackagesFolder);
+				string solutionPackagesFolder = Path.Combine(Path.GetDirectoryName(mSolutionPath) ?? "", PackagesFolder);
 				if (Directory.Exists(solutionPackagesFolder))
 				{
 					// 'packages' folder exist in solution directory
@@ -294,8 +297,8 @@ namespace GriffinPlus.LicenseCollector
 						continue;
 
 					string projectPackagesFolder = Path.Combine(
-						Path.GetDirectoryName(project.ProjectAbsolutePath),
-						cPackagesFolder);
+						Path.GetDirectoryName(project.ProjectAbsolutePath) ?? "",
+						PackagesFolder);
 					if (!Directory.Exists(projectPackagesFolder)) continue;
 					// 'packages' folder exist in project directory
 					sLog.Write(LogLevel.Debug, "Under project directory: Found '{0}'", projectPackagesFolder);
@@ -439,15 +442,15 @@ namespace GriffinPlus.LicenseCollector
 
 			var packagePaths = new Dictionary<string, string>();
 			// extract 'packages.config' and determine id and version
-			foreach (XElement element in XElement.Load(project.NuGetInformationPath).Descendants())
+			foreach (var element in XElement.Load(project.NuGetInformationPath).Descendants())
 			{
 				switch (element.Name.LocalName)
 				{
 					case "package":
-						string id = element.Attribute("id").Value;
+						string id = element.Attribute("id")?.Value;
 						if (string.IsNullOrEmpty(id))
 							continue;
-						string version = element.Attribute("version").Value;
+						string version = element.Attribute("version")?.Value;
 						if (string.IsNullOrEmpty(version))
 							continue;
 						packagePaths.Add(id, $"{id}.{version}");
@@ -484,14 +487,14 @@ namespace GriffinPlus.LicenseCollector
 				using (var fs = new FileStream(nugetPackages[nugetId], FileMode.Open))
 				{
 					var archive = new ZipArchive(fs, ZipArchiveMode.Read);
-					ZipArchiveEntry nuSpec = archive.Entries.First(x => x.Name.EndsWith(".nuspec"));
+					ZipArchiveEntry nuSpec = archive.Entries.FirstOrDefault(x => x.Name.EndsWith(".nuspec"));
 					if (nuSpec == null)
 					{
 						sLog.Write(LogLevel.Error, "The NuGet package '{0}' does not contains an '.nuspec' file.", nugetId);
 						continue;
 					}
 
-					string nuspecPath = Path.Combine(Path.GetDirectoryName(nugetPackages[nugetId]), $"{nugetId}.nuspec");
+					string nuspecPath = Path.Combine(Path.GetDirectoryName(nugetPackages[nugetId]) ?? "", $"{nugetId}.nuspec");
 					using (var nuspecStream = new FileStream(nuspecPath, FileMode.Create, FileAccess.Write))
 					{
 						nuSpec.Open().CopyTo(nuspecStream);
@@ -549,7 +552,7 @@ namespace GriffinPlus.LicenseCollector
 				string licenseUrl =
 					root.SelectSingleNode("/nu:package/nu:metadata/nu:licenseUrl", namespaceManager)?.InnerText ??
 					string.Empty;
-				if (licenseUrl == cDeprecatedLicenseUrl)
+				if (licenseUrl == DeprecatedLicenseUrl)
 					licenseUrl = string.Empty;
 				string projectUrl =
 					root.SelectSingleNode("/nu:package/nu:metadata/nu:projectUrl", namespaceManager)?.InnerText ??
@@ -561,7 +564,7 @@ namespace GriffinPlus.LicenseCollector
 				var license = string.Empty;
 				if (licenseNode != null)
 				{
-					switch (licenseNode.Attributes["type"].Value)
+					switch (licenseNode.Attributes?["type"]?.Value)
 					{
 						// TODO: Is there a better handling e.g. loading templates?
 						case "expression":
@@ -571,7 +574,7 @@ namespace GriffinPlus.LicenseCollector
 
 						case "file":
 							// license is contained as file within the nuget package
-							string directoryPath = Path.GetDirectoryName(nuSpecFilePath);
+							string directoryPath = Path.GetDirectoryName(nuSpecFilePath) ?? "";
 							string licensePath = Path.Combine(directoryPath, licenseNode.InnerText);
 							if (!File.Exists(licensePath))
 							{
@@ -591,7 +594,7 @@ namespace GriffinPlus.LicenseCollector
 								using (var fs = new FileStream(nugetPackage, FileMode.Open))
 								{
 									var archive = new ZipArchive(fs, ZipArchiveMode.Read);
-									ZipArchiveEntry licenseEntry = archive.Entries.First(x => x.Name.Contains(licenseNode.InnerText));
+									ZipArchiveEntry licenseEntry = archive.Entries.FirstOrDefault(x => x.Name.Contains(licenseNode.InnerText));
 									if (licenseEntry == null)
 									{
 										sLog.Write(LogLevel.Error, "The NuGet package '{0}' does not contains '{1}'", licenseNode.InnerText);
@@ -618,11 +621,15 @@ namespace GriffinPlus.LicenseCollector
 					string url = licenseUrl.Contains("github.com") ? licenseUrl.Replace("/blob/", "/raw/") : licenseUrl;
 					try
 					{
-						using (var client = new WebClient())
-						{
-							license = client.DownloadString(url);
-							sLog.Write(LogLevel.Debug, "Successful downloaded license '{0}' for {1}", url, identifier);
-						}
+						using var client = new HttpClient();
+						license = client.GetStringAsync(url).WaitAndUnwrapException();
+						sLog.Write(LogLevel.Debug, "Successful downloaded license '{0}' for {1}", url, identifier);
+
+						//using (var client = new WebClient())
+						//{
+						//	license = client.DownloadString(url);
+						//	sLog.Write(LogLevel.Debug, "Successful downloaded license '{0}' for {1}", url, identifier);
+						//}
 					}
 					catch (WebException ex)
 					{
@@ -660,11 +667,11 @@ namespace GriffinPlus.LicenseCollector
 
 			foreach (ProjectInfo project in mProjectsToProcess)
 			{
-				string projectDir = Path.GetDirectoryName(project.ProjectAbsolutePath);
+				string projectDir = Path.GetDirectoryName(project.ProjectAbsolutePath) ?? "";
 
 				IEnumerable<string> staticProjectLicenses = Directory.EnumerateFiles(projectDir, mSearchPattern, SearchOption.AllDirectories);
 
-				if (staticProjectLicenses != null && staticProjectLicenses.Any())
+				if (staticProjectLicenses.Any())
 				{
 					foreach (string staticLicensePath in staticProjectLicenses)
 					{
@@ -741,7 +748,7 @@ namespace GriffinPlus.LicenseCollector
 			if (File.Exists(mOutputPath))
 				File.Delete(mOutputPath);
 
-			RazorLightEngine engine = new RazorLightEngineBuilder()
+			var engine = new RazorLightEngineBuilder()
 				.UseEmbeddedResourcesProject(typeof(AppCore))
 				.UseMemoryCachingProvider()
 				.DisableEncoding()
@@ -751,13 +758,13 @@ namespace GriffinPlus.LicenseCollector
 			if (!string.IsNullOrEmpty(mLicenseTemplatePath) && File.Exists(mLicenseTemplatePath))
 			{
 				sLog.Write(LogLevel.Notice, "Load user defined razor template '{0}' for third party notices", mLicenseTemplatePath);
-				template = File.ReadAllText(mLicenseTemplatePath);
+				template = await File.ReadAllTextAsync(mLicenseTemplatePath);
 			}
 
 			string patchedTemplate = await engine
 				                         .CompileRenderStringAsync("Third party notices", template, mLicenses)
 				                         .ConfigureAwait(false);
-			File.WriteAllText(mOutputPath, patchedTemplate);
+			await File.WriteAllTextAsync(mOutputPath, patchedTemplate);
 
 			sLog.Write(LogLevel.Notice, "Successful write collected licenses to '{0}'", mOutputPath);
 			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");

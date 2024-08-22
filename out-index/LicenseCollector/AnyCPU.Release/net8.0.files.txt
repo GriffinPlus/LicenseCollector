@@ -38,6 +38,7 @@
 .\pt-BR\Microsoft.CodeAnalysis.resources.dll
 .\refs\Microsoft.AspNetCore.Antiforgery.dll
 .\refs\Microsoft.AspNetCore.Authentication.Abstractions.dll
+.\refs\Microsoft.AspNetCore.Authentication.BearerToken.dll
 .\refs\Microsoft.AspNetCore.Authentication.Cookies.dll
 .\refs\Microsoft.AspNetCore.Authentication.Core.dll
 .\refs\Microsoft.AspNetCore.Authentication.dll
@@ -46,6 +47,7 @@
 .\refs\Microsoft.AspNetCore.Authorization.Policy.dll
 .\refs\Microsoft.AspNetCore.Components.Authorization.dll
 .\refs\Microsoft.AspNetCore.Components.dll
+.\refs\Microsoft.AspNetCore.Components.Endpoints.dll
 .\refs\Microsoft.AspNetCore.Components.Forms.dll
 .\refs\Microsoft.AspNetCore.Components.Server.dll
 .\refs\Microsoft.AspNetCore.Components.Web.dll
@@ -93,8 +95,11 @@
 .\refs\Microsoft.AspNetCore.Mvc.RazorPages.dll
 .\refs\Microsoft.AspNetCore.Mvc.TagHelpers.dll
 .\refs\Microsoft.AspNetCore.Mvc.ViewFeatures.dll
+.\refs\Microsoft.AspNetCore.OutputCaching.dll
+.\refs\Microsoft.AspNetCore.RateLimiting.dll
 .\refs\Microsoft.AspNetCore.Razor.dll
 .\refs\Microsoft.AspNetCore.Razor.Runtime.dll
+.\refs\Microsoft.AspNetCore.RequestDecompression.dll
 .\refs\Microsoft.AspNetCore.ResponseCaching.Abstractions.dll
 .\refs\Microsoft.AspNetCore.ResponseCaching.dll
 .\refs\Microsoft.AspNetCore.ResponseCompression.dll
@@ -106,6 +111,7 @@
 .\refs\Microsoft.AspNetCore.Server.IISIntegration.dll
 .\refs\Microsoft.AspNetCore.Server.Kestrel.Core.dll
 .\refs\Microsoft.AspNetCore.Server.Kestrel.dll
+.\refs\Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.dll
 .\refs\Microsoft.AspNetCore.Server.Kestrel.Transport.Quic.dll
 .\refs\Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll
 .\refs\Microsoft.AspNetCore.Session.dll
@@ -132,6 +138,8 @@
 .\refs\Microsoft.Extensions.Configuration.Xml.dll
 .\refs\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 .\refs\Microsoft.Extensions.DependencyInjection.dll
+.\refs\Microsoft.Extensions.Diagnostics.Abstractions.dll
+.\refs\Microsoft.Extensions.Diagnostics.dll
 .\refs\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
 .\refs\Microsoft.Extensions.Diagnostics.HealthChecks.dll
 .\refs\Microsoft.Extensions.Features.dll
@@ -204,6 +212,7 @@
 .\refs\System.Drawing.Primitives.dll
 .\refs\System.Dynamic.Runtime.dll
 .\refs\System.Formats.Asn1.dll
+.\refs\System.Formats.Tar.dll
 .\refs\System.Globalization.Calendars.dll
 .\refs\System.Globalization.dll
 .\refs\System.Globalization.Extensions.dll
@@ -237,6 +246,7 @@
 .\refs\System.Net.NetworkInformation.dll
 .\refs\System.Net.Ping.dll
 .\refs\System.Net.Primitives.dll
+.\refs\System.Net.Quic.dll
 .\refs\System.Net.Requests.dll
 .\refs\System.Net.Security.dll
 .\refs\System.Net.ServicePoint.dll
@@ -267,6 +277,7 @@
 .\refs\System.Runtime.Extensions.dll
 .\refs\System.Runtime.Handles.dll
 .\refs\System.Runtime.InteropServices.dll
+.\refs\System.Runtime.InteropServices.JavaScript.dll
 .\refs\System.Runtime.InteropServices.RuntimeInformation.dll
 .\refs\System.Runtime.Intrinsics.dll
 .\refs\System.Runtime.Loader.dll
@@ -281,6 +292,7 @@
 .\refs\System.Security.Cryptography.Algorithms.dll
 .\refs\System.Security.Cryptography.Cng.dll
 .\refs\System.Security.Cryptography.Csp.dll
+.\refs\System.Security.Cryptography.dll
 .\refs\System.Security.Cryptography.Encoding.dll
 .\refs\System.Security.Cryptography.OpenSsl.dll
 .\refs\System.Security.Cryptography.Primitives.dll
@@ -301,6 +313,7 @@
 .\refs\System.Threading.Channels.dll
 .\refs\System.Threading.dll
 .\refs\System.Threading.Overlapped.dll
+.\refs\System.Threading.RateLimiting.dll
 .\refs\System.Threading.Tasks.Dataflow.dll
 .\refs\System.Threading.Tasks.dll
 .\refs\System.Threading.Tasks.Extensions.dll
