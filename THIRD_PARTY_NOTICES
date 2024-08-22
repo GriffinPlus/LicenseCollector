@@ -56,12 +56,12 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: GriffinPlus.Lib.Common (v2.0.1)
+- Package: GriffinPlus.Lib.Common (v4.0.0)
 - Author: Sascha Falk
 - Project: https://github.com/GriffinPlus/dotnet-libs-common
 - License: https://licenses.nuget.org/MIT
 
-  Copyright (c) 2021 Sascha Falk and Contributors
+  Copyright (c) 2024 Sascha Falk and Contributors
 
 
 MIT
@@ -69,12 +69,12 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: GriffinPlus.Lib.Logging (v5.1.0)
+- Package: GriffinPlus.Lib.Logging (v7.0.2)
 - Author: Sascha Falk
 - Project: https://github.com/GriffinPlus/dotnet-libs-logging
 - License: https://licenses.nuget.org/MIT
 
-  Copyright (c) 2022 Sascha Falk and Contributors
+  Copyright (c) 2024 Sascha Falk and Contributors
 
 
 MIT
@@ -82,12 +82,12 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: GriffinPlus.Lib.Logging.Interface (v1.1.0)
+- Package: GriffinPlus.Lib.Logging.Interface (v1.1.2)
 - Author: Sascha Falk
 - Project: https://github.com/GriffinPlus/dotnet-libs-logging-interface
 - License: https://licenses.nuget.org/MIT
 
-  Copyright (c) 2022 Sascha Falk and Contributors
+  Copyright (c) 2024 Sascha Falk and Contributors
 
 
 MIT
@@ -121,7 +121,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build (v17.2.0)
+- Package: Microsoft.Build (v17.11.4)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -134,7 +134,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build.Framework (v17.2.0)
+- Package: Microsoft.Build.Framework (v17.11.4)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -147,7 +147,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build.Locator (v1.4.1)
+- Package: Microsoft.Build.Locator (v1.7.8)
 - Author: Microsoft
 - Project: https://github.com/microsoft/MSBuildLocator
 - License: https://licenses.nuget.org/MIT
@@ -160,7 +160,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.Build.Utilities.Core (v17.2.0)
+- Package: Microsoft.Build.Utilities.Core (v17.11.4)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -368,7 +368,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.NET.StringTools (v1.0.0)
+- Package: Microsoft.NET.StringTools (v17.11.4)
 - Author: Microsoft
 - Project: http://go.microsoft.com/fwlink/?LinkId=624683
 - License: https://licenses.nuget.org/MIT
@@ -381,53 +381,43 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.NETCore.Platforms (v3.1.0)
+- Package: Microsoft.NETCore.Platforms (v2.1.2)
 - Author: Microsoft
-- Project: https://github.com/dotnet/corefx
-- License: https://licenses.nuget.org/MIT
+- Project: https://dot.net/
+- License: https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
 
   © Microsoft Corporation. All rights reserved.
 
 
-MIT
+The MIT License (MIT)
+
+Copyright (c) .NET Foundation and Contributors
+
+All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: Microsoft.NETCore.Targets (v1.1.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Win32.Registry (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Microsoft.Win32.SystemEvents (v4.7.0)
-- Author: Microsoft
-- Project: https://github.com/dotnet/corefx
-- License: https://licenses.nuget.org/MIT
-
-  © Microsoft Corporation. All rights reserved.
-
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: Newtonsoft.Json (v13.0.1)
+- Package: Newtonsoft.Json (v13.0.3)
 - Author: James Newton-King
 - Project: https://www.newtonsoft.com/json
 - License: https://licenses.nuget.org/MIT
@@ -440,7 +430,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: RazorLight (v2.0.0)
+- Package: RazorLight (v2.3.1)
 - Author: toddams
 
 
@@ -686,43 +676,7 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Collections (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Collections.Immutable (v5.0.0)
-- Author: Microsoft
-- Project: https://github.com/dotnet/runtime
-- License: https://licenses.nuget.org/MIT
-
-  © Microsoft Corporation. All rights reserved.
-
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Configuration.ConfigurationManager (v4.7.0)
-- Author: Microsoft
-- Project: https://github.com/dotnet/corefx
-- License: https://licenses.nuget.org/MIT
-
-  © Microsoft Corporation. All rights reserved.
-
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Diagnostics.EventLog (v6.0.0)
+- Package: System.Collections.Immutable (v8.0.0)
 - Author: Microsoft
 - Project: https://dot.net/
 - License: https://licenses.nuget.org/MIT
@@ -735,9 +689,9 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Drawing.Common (v4.7.0)
+- Package: System.Configuration.ConfigurationManager (v8.0.0)
 - Author: Microsoft
-- Project: https://github.com/dotnet/corefx
+- Project: https://dot.net/
 - License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
@@ -748,22 +702,15 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Globalization (v4.3.0)
+- Package: System.Diagnostics.EventLog (v8.0.0)
 - Author: Microsoft
 - Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
 
-- Package: System.IO (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -804,19 +751,9 @@ SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Reflection (v4.3.0)
+- Package: System.Reflection.Metadata (v8.0.0)
 - Author: Microsoft
 - Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Reflection.Metadata (v5.0.0)
-- Author: Microsoft
-- Project: https://github.com/dotnet/runtime
 - License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
@@ -827,32 +764,15 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Reflection.Primitives (v4.3.0)
+- Package: System.Reflection.MetadataLoadContext (v8.0.0)
 - Author: Microsoft
 - Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
+- License: https://licenses.nuget.org/MIT
 
-  © Microsoft Corporation.  All rights reserved.
+  © Microsoft Corporation. All rights reserved.
 
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Resources.ResourceManager (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Runtime (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
+MIT
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -870,94 +790,15 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Runtime.Extensions (v4.3.0)
+- Package: System.Security.Cryptography.ProtectedData (v8.0.0)
 - Author: Microsoft
 - Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Runtime.Handles (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Runtime.InteropServices (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.AccessControl (v4.7.0)
-- Author: Microsoft
-- Project: https://github.com/dotnet/corefx
 - License: https://licenses.nuget.org/MIT
 
   © Microsoft Corporation. All rights reserved.
 
 
 MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Cryptography.ProtectedData (v4.7.0)
-- Author: Microsoft
-- Project: https://github.com/dotnet/corefx
-- License: https://licenses.nuget.org/MIT
-
-  © Microsoft Corporation. All rights reserved.
-
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Permissions (v4.7.0)
-- Author: Microsoft
-- Project: https://github.com/dotnet/corefx
-- License: https://licenses.nuget.org/MIT
-
-  © Microsoft Corporation. All rights reserved.
-
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Security.Principal.Windows (v4.7.0)
-- Author: Microsoft
-- Project: https://github.com/dotnet/corefx
-- License: https://licenses.nuget.org/MIT
-
-  © Microsoft Corporation. All rights reserved.
-
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Text.Encoding (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
@@ -1024,29 +865,6 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package: System.Threading.Tasks (v4.3.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: http://go.microsoft.com/fwlink/?LinkId=329770
-
-  © Microsoft Corporation.  All rights reserved.
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Threading.Tasks.Dataflow (v6.0.0)
-- Author: Microsoft
-- Project: https://dot.net/
-- License: https://licenses.nuget.org/MIT
-
-  © Microsoft Corporation. All rights reserved.
-
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
 - Package: System.Threading.Tasks.Extensions (v4.5.4)
 - Author: Microsoft
 - Project: https://dot.net/
@@ -1079,18 +897,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package: System.Windows.Extensions (v4.7.0)
-- Author: Microsoft
-- Project: https://github.com/dotnet/corefx
-- License: https://licenses.nuget.org/MIT
-
-  © Microsoft Corporation. All rights reserved.
-
-
-MIT
 
 -----------------------------------------------------------------------------------------------------------------------
