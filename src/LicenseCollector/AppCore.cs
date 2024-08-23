@@ -624,12 +624,6 @@ namespace GriffinPlus.LicenseCollector
 						using var client = new HttpClient();
 						license = client.GetStringAsync(url).WaitAndUnwrapException();
 						sLog.Write(LogLevel.Debug, "Successful downloaded license '{0}' for {1}", url, identifier);
-
-						//using (var client = new WebClient())
-						//{
-						//	license = client.DownloadString(url);
-						//	sLog.Write(LogLevel.Debug, "Successful downloaded license '{0}' for {1}", url, identifier);
-						//}
 					}
 					catch (WebException ex)
 					{
