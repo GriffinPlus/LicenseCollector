@@ -14,15 +14,15 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   # runtime identifiers (see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog)
-  targets: 'win10-x86,win10-x64'
+  targets: 'win-x86,win-x64'
 
 steps:
 
 - task: UseDotNet@2
-  displayName: 'Use .NET 6.0 SDK'
+  displayName: 'Use .NET 8.0 SDK'
   inputs:
     packageType: 'sdk'
-    version: '6.0.x'
+    version: '8.0.x'
     installationPath: '$(Agent.ToolsDirectory)/dotnet'
 
 - task: NuGetToolInstaller@1
@@ -62,17 +62,23 @@ steps:
     $env:DOTNET_CLI_TELEMETRY_OPTOUT = 'true'
     dotnet publish `
     -c $(buildConfiguration) `
-    -o "$(Build.ArtifactStagingDirectory)/portable" `
-    /p:TargetFramework=net6.0
+    /p:TargetFramework=net8.0
     foreach ($target in '$(targets)'.Split(',')) {
         dotnet publish `
             --configuration $(buildConfiguration) `
             --runtime $target `
             --self-contained `
-            --output "$(Build.ArtifactStagingDirectory)/standalone/$target" `
-            /p:TargetFramework=net6.0 `
+            /p:TargetFramework=net8.0 `
             /p:PublishSingleFile=true
+        Copy-Item `
+        -Path "$(Build.SourcesDirectory)/_build/.out/LicenseCollector/AnyCPU.Release/net8.0/$target/publish/" `
+        -Destination "$(Build.ArtifactStagingDirectory)/standalone/$target" `
+        -Recurse
     }
+    Copy-Item `
+    -Path "$(Build.SourcesDirectory)/_build/.out/LicenseCollector/AnyCPU.Release/net8.0/publish/" `
+    -Destination "$(Build.ArtifactStagingDirectory)/portable" `
+    -Recurse
   displayName: Build
 
 - powershell: |
