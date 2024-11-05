@@ -1,23 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-    <BuildVs_Override_IntermediateOutputPath>true</BuildVs_Override_IntermediateOutputPath>
-    <BuildVs_Override_OutputPath>true</BuildVs_Override_OutputPath>
-    <StartupObject>GriffinPlus.LicenseCollector.Program</StartupObject>
-    <RootNamespace>GriffinPlus.LicenseCollector</RootNamespace>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<BuildVs_Override_IntermediateOutputPath>true</BuildVs_Override_IntermediateOutputPath>
+		<BuildVs_Override_OutputPath>true</BuildVs_Override_OutputPath>
+		<StartupObject>GriffinPlus.LicenseCollector.Program</StartupObject>
+		<RootNamespace>GriffinPlus.LicenseCollector</RootNamespace>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="GriffinPlus.Lib.Logging" Version="7.0.2" />
-    <PackageReference Include="Microsoft.Build" Version="17.11.4" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.7.8" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" ExcludeAssets="runtime" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="RazorLight" Version="2.3.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+		<PackageReference Include="GriffinPlus.Lib.Logging" Version="7.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.35" />
+		<PackageReference Include="Microsoft.Build" Version="17.11.4" ExcludeAssets="runtime" />
+		<PackageReference Include="Microsoft.Build.Locator" Version="1.7.8" />
+		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" ExcludeAssets="runtime" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
 
 </Project>

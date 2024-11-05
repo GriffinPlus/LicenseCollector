@@ -1,8 +1,4 @@
-﻿@using RazorLight
-@using GriffinPlus.LicenseCollector
-@using System.Collections.Generic
-@inherits RazorLight.TemplatePage<List<PackageLicenseInfo>>
-Third Party Libraries
+﻿Third Party Libraries
 ========================================
 
 Certain third-party software may be distributed, embedded, or bundled with the Griffin+ product or
@@ -26,10 +22,36 @@ https://github.com/griffinplus/LicenseCollector
 
 -----------------------------------------------------------------------------------------------------------------------
 @{
-foreach (PackageLicenseInfo license in Model)
+    foreach (var license in Model.Licenses)
     {
 @:-----------------------------------------------------------------------------------------------------------------------
-        @license.ToString()
+@:
+        if (!string.IsNullOrEmpty(license.PackageIdentifier))
+        {
+@:- Package:     @license.PackageIdentifier @license.PackageVersion
+        }
+        if (!string.IsNullOrEmpty(license.Author))
+        {
+@:- Author:      @license.Author
+        }
+        if (!string.IsNullOrEmpty(license.Copyright))
+        {
+@:- Copyright:   @license.Copyright
+        }
+        if (!string.IsNullOrEmpty(license.ProjectUrl))
+        {
+@:- Project URL: @license.ProjectUrl
+        }
+        if (!string.IsNullOrEmpty(license.LicenseUrl))
+        {
+@:- License URL: @license.LicenseUrl
+        }
+        if (!string.IsNullOrEmpty(license.License))
+        {
+@:
+@:@license.License
+        }
+@:
 @:-----------------------------------------------------------------------------------------------------------------------
     }
 }

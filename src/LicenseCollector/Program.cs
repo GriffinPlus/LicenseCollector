@@ -9,6 +9,8 @@ using CommandLine;
 
 using GriffinPlus.Lib.Logging;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Local
+
 namespace GriffinPlus.LicenseCollector
 {
 
@@ -23,6 +25,7 @@ namespace GriffinPlus.LicenseCollector
 		/// Command line argument mapping class
 		/// (see https://github.com/commandlineparser/commandline for details).
 		/// </summary>
+		// ReSharper disable once ClassNeverInstantiated.Local
 		private class Options
 		{
 			/// <summary>
@@ -132,65 +135,79 @@ namespace GriffinPlus.LicenseCollector
 						stage.Formatter = formatter;
 					}));
 
-			sLog.Write(LogLevel.Debug, "LicenseCollector v{0}", Assembly.GetExecutingAssembly().GetName().Version);
-			sLog.Write(LogLevel.Debug, "--------------------------------------------------------------------------------");
-			sLog.Write(LogLevel.Debug, "Verbose:            '{0}'", options.Verbose);
-			sLog.Write(LogLevel.Debug, "SolutionFile:       '{0}'", options.SolutionFilePath);
-			sLog.Write(LogLevel.Debug, "Configuration:      '{0}'", options.Configuration);
-			sLog.Write(LogLevel.Debug, "Platform:           '{0}'", options.Platform);
-			sLog.Write(LogLevel.Debug, "SearchPattern:      '{0}'", options.SearchPattern);
-			sLog.Write(LogLevel.Debug, "LicenseTemplatePath '{0}'", options.LicenseTemplatePath);
-			sLog.Write(LogLevel.Debug, "OutputPath:         '{0}'", options.OutputLicensePath);
-			sLog.Write(LogLevel.Debug, "--------------------------------------------------------------------------------");
-
-			// the given path for the solution does not exist
-			if (!File.Exists(options.SolutionFilePath))
-			{
-				sLog.Write(LogLevel.Error, "The path to the solution file under '{0}' does not exist.", options.SolutionFilePath);
-				return ExitCode.FileNotFound;
-			}
-
-			// the given path is not a solution file
-			if (!Path.GetExtension(options.SolutionFilePath).Equals(".sln"))
-			{
-				sLog.Write(LogLevel.Error, "The path '{0}' is not a solution file.", options.SolutionFilePath);
-				return ExitCode.ArgumentError;
-			}
-
-			// convert given relative paths to absolute paths if necessary
-			if (!Path.IsPathRooted(options.SolutionFilePath))
-				options.SolutionFilePath = Path.GetFullPath(options.SolutionFilePath);
-			if (!Path.IsPathRooted(options.OutputLicensePath))
-				options.OutputLicensePath = Path.GetFullPath(options.OutputLicensePath);
-			if (!string.IsNullOrEmpty(options.LicenseTemplatePath) && !Path.IsPathRooted(options.LicenseTemplatePath))
-				options.LicenseTemplatePath = Path.GetFullPath(options.LicenseTemplatePath);
-
-			var app = new AppCore(
-				options.SolutionFilePath,
-				options.Configuration,
-				options.Platform,
-				options.OutputLicensePath,
-				options.SearchPattern,
-				options.LicenseTemplatePath);
 			try
 			{
-				app.CollectProjects();
+				sLog.Write(LogLevel.Debug, "LicenseCollector v{0}", Assembly.GetExecutingAssembly().GetName().Version);
+				sLog.Write(LogLevel.Debug, "--------------------------------------------------------------------------------");
+				sLog.Write(LogLevel.Debug, "Verbose:            '{0}'", options.Verbose);
+				sLog.Write(LogLevel.Debug, "SolutionFile:       '{0}'", options.SolutionFilePath);
+				sLog.Write(LogLevel.Debug, "Configuration:      '{0}'", options.Configuration);
+				sLog.Write(LogLevel.Debug, "Platform:           '{0}'", options.Platform);
+				sLog.Write(LogLevel.Debug, "SearchPattern:      '{0}'", options.SearchPattern);
+				sLog.Write(LogLevel.Debug, "LicenseTemplatePath '{0}'", options.LicenseTemplatePath);
+				sLog.Write(LogLevel.Debug, "OutputPath:         '{0}'", options.OutputLicensePath);
+				sLog.Write(LogLevel.Debug, "--------------------------------------------------------------------------------");
 
-				app.GetNuGetPackages();
+				// ensure that the specified solution file exists
+				if (!File.Exists(options.SolutionFilePath))
+				{
+					sLog.Write(LogLevel.Error, "The solution file ({0}) does not exist.", options.SolutionFilePath);
+					return ExitCode.FileNotFound;
+				}
 
-				app.GetNuGetLicenseInfo();
+				// ensure that the specified template file exists
+				if (!File.Exists(options.LicenseTemplatePath))
+				{
+					sLog.Write(LogLevel.Error, "The template file ({0}) does not exist.", options.LicenseTemplatePath);
+					return ExitCode.FileNotFound;
+				}
 
-				app.GetStaticLicenseInfo();
+				// ensure that the specified solution file is a really a solution file (at least check its file extension...)
+				if (!Path.GetExtension(options.SolutionFilePath).Equals(".sln"))
+				{
+					sLog.Write(LogLevel.Error, "The solution file ({0}) does not end with '.sln'.", options.SolutionFilePath);
+					return ExitCode.ArgumentError;
+				}
 
-				app.GenerateOutputFileAsync().Wait();
+				// convert given relative paths to absolute paths if necessary
+				if (!Path.IsPathRooted(options.SolutionFilePath))
+					options.SolutionFilePath = Path.GetFullPath(options.SolutionFilePath);
+				if (!Path.IsPathRooted(options.OutputLicensePath))
+					options.OutputLicensePath = Path.GetFullPath(options.OutputLicensePath);
+				if (!string.IsNullOrEmpty(options.LicenseTemplatePath) && !Path.IsPathRooted(options.LicenseTemplatePath))
+					options.LicenseTemplatePath = Path.GetFullPath(options.LicenseTemplatePath);
+
+				var app = new AppCore(
+					options.SolutionFilePath,
+					options.Configuration,
+					options.Platform,
+					options.OutputLicensePath,
+					options.SearchPattern,
+					options.LicenseTemplatePath);
+				try
+				{
+					app.CollectProjects();
+
+					app.GetNuGetPackages();
+
+					app.GetNuGetLicenseInfo();
+
+					app.GetStaticLicenseInfo();
+
+					app.GenerateOutputFileAsync().Wait();
+				}
+				catch (Exception ex)
+				{
+					sLog.Write(LogLevel.Error, "Caught exception during processing. Exception:\n{0}", ex);
+					return ExitCode.GeneralError;
+				}
+
+				return ExitCode.Success;
 			}
-			catch (Exception ex)
+			finally
 			{
-				sLog.Write(LogLevel.Error, "Caught exception during processing. Exception: {0}", ex);
-				return ExitCode.GeneralError;
+				Log.Shutdown();
 			}
-
-			return ExitCode.Success;
 		}
 
 		private static ExitCode HandleParseError(IEnumerable<Error> errors)
@@ -231,7 +248,7 @@ namespace GriffinPlus.LicenseCollector
 				writer.WriteLine("  ERRORS:");
 				writer.WriteLine();
 
-				foreach (Error error in errors)
+				foreach (var error in errors)
 				{
 					switch (error.Tag)
 					{

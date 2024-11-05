@@ -51,37 +51,37 @@ namespace GriffinPlus.LicenseCollector
 		#region Properties
 
 		/// <summary>
-		/// Gets and sets identifier of this package.
+		/// Gets and sets the identifier of this package.
 		/// </summary>
 		public string PackageIdentifier { get; }
 
 		/// <summary>
-		/// Gets and sets version of this package.
+		/// Gets and sets the version of this package.
 		/// </summary>
 		public string PackageVersion { get; }
 
 		/// <summary>
-		/// Gets and sets author of this package.
+		/// Gets and sets the author of this package.
 		/// </summary>
 		public string Author { get; }
 
 		/// <summary>
-		/// Gets and sets copyright of this package.
+		/// Gets and sets the copyright of this package.
 		/// </summary>
 		public string Copyright { get; }
 
 		/// <summary>
-		/// Gets and sets url to the license.
+		/// Gets and sets the URL to the license.
 		/// </summary>
 		public string LicenseUrl { get; }
 
 		/// <summary>
-		/// Gets and sets url to the project related to this package.
+		/// Gets and sets the URL to the project related to this package.
 		/// </summary>
 		public string ProjectUrl { get; }
 
 		/// <summary>
-		/// Get and sets license to this package.
+		/// Get and sets the license to this package.
 		/// </summary>
 		public string License { get; }
 

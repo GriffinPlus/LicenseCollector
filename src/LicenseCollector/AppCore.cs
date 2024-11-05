@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
 using GriffinPlus.Lib.Logging;
 using GriffinPlus.Lib.Threading;
+using GriffinPlus.LicenseCollector.Razor;
 
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Locator;
 
 using Newtonsoft.Json.Linq;
-
-using RazorLight;
 
 namespace GriffinPlus.LicenseCollector
 {
@@ -29,7 +28,9 @@ namespace GriffinPlus.LicenseCollector
 	/// </summary>
 	public class AppCore
 	{
-		private static readonly LogWriter sLog = LogWriter.Get<AppCore>();
+		private static readonly LogWriter           sLog = LogWriter.Get<AppCore>();
+		private static readonly RazorEngineCompiler sRazorEngineCompiler;
+		private static readonly bool                sDebugRazor = false;
 
 		#region Internal members for input
 
@@ -95,6 +96,14 @@ namespace GriffinPlus.LicenseCollector
 		private const string DeprecatedLicenseUrl = "https://aka.ms/deprecateLicenseUrl";
 
 		/// <summary>
+		/// Initializes the <see cref="AppCore"/> class.
+		/// </summary>
+		static AppCore()
+		{
+			sRazorEngineCompiler = new RazorEngineCompiler();
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="AppCore"/> class.
 		/// </summary>
 		/// <param name="solution">Path to the solution to examine.</param>
@@ -122,9 +131,9 @@ namespace GriffinPlus.LicenseCollector
 			mLicenseTemplatePath = licenseTemplatePath;
 
 			mFinishProcessing = false;
-			mProjectsToProcess = new List<ProjectInfo>();
+			mProjectsToProcess = [];
 			mNuGetPackages = new Dictionary<string, string>();
-			mLicenses = new List<PackageLicenseInfo>();
+			mLicenses = [];
 		}
 
 		#region Collect projects under given 'configuration|platform'
@@ -135,7 +144,7 @@ namespace GriffinPlus.LicenseCollector
 		/// </summary>
 		public void CollectProjects()
 		{
-			SolutionFile solution = SolutionFile.Parse(mSolutionPath);
+			var solution = SolutionFile.Parse(mSolutionPath);
 
 			if (solution == null)
 			{
@@ -155,7 +164,7 @@ namespace GriffinPlus.LicenseCollector
 				return;
 			}
 
-			foreach (ProjectInSolution project in solution.ProjectsInOrder)
+			foreach (var project in solution.ProjectsInOrder)
 			{
 				// only c# and c++ projects get processed which are build with given "configuration|platform"
 				string absolutePathExtension = Path.GetExtension(project.AbsolutePath);
@@ -291,7 +300,7 @@ namespace GriffinPlus.LicenseCollector
 					foundPackagesFolders.Add(solutionPackagesFolder);
 				}
 
-				foreach (ProjectInfo project in mProjectsToProcess)
+				foreach (var project in mProjectsToProcess)
 				{
 					if (project.Type != NuGetPackageDependency.PackagesConfig)
 						continue;
@@ -314,7 +323,7 @@ namespace GriffinPlus.LicenseCollector
 			}
 
 			// process each project depending on their type
-			foreach (ProjectInfo project in mProjectsToProcess)
+			foreach (var project in mProjectsToProcess)
 			{
 				sLog.Write(
 					LogLevel.Debug,
@@ -344,7 +353,7 @@ namespace GriffinPlus.LicenseCollector
 				}
 			}
 
-			sLog.Write(LogLevel.Notice, "Successful collect NuGet packages for solution.");
+			sLog.Write(LogLevel.Notice, "Collecting NuGet packages for solution completed successfully.");
 			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
 		}
 
@@ -360,12 +369,12 @@ namespace GriffinPlus.LicenseCollector
 			using (var reader = new StreamReader(project.NuGetInformationPath))
 			{
 				string json = reader.ReadToEnd();
-				JObject jsonObject = JObject.Parse(json);
+				var jsonObject = JObject.Parse(json);
 
 				if (jsonObject == null)
 					throw new ArgumentException($"The project '{project.ProjectName}' does not contain a valid 'project.assets.json' file.");
 
-				foreach (JProperty property in jsonObject.Properties())
+				foreach (var property in jsonObject.Properties())
 				{
 					switch (property.Path)
 					{
@@ -393,7 +402,7 @@ namespace GriffinPlus.LicenseCollector
 
 						case "packageFolders":
 							// collect all package folders used by this project
-							foreach (JToken packageFolder in property.Value)
+							foreach (var packageFolder in property.Value)
 							{
 								packageFolders.Add((packageFolder as JProperty).Name);
 							}
@@ -421,7 +430,7 @@ namespace GriffinPlus.LicenseCollector
 					if (!File.Exists(nuSpecFilePath)) continue;
 
 					mNuGetPackages.Add(packageId, nuSpecFilePath);
-					sLog.Write(LogLevel.Debug, "Add NuGet package '{0}' to processing...", packageId);
+					sLog.Write(LogLevel.Debug, "Adding NuGet package '{0}' to processing...", packageId);
 					isNuSpecPathExisting = true;
 					break;
 				}
@@ -438,7 +447,7 @@ namespace GriffinPlus.LicenseCollector
 		/// <param name="packagesFolders">Possible 'packages' folders inside solution or project directories.</param>
 		private void GetNuGetPackagesFromPackagesConfig(ProjectInfo project, HashSet<string> packagesFolders)
 		{
-			sLog.Write(LogLevel.Debug, "Get nuspec files for '{0}'", project.ProjectName);
+			sLog.Write(LogLevel.Debug, "Getting nuspec files for '{0}'...", project.ProjectName);
 
 			var packagePaths = new Dictionary<string, string>();
 			// extract 'packages.config' and determine id and version
@@ -487,10 +496,10 @@ namespace GriffinPlus.LicenseCollector
 				using (var fs = new FileStream(nugetPackages[nugetId], FileMode.Open))
 				{
 					var archive = new ZipArchive(fs, ZipArchiveMode.Read);
-					ZipArchiveEntry nuSpec = archive.Entries.FirstOrDefault(x => x.Name.EndsWith(".nuspec"));
+					var nuSpec = archive.Entries.FirstOrDefault(x => x.Name.EndsWith(".nuspec"));
 					if (nuSpec == null)
 					{
-						sLog.Write(LogLevel.Error, "The NuGet package '{0}' does not contains an '.nuspec' file.", nugetId);
+						sLog.Write(LogLevel.Error, "The NuGet package '{0}' does not contain a '.nuspec' file.", nugetId);
 						continue;
 					}
 
@@ -500,7 +509,7 @@ namespace GriffinPlus.LicenseCollector
 						nuSpec.Open().CopyTo(nuspecStream);
 					}
 
-					sLog.Write(LogLevel.Debug, "Add NuGet package '{0}' to processing...", nugetId);
+					sLog.Write(LogLevel.Debug, "Adding NuGet package '{0}' to processing...", nugetId);
 					mNuGetPackages.Add(nugetId, nuspecPath);
 				}
 			}
@@ -528,7 +537,7 @@ namespace GriffinPlus.LicenseCollector
 
 			foreach (string nuSpecFilePath in mNuGetPackages.Values)
 			{
-				sLog.Write(LogLevel.Debug, "Begin retrieving NuGet specification information from '{0}'...", nuSpecFilePath);
+				sLog.Write(LogLevel.Debug, "Retrieving NuGet specification information from '{0}'...", nuSpecFilePath);
 
 				// extract important information from NuGet specification file
 				var doc = new XmlDocument();
@@ -560,7 +569,7 @@ namespace GriffinPlus.LicenseCollector
 				string copyright =
 					root.SelectSingleNode("/nu:package/nu:metadata/nu:copyright", namespaceManager)?.InnerText ??
 					string.Empty;
-				XmlNode licenseNode = root.SelectSingleNode("/nu:package/nu:metadata/nu:license", namespaceManager);
+				var licenseNode = root.SelectSingleNode("/nu:package/nu:metadata/nu:license", namespaceManager);
 				var license = string.Empty;
 				if (licenseNode != null)
 				{
@@ -594,10 +603,10 @@ namespace GriffinPlus.LicenseCollector
 								using (var fs = new FileStream(nugetPackage, FileMode.Open))
 								{
 									var archive = new ZipArchive(fs, ZipArchiveMode.Read);
-									ZipArchiveEntry licenseEntry = archive.Entries.FirstOrDefault(x => x.Name.Contains(licenseNode.InnerText));
+									var licenseEntry = archive.Entries.FirstOrDefault(x => x.Name.Contains(licenseNode.InnerText));
 									if (licenseEntry == null)
 									{
-										sLog.Write(LogLevel.Error, "The NuGet package '{0}' does not contains '{1}'", licenseNode.InnerText);
+										sLog.Write(LogLevel.Error, "The NuGet package '{0}' does not contain '{1}'", licenseNode.InnerText);
 										break;
 									}
 
@@ -623,7 +632,7 @@ namespace GriffinPlus.LicenseCollector
 					{
 						using var client = new HttpClient();
 						license = client.GetStringAsync(url).WaitAndUnwrapException();
-						sLog.Write(LogLevel.Debug, "Successful downloaded license '{0}' for {1}", url, identifier);
+						sLog.Write(LogLevel.Debug, "Successfully downloaded license '{0}' for '{1}'", url, identifier);
 					}
 					catch (WebException ex)
 					{
@@ -637,12 +646,21 @@ namespace GriffinPlus.LicenseCollector
 					continue;
 				}
 
+				// condition strings
+				identifier = identifier?.Trim();
+				version = version?.Trim();
+				authors = authors?.Trim();
+				copyright = copyright?.Trim();
+				licenseUrl = licenseUrl?.Trim();
+				projectUrl = projectUrl?.Trim();
+				license = license?.Trim();
+
 				var package = new PackageLicenseInfo(identifier, version, authors, copyright, licenseUrl, projectUrl, license);
 				mLicenses.Add(package);
-				sLog.Write(LogLevel.Debug, "Successful extract license information for '{0} v{1}'.", identifier, version);
+				sLog.Write(LogLevel.Debug, "Successfully extracted license information for '{0} v{1}'.", identifier, version);
 			}
 
-			sLog.Write(LogLevel.Notice, "Successful extract license information from found NuGet packages.");
+			sLog.Write(LogLevel.Notice, "Successfully extracted license information from found NuGet packages.");
 			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
 		}
 
@@ -659,11 +677,13 @@ namespace GriffinPlus.LicenseCollector
 				// already finished processing
 				return;
 
-			foreach (ProjectInfo project in mProjectsToProcess)
+			foreach (var project in mProjectsToProcess)
 			{
 				string projectDir = Path.GetDirectoryName(project.ProjectAbsolutePath) ?? "";
 
-				IEnumerable<string> staticProjectLicenses = Directory.EnumerateFiles(projectDir, mSearchPattern, SearchOption.AllDirectories);
+				IEnumerable<string> staticProjectLicenses = Directory
+					.EnumerateFiles(projectDir, mSearchPattern, SearchOption.AllDirectories)
+					.ToArray();
 
 				if (staticProjectLicenses.Any())
 				{
@@ -688,44 +708,13 @@ namespace GriffinPlus.LicenseCollector
 				}
 			}
 
-			sLog.Write(LogLevel.Notice, "Successful scan project directories for static licenses.");
+			sLog.Write(LogLevel.Notice, "Scanning project directories for static licenses completed successfully.");
 			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
 		}
 
 		#endregion
 
 		#region Generate output file
-
-		private static string LicenseTemplate
-		{
-			get
-			{
-				var template = new StringBuilder();
-				template.AppendLine("@using RazorLight");
-				template.AppendLine("@using GriffinPlus.LicenseCollector");
-				template.AppendLine("@using System.Collections.Generic");
-				template.AppendLine("@inherits RazorLight.TemplatePage<List<PackageLicenseInfo>>");
-				template.AppendLine("Third party libraries");
-				template.AppendLine("========================================");
-				template.AppendLine();
-				template.AppendLine("Certain third-party software may be distributed, embedded, or bundled with this product or");
-				template.AppendLine("recommended for use in conjunction with the installation and operation of this product.");
-				template.AppendLine("Such third-party software is separately licensed by its copyright holder. Use of the third-party");
-				template.AppendLine("software must be in accordance with its license terms. This section contains the licenses which");
-				template.AppendLine("govern the use of third-party software and its copyright holder's proprietary notices.");
-				template.AppendLine();
-				template.AppendLine("-----------------------------------------------------------------------------------------------------------------------");
-				template.AppendLine("@{");
-				template.AppendLine("foreach (PackageLicenseInfo license in Model)");
-				template.AppendLine("{");
-				template.AppendLine("@:-----------------------------------------------------------------------------------------------------------------------");
-				template.AppendLine("@license.ToString();");
-				template.AppendLine("@:-----------------------------------------------------------------------------------------------------------------------");
-				template.AppendLine("}");
-				template.AppendLine("}");
-				return template.ToString();
-			}
-		}
 
 		/// <summary>
 		/// Generate output third party notice with collected license information.
@@ -742,26 +731,66 @@ namespace GriffinPlus.LicenseCollector
 			if (File.Exists(mOutputPath))
 				File.Delete(mOutputPath);
 
-			var engine = new RazorLightEngineBuilder()
-				.UseEmbeddedResourcesProject(typeof(AppCore))
-				.UseMemoryCachingProvider()
-				.DisableEncoding()
-				.Build();
+			// render the template
+			var model = new { Licenses = mLicenses };
+			string patchedTemplate = RunTemplate(mLicenseTemplatePath, model);
 
-			string template = LicenseTemplate;
-			if (!string.IsNullOrEmpty(mLicenseTemplatePath) && File.Exists(mLicenseTemplatePath))
-			{
-				sLog.Write(LogLevel.Notice, "Load user defined razor template '{0}' for third party notices", mLicenseTemplatePath);
-				template = await File.ReadAllTextAsync(mLicenseTemplatePath);
-			}
-
-			string patchedTemplate = await engine
-				                         .CompileRenderStringAsync("Third party notices", template, mLicenses)
-				                         .ConfigureAwait(false);
+			// save the rendered template to the specified file
 			await File.WriteAllTextAsync(mOutputPath, patchedTemplate);
 
-			sLog.Write(LogLevel.Notice, "Successful write collected licenses to '{0}'", mOutputPath);
+			sLog.Write(LogLevel.Notice, "Collected licenses have been successfully written to '{0}'", mOutputPath);
 			sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
+		}
+
+		/// <summary>
+		/// Renders the specified template file.
+		/// </summary>
+		/// <param name="path">Path of the template file to render.</param>
+		/// <param name="context">Context object containing data to use within the template.</param>
+		/// <returns>The rendered template.</returns>
+		public string RunTemplate(string path, object context)
+		{
+			if (!sRazorEngineCompiler.IsTemplateCached(path))
+			{
+				using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+				using var reader = new StreamReader(fs, true);
+				string template = reader.ReadToEnd();
+				using (TimingLogger.Measure(sLog, LogLevel.Timing, $"Compiling template ({path})"))
+				{
+					sRazorEngineCompiler.Compile(
+						path,
+						template,
+						new RazorEngineCompilationOptions
+						{
+							IncludeDebuggingInfo = sDebugRazor,
+							TemplateFilename = Path.GetFileName(path)
+						});
+				}
+			}
+
+			string fileExtension = Path.GetExtension(path);
+			Debug.Assert(fileExtension != null, nameof(fileExtension) + " != null");
+
+			string filePathWithoutTemplateExtension = Path.GetFileNameWithoutExtension(path);
+			string templateExtension = Path.GetExtension(filePathWithoutTemplateExtension).ToLower();
+
+			bool isHtml;
+			switch (templateExtension)
+			{
+				case ".cshtml":
+				case ".html":
+					isHtml = true;
+					break;
+
+				default:
+					isHtml = false;
+					break;
+			}
+
+			using (TimingLogger.Measure(sLog, LogLevel.Timing, $"Rendering template ({path})"))
+			{
+				return sRazorEngineCompiler.Run(path, isHtml, context);
+			}
 		}
 
 		#endregion
