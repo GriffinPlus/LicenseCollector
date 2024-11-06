@@ -16,7 +16,7 @@ public class TemplateHelper
 	/// <param name="message">Message to split.</param>
 	/// <param name="maxLineLength">Maximum number of characters per line.</param>
 	/// <returns>The message split into multiple lines.</returns>
-	public IEnumerable<string> SplitToLines(string message, int maxLineLength)
+	public static IEnumerable<string> SplitToLines(string message, int maxLineLength)
 	{
 		string[] words = message.Split(' ');
 		var line = new StringBuilder();
