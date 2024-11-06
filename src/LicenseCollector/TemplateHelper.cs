@@ -18,9 +18,13 @@ public class TemplateHelper
 	/// <returns>The message split into multiple lines.</returns>
 	public static IEnumerable<string> SplitToLines(string message, int maxLineLength)
 	{
-		string[] words = message.Split(' ');
+		// replace CR+LF with LF only to maintain a consistent newline representation
+		message = message.Replace("\r\n", "\n");
+
+		// split the message into words and reassemble the words to lines up to the
+		// specified line length and keep newline characters
 		var line = new StringBuilder();
-		foreach (string word in words)
+		foreach (string word in message.Split(' '))
 		{
 			if (word.Length + line.Length <= maxLineLength)
 			{
