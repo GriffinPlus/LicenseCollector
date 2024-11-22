@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-#if NET7_0 || NET8_0
+#if NET7_0 || NET8_0 || NET9_0
 using System.Reflection.Metadata;
 #endif
 
@@ -147,7 +147,7 @@ class RazorEngineCompiler : IRazorEngineCompiler
 					{
 #if NET48
 						return MetadataReference.CreateFromFile(ass.Location);
-#elif NET7_0 || NET8_0
+#elif NET7_0 || NET8_0 || NET9_0
 						unsafe
 						{
 							ass.TryGetRawMetadata(out byte* blob, out int length);

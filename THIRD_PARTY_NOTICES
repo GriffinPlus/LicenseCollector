@@ -86,7 +86,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.AspNetCore.Razor.Language 6.0.35
+- Package:     Microsoft.AspNetCore.Razor.Language 6.0.36
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: https://asp.net/
@@ -97,7 +97,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.Build 17.11.4
+- Package:     Microsoft.Build 17.12.6
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
@@ -108,7 +108,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.Build.Framework 17.11.4
+- Package:     Microsoft.Build.Framework 17.12.6
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
@@ -130,7 +130,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.Build.Utilities.Core 17.11.4
+- Package:     Microsoft.Build.Utilities.Core 17.12.6
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
@@ -174,7 +174,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.NET.StringTools 17.11.4
+- Package:     Microsoft.NET.StringTools 17.12.6
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: http://go.microsoft.com/fwlink/?LinkId=624683

@@ -90,6 +90,7 @@
 .\refs\System.IO.FileSystem.Watcher.dll
 .\refs\System.IO.IsolatedStorage.dll
 .\refs\System.IO.MemoryMappedFiles.dll
+.\refs\System.IO.Pipelines.dll
 .\refs\System.IO.Pipes.AccessControl.dll
 .\refs\System.IO.Pipes.dll
 .\refs\System.IO.UnmanagedMemoryStream.dll
