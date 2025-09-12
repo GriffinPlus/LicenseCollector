@@ -94,6 +94,8 @@ namespace GriffinPlus.LicenseCollector
 		private const string PackagesConfig       = "packages.config";
 		private const string PackagesFolder       = "packages";
 		private const string DeprecatedLicenseUrl = "https://aka.ms/deprecateLicenseUrl";
+		private const string GithubDomain = "/github.com/";
+		private const string RawGithubDomain = "/raw.githubusercontent.com/";
 
 		/// <summary>
 		/// Initializes the <see cref="AppCore"/> class.
@@ -624,19 +626,33 @@ namespace GriffinPlus.LicenseCollector
 
 				// TODO: extend to download other url then from github.com
 				if (string.IsNullOrEmpty(license) && !string.IsNullOrEmpty(licenseUrl) &&
-				    (licenseUrl.Contains("github.com") || licenseUrl.Contains("/raw.githubusercontent.com/")))
+				    (licenseUrl.Contains(GithubDomain) || licenseUrl.Contains(RawGithubDomain)))
 				{
 					// download license when only url to license is given
-					string url = licenseUrl.Contains("github.com") ? licenseUrl.Replace("/blob/", "/raw/") : licenseUrl;
+					string redirectedUrl = licenseUrl;
 					try
 					{
-						using var client = new HttpClient();
-						license = client.GetStringAsync(url).WaitAndUnwrapException();
-						sLog.Write(LogLevel.Debug, "Successfully downloaded license '{0}' for '{1}'", url, identifier);
+						using var client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = true });
+						// only get headers to follow redirects
+						var response = client.GetAsync(licenseUrl, HttpCompletionOption.ResponseHeadersRead).Result;
+						redirectedUrl = response.RequestMessage.RequestUri.ToString();
+
+						// check again if a redirection leads to another domain
+						if (redirectedUrl.Contains(GithubDomain) || redirectedUrl.Contains(RawGithubDomain))
+						{
+							// convert to raw URL if needed
+							if (redirectedUrl.Contains(GithubDomain) && redirectedUrl.Contains("/blob/"))
+								redirectedUrl = redirectedUrl.Replace(GithubDomain, RawGithubDomain)
+									.Replace("/blob/", "/");
+
+							// download the raw license text
+							license = client.GetStringAsync(redirectedUrl).Result;
+							sLog.Write(LogLevel.Debug, "Successfully downloaded license '{0}' for '{1}'", redirectedUrl, identifier);
+						}
 					}
-					catch (WebException ex)
+					catch (Exception ex) when (ex is HttpRequestException or WebException)
 					{
-						sLog.Write(LogLevel.Error, "Error during downloading '{0}': {1}", url, ex.Message);
+						sLog.Write(LogLevel.Error, "Error during downloading '{0}' for '{1}': {2}", redirectedUrl, identifier, ex.Message);
 					}
 				}
 
