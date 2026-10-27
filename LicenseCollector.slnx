@@ -1,0 +1,47 @@
+<Solution>
+  <Folder Name="/build.vs/">
+    <File Path="build.vs/AssemblyInfoVersion.cs" />
+    <File Path="build.vs/AssemblyInfoVersion.mcpp" />
+    <File Path="build.vs/Build.psm1" />
+    <File Path="build.vs/Clean.psm1" />
+    <File Path="build.vs/Configuration.psm1" />
+    <File Path="build.vs/CopyFilesFromListToFolder.psm1" />
+    <File Path="build.vs/CopyToReleaseFolder.psm1" />
+    <File Path="build.vs/Directory.Build.Cpp.props" />
+    <File Path="build.vs/Directory.Build.Cpp.targets" />
+    <File Path="build.vs/Directory.Build.Cs.props" />
+    <File Path="build.vs/Directory.Build.Cs.targets" />
+    <File Path="build.vs/Directory.Build.props" />
+    <File Path="build.vs/Directory.Build.targets" />
+    <File Path="build.vs/GitVersion.psm1" />
+    <File Path="build.vs/GitVersion.yml" />
+    <File Path="build.vs/Helper.psm1" />
+    <File Path="build.vs/LICENSE" />
+    <File Path="build.vs/LicenseCollector.psm1" />
+    <File Path="build.vs/NuGet.msbuild" />
+    <File Path="build.vs/PackNuGet.psm1" />
+    <File Path="build.vs/PreBuildWizard.psm1" />
+    <File Path="build.vs/PublishNuGet.psm1" />
+    <File Path="build.vs/README.md" />
+    <File Path="build.vs/ReSharper.DotSettings" />
+    <File Path="build.vs/RestoreNuGet.psm1" />
+    <File Path="build.vs/UpdateOutputFileList.psm1" />
+  </Folder>
+  <Folder Name="/build.vs/azure-pipelines/">
+    <File Path="build.vs/azure-pipelines/ci-csharp-netstandard20-with-deployment-on-tag.yml" />
+  </Folder>
+  <Folder Name="/Repository Files/">
+    <File Path=".gitignore" />
+    <File Path="azure-pipelines.yml" />
+    <File Path="Build.ps1" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="src/CommonAssemblyInfo.cs" />
+    <File Path="src/CommonAssemblyInfo.mcpp" />
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/Directory.Build.targets" />
+    <File Path="THIRD_PARTY_NOTICES" />
+    <File Path="THIRD_PARTY_NOTICES.template" />
+  </Folder>
+  <Project Path="src/LicenseCollector/LicenseCollector.csproj" />
+</Solution>

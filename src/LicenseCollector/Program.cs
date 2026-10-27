@@ -163,9 +163,9 @@ namespace GriffinPlus.LicenseCollector
 				}
 
 				// ensure that the specified solution file is a really a solution file (at least check its file extension...)
-				if (!Path.GetExtension(options.SolutionFilePath).Equals(".sln"))
+				if (!Path.GetExtension(options.SolutionFilePath).Equals(".sln") && !Path.GetExtension(options.SolutionFilePath).Equals(".slnx"))
 				{
-					sLog.Write(LogLevel.Error, "The solution file ({0}) does not end with '.sln'.", options.SolutionFilePath);
+					sLog.Write(LogLevel.Error, "The solution file ({0}) does not end with '.sln' or '.slnx'", options.SolutionFilePath);
 					return ExitCode.ArgumentError;
 				}
 

@@ -15,7 +15,7 @@ Import-Module "$ScriptDir\build.vs\LicenseCollector.psm1"
 # #################################
 
 [String]  $ProductName          = "LicenseCollector"
-[String]  $SolutionPath         = "$ScriptDir\LicenseCollector.sln"
+[String]  $SolutionPath         = "$ScriptDir\LicenseCollector.slnx"
 [String]  $LicenseTemplatePath  = "$ScriptDir\THIRD_PARTY_NOTICES.template"
 
 $MsbuildConfigurations = @('Release')
