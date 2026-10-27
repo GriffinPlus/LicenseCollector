@@ -53,7 +53,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     GriffinPlus.Lib.Common 4.1.4
+- Package:     GriffinPlus.Lib.Common 4.3.0
 - Author:      Sascha Falk
 - Copyright:   Copyright (c) 2024 Sascha Falk and Contributors
 - Project URL: https://github.com/GriffinPlus/dotnet-libs-common
@@ -64,7 +64,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     GriffinPlus.Lib.Logging 7.0.3
+- Package:     GriffinPlus.Lib.Logging 7.1.4
 - Author:      Sascha Falk
 - Copyright:   Copyright (c) 2024 Sascha Falk and Contributors
 - Project URL: https://github.com/GriffinPlus/dotnet-libs-logging
@@ -75,9 +75,9 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     GriffinPlus.Lib.Logging.Interface 1.1.2
+- Package:     GriffinPlus.Lib.Logging.Interface 1.3.1
 - Author:      Sascha Falk
-- Copyright:   Copyright (c) 2024 Sascha Falk and Contributors
+- Copyright:   Copyright (c) 2025 Sascha Falk and Contributors
 - Project URL: https://github.com/GriffinPlus/dotnet-libs-logging-interface
 - License URL: https://licenses.nuget.org/MIT
 
@@ -97,7 +97,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.Build 17.12.6
+- Package:     Microsoft.Build 18.9.6
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
@@ -108,7 +108,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.Build.Framework 17.12.6
+- Package:     Microsoft.Build.Framework 18.9.6
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
@@ -119,7 +119,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.Build.Locator 1.7.8
+- Package:     Microsoft.Build.Locator 1.11.2
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: https://github.com/microsoft/MSBuildLocator
@@ -130,7 +130,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.Build.Utilities.Core 17.12.6
+- Package:     Microsoft.Build.Utilities.Core 18.9.6
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
@@ -141,18 +141,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.CodeAnalysis.Analyzers 3.3.4
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: https://github.com/dotnet/roslyn-analyzers
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package:     Microsoft.CodeAnalysis.Common 4.11.0
+- Package:     Microsoft.CodeAnalysis.Analyzers 5.9.0-1.26328.17
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: https://github.com/dotnet/roslyn
@@ -163,7 +152,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.CodeAnalysis.CSharp 4.11.0
+- Package:     Microsoft.CodeAnalysis.Common 5.9.0
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: https://github.com/dotnet/roslyn
@@ -174,7 +163,18 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.NET.StringTools 17.12.6
+- Package:     Microsoft.CodeAnalysis.CSharp 5.9.0
+- Author:      Microsoft
+- Copyright:   © Microsoft Corporation. All rights reserved.
+- Project URL: https://github.com/dotnet/roslyn
+- License URL: https://licenses.nuget.org/MIT
+
+MIT
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+- Package:     Microsoft.NET.StringTools 18.9.6
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
@@ -185,7 +185,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Newtonsoft.Json 13.0.3
+- Package:     Newtonsoft.Json 13.0.4
 - Author:      James Newton-King
 - Copyright:   Copyright © James Newton-King 2008
 - Project URL: https://www.newtonsoft.com/json
@@ -196,7 +196,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     System.Collections.Immutable 8.0.0
+- Package:     System.Configuration.ConfigurationManager 10.0.8
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: https://dot.net/
@@ -207,7 +207,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     System.Configuration.ConfigurationManager 8.0.0
+- Package:     System.Diagnostics.EventLog 10.0.8
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: https://dot.net/
@@ -218,7 +218,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     System.Diagnostics.EventLog 8.0.0
+- Package:     System.Reflection.MetadataLoadContext 10.0.8
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: https://dot.net/
@@ -229,29 +229,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     System.Reflection.Metadata 8.0.0
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: https://dot.net/
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package:     System.Reflection.MetadataLoadContext 8.0.0
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: https://dot.net/
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package:     System.Security.Cryptography.ProtectedData 8.0.0
+- Package:     System.Security.Cryptography.ProtectedData 10.0.8
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: https://dot.net/
