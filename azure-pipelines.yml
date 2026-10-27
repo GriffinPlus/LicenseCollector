@@ -84,7 +84,7 @@ steps:
 - powershell: |
     $ErrorActionPreference = "Stop"
     dotnet "$(Build.ArtifactStagingDirectory)/portable/LicenseCollector.dll" `
-        --SolutionFilePath "LicenseCollector.sln" `
+        --SolutionFilePath "LicenseCollector.slnx" `
         --Configuration "$(buildConfiguration)" `
         --Platform "$(buildPlatform)" `
         --LicenseTemplatePath "$(Build.SourcesDirectory)/THIRD_PARTY_NOTICES.template" `
