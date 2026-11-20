@@ -42,7 +42,7 @@ steps:
   inputs:
     command: 'custom'
     custom: 'gitversion'
-    arguments: 'version'
+    arguments: '--version'
 
 - task: DotNetCoreCLI@2
   name: 'GitVersion'
