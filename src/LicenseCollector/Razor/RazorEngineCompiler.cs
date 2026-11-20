@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +14,6 @@ using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-#if NET7_0 || NET8_0 || NET9_0 || NET10_0
-using System.Reflection.Metadata;
-#endif
 
 namespace GriffinPlus.LicenseCollector.Razor;
 
@@ -145,9 +143,6 @@ class RazorEngineCompiler : IRazorEngineCompiler
 				.Select(
 					ass =>
 					{
-#if NET48
-						return MetadataReference.CreateFromFile(ass.Location);
-#elif NET7_0 || NET8_0 || NET9_0 || NET10_0
 						unsafe
 						{
 							ass.TryGetRawMetadata(out byte* blob, out int length);
@@ -157,7 +152,6 @@ class RazorEngineCompiler : IRazorEngineCompiler
 
 							return metadataReference;
 						}
-#endif
 					})
 				.Concat(options.MetadataReferences)
 				.ToList(),
