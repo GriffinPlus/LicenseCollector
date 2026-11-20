@@ -1,0 +1,16 @@
+﻿calculation:
+  branches:
+    main:
+      increment: Patch
+      label: ci
+      mode: ContinuousDelivery
+      regex: ^master$
+  commit-message-incrementing: Disabled
+  ignore:
+    sha: []
+  mode: ContinuousDelivery
+  next-version: 0.1.0
+  tag-prefix: '[vV]'
+output:
+  assembly-versioning-scheme: MajorMinorPatch
+  commit-date-format: yyyy-MM-dd

@@ -29,7 +29,15 @@ public string LicenseUrl { get; }
 public string License { get; }
 ```
 
-## Current Limitations 
+## CI Versioning
+
+The Azure pipeline pins GitVersion.Tool to 7.0.0 and uses `GitVersion.CI.yml` with the full Git history and tags. Version outputs use the GitVersion 7 Azure Pipelines naming convention, for example `$(GitVersion_SemVer)`.
+
+On `master`, Continuous Delivery with the explicit `ci` label preserves the legacy fallback-tag behavior: commits after `v7.1.0` produce `7.1.1-ci.1`, while the tagged release itself remains `7.1.0`.
+
+The CI configuration is separate from the ignored `GitVersion.yml`, which the legacy local `Build.ps1` workflow copies from `build.vs`. When upgrading GitVersion, review its [migration guide](https://gitversion.net/7.0/docs/migration/v6-to-v7) and validate the CI configuration and version outputs before changing the pinned version.
+
+## Current Limitations
 
 + Only supports C# and C++ projects within a given solution
 + Only downloads licenses with a Github URL, when a URL is defined for the NuGet package
