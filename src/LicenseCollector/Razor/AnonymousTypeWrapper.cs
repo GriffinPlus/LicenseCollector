@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Reflection;
 
 namespace GriffinPlus.LicenseCollector.Razor;
 
@@ -33,7 +35,7 @@ public class AnonymousTypeWrapper : DynamicObject
 	/// </returns>
 	public override bool TryGetMember(GetMemberBinder binder, out object result)
 	{
-		var propertyInfo = mModel.GetType().GetProperty(binder.Name);
+		PropertyInfo propertyInfo = mModel.GetType().GetProperty(binder.Name);
 
 		if (propertyInfo == null)
 		{
@@ -55,7 +57,7 @@ public class AnonymousTypeWrapper : DynamicObject
 
 		if (result is IDictionary dictionary)
 		{
-			var keys = dictionary.Keys.Cast<object>().ToList();
+			List<object> keys = dictionary.Keys.Cast<object>().ToList();
 
 			foreach (object key in keys.Where(key => dictionary[key].IsAnonymous()))
 			{

@@ -33,7 +33,7 @@ public class RazorEngineCompiledTemplate
 		if (assemblyByteCode == null || assemblyByteCode.Length == 0) throw new ArgumentException($"An {nameof(assemblyByteCode)} must be provided.");
 
 		sLog.Write(LogLevel.Debug, "Loading dynamic assembly of template {0}...", templateFileName);
-		var assembly = Assembly.Load(assemblyByteCode, pdbByteCode);
+		Assembly assembly = Assembly.Load(assemblyByteCode, pdbByteCode);
 		TemplateType = assembly.GetType(templateNameSpace + ".Template");
 		if (TemplateType == null) throw new InvalidOperationException($"The assembly does not contain a type named {templateNameSpace}.Template'.");
 
@@ -71,7 +71,7 @@ public class RazorEngineCompiledTemplate
 		model = model != null ? new AnonymousTypeWrapper(model) : null;
 
 		sLog.Write(LogLevel.Debug, "Creating instance of {0}...", TemplateType.FullName);
-		var instance = (IRazorEngineTemplate)Activator.CreateInstance(TemplateType) ?? throw new InvalidOperationException($"Could not create an instance of {TemplateType.FullName}.");
+		IRazorEngineTemplate instance = (IRazorEngineTemplate)Activator.CreateInstance(TemplateType) ?? throw new InvalidOperationException($"Could not create an instance of {TemplateType.FullName}.");
 		instance.Model = model;
 		instance.IsHtml = isHtml;
 

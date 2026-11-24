@@ -13,6 +13,7 @@ using GriffinPlus.Lib.Threading;
 using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
 
 namespace GriffinPlus.LicenseCollector.Razor;
@@ -122,16 +123,16 @@ class RazorEngineCompiler : IRazorEngineCompiler
 
 		var document = RazorSourceDocument.Create(templateSource, fileName);
 		sLog.Write(LogLevel.Debug, "Processing template with razor engine...");
-		var codeDocument = engine.Process(
+		RazorCodeDocument codeDocument = engine.Process(
 			document,
 			null,
 			new List<RazorSourceDocument>(),
 			new List<TagHelperDescriptor>());
 		sLog.Write(LogLevel.Debug, "Processed template with razor engine.");
 
-		var razorCSharpDocument = codeDocument.GetCSharpDocument();
-		var sourceText = SourceText.From(razorCSharpDocument.GeneratedCode, Encoding.UTF8);
-		var syntaxTree = CSharpSyntaxTree.ParseText(sourceText, cancellationToken: cancellationToken);
+		RazorCSharpDocument razorCSharpDocument = codeDocument.GetCSharpDocument();
+		SourceText sourceText = SourceText.From(razorCSharpDocument.GeneratedCode, Encoding.UTF8);
+		SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(sourceText, cancellationToken: cancellationToken);
 
 		sLog.Write(LogLevel.Debug, "Compiling template...");
 		var compilation = CSharpCompilation.Create(
@@ -140,28 +141,27 @@ class RazorEngineCompiler : IRazorEngineCompiler
 				syntaxTree
 			],
 			options.ReferencedAssemblies
-				.Select(
-					ass =>
+				.Select(ass =>
+				{
+					unsafe
 					{
-						unsafe
-						{
-							ass.TryGetRawMetadata(out byte* blob, out int length);
-							var moduleMetadata = ModuleMetadata.CreateFromMetadata((IntPtr)blob, length);
-							var assemblyMetadata = AssemblyMetadata.Create(moduleMetadata);
-							var metadataReference = assemblyMetadata.GetReference();
+						ass.TryGetRawMetadata(out byte* blob, out int length);
+						var moduleMetadata = ModuleMetadata.CreateFromMetadata((IntPtr)blob, length);
+						var assemblyMetadata = AssemblyMetadata.Create(moduleMetadata);
+						PortableExecutableReference metadataReference = assemblyMetadata.GetReference();
 
-							return metadataReference;
-						}
-					})
+						return metadataReference;
+					}
+				})
 				.Concat(options.MetadataReferences)
 				.ToList(),
 			new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
 
 		var assemblyStream = new MemoryStream();
-		var pdbStream = options.IncludeDebuggingInfo ? new MemoryStream() : null;
+		MemoryStream pdbStream = options.IncludeDebuggingInfo ? new MemoryStream() : null;
 
-		var emitResult = compilation.Emit(assemblyStream, pdbStream, cancellationToken: cancellationToken);
+		EmitResult emitResult = compilation.Emit(assemblyStream, pdbStream, cancellationToken: cancellationToken);
 		if (!emitResult.Success)
 		{
 			var exception = new RazorEngineCompilationException
