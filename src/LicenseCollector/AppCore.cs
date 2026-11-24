@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -13,9 +14,9 @@ using System.Xml.Linq;
 using GriffinPlus.Lib.Logging;
 using GriffinPlus.LicenseCollector.Razor;
 
-using Microsoft.Build.Construction;
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Locator;
+using Microsoft.VisualStudio.SolutionPersistence;
+using Microsoft.VisualStudio.SolutionPersistence.Model;
+using Microsoft.VisualStudio.SolutionPersistence.Serializer;
 
 using Newtonsoft.Json.Linq;
 
@@ -120,9 +121,6 @@ public class AppCore
 		string searchPattern,
 		string licenseTemplatePath)
 	{
-		// register default msbuild version to use.
-		MSBuildLocator.RegisterDefaults();
-
 		mSolutionPath = solution;
 		mConfiguration = config;
 		mPlatform = platform;
@@ -140,128 +138,192 @@ public class AppCore
 
 	/// <summary>
 	/// Examines given solution file to collect all projects that are build under given 'configuration|platform'.
-	/// This method retrieves their names, project file location and base intermediate output path.
+	/// This method retrieves their names, project file location and the location of their NuGet information.
 	/// </summary>
 	public void CollectProjects()
 	{
-		var solution = SolutionFile.Parse(mSolutionPath);
+		CollectProjectsAsync().GetAwaiter().GetResult();
+	}
 
-		if (solution == null)
+	/// <summary>
+	/// Examines given solution file to collect all projects that are build under given 'configuration|platform'.
+	/// This method retrieves their names, project file location and the location of their NuGet information.
+	/// </summary>
+	/// <param name="cancellationToken">Token that can be signaled to cancel the operation.</param>
+	public async Task CollectProjectsAsync(CancellationToken cancellationToken = default)
+	{
+		ISolutionSerializer serializer = SolutionSerializers.GetSerializerByMoniker(mSolutionPath);
+		if (serializer == null)
 		{
 			throw new ArgumentException($"The given path '{mSolutionPath}' does not define a visual studio solution.");
 		}
 
-		if (solution.SolutionConfigurations == null ||
-		    !solution.SolutionConfigurations.Any(x => x.ConfigurationName.Equals(mConfiguration) && x.PlatformName.Equals(mPlatform)))
+		SolutionModel solution = await serializer.OpenAsync(mSolutionPath, cancellationToken).ConfigureAwait(false);
+
+		string solutionBuildType = solution.BuildTypes.FirstOrDefault(x => x.Equals(mConfiguration, StringComparison.OrdinalIgnoreCase));
+		string solutionPlatform = solution.Platforms.FirstOrDefault(x => x.Equals(mPlatform, StringComparison.OrdinalIgnoreCase));
+		if (solutionBuildType == null || solutionPlatform == null)
 		{
 			throw new ArgumentOutOfRangeException($"The given parameter set '{mConfiguration}|{mPlatform}' does not match an existing solution configuration.");
 		}
 
-		if (solution.ProjectsInOrder == null || solution.ProjectsInOrder.Count == 0)
+		if (solution.SolutionProjects.Count == 0)
 		{
 			sLog.Write(LogLevel.Notice, "The given solution file does not contain any projects.");
 			mFinishProcessing = true;
 			return;
 		}
 
-		foreach (var project in solution.ProjectsInOrder)
+		string solutionDirectory = Path.GetDirectoryName(mSolutionPath) ?? "";
+		var projectsToEvaluate = new List<(int Index, string Name, string Path, string BuildType, string Platform)>();
+		var collectedProjects = new SortedDictionary<int, ProjectInfo>();
+		int index = 0;
+
+		foreach (SolutionProjectModel project in solution.SolutionProjects)
 		{
+			int projectIndex = index++;
+			string projectName = project.ActualDisplayName;
+			string projectPath = Path.GetFullPath(
+				Path.Combine(
+					solutionDirectory,
+					project.FilePath.Replace('\\', Path.DirectorySeparatorChar)));
+
 			// only c# and c++ projects get processed which are build with given "configuration|platform"
-			string absolutePathExtension = Path.GetExtension(project.AbsolutePath);
-			string absolutePathDirectoryName = Path.GetDirectoryName(project.AbsolutePath) ?? "";
-			bool isProjectSupported = absolutePathExtension is ".csproj" or ".vcxproj" &&
-			                          project.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat;
+			string absolutePathExtension = Path.GetExtension(projectPath);
+			string absolutePathDirectoryName = Path.GetDirectoryName(projectPath) ?? "";
+			bool isProjectSupported = absolutePathExtension.Equals(".csproj", StringComparison.OrdinalIgnoreCase) ||
+			                          absolutePathExtension.Equals(".vcxproj", StringComparison.OrdinalIgnoreCase);
 			if (!isProjectSupported) continue;
-			bool isConfigurationBuild = project.ProjectConfigurations.Keys.Any(x =>
-				x.Equals($"{mConfiguration}|{mPlatform}") && project.ProjectConfigurations[x].IncludeInBuild);
+			(string projectBuildType, string projectPlatform, bool isConfigurationBuild, bool _) = project.GetProjectConfiguration(
+				solutionBuildType,
+				solutionPlatform);
 			if (!isConfigurationBuild) continue;
 
 			string packagesConfigPath = Path.Combine(absolutePathDirectoryName, PackagesConfig);
 			if (File.Exists(packagesConfigPath))
 			{
 				// project uses packages.config
-				sLog.Write(LogLevel.Debug, "Found '{0}' for '{1}'.", packagesConfigPath, project.ProjectName);
-				mProjectsToProcess.Add(
+				sLog.Write(LogLevel.Debug, "Found '{0}' for '{1}'.", packagesConfigPath, projectName);
+				collectedProjects.Add(
+					projectIndex,
 					new ProjectInfo(
-						project.ProjectName,
-						project.AbsolutePath,
+						projectName,
+						projectPath,
 						packagesConfigPath,
 						NuGetPackageDependency.PackagesConfig));
 				continue;
 			}
 
-			if (absolutePathExtension.Equals(".vcxproj"))
+			if (absolutePathExtension.Equals(".vcxproj", StringComparison.OrdinalIgnoreCase))
 			{
 				// c++ project is included in build but has no valid NuGet dependencies
-				sLog.Write(LogLevel.Debug, "Found no valid NuGet dependencies for '{0}'", project.ProjectName);
-				mProjectsToProcess.Add(new ProjectInfo(project.ProjectName, project.AbsolutePath, "", NuGetPackageDependency.NoDependencies));
+				sLog.Write(LogLevel.Debug, "Found no valid NuGet dependencies for '{0}'", projectName);
+				collectedProjects.Add(projectIndex, new ProjectInfo(projectName, projectPath, "", NuGetPackageDependency.NoDependencies));
 				continue;
 			}
 
-			// project seems to use package reference
-			sLog.Write(LogLevel.Debug, "Calculate path to '{0}' for '{1}'.", ProjectAssets, project.ProjectName);
-			var msBuildProject = new Project(project.AbsolutePath);
-			string baseIntermediateOutputPath = msBuildProject.GetPropertyValue("BaseIntermediateOutputPath");
-			if (baseIntermediateOutputPath == null)
-			{
-				sLog.Write(LogLevel.Error, "The project '{0}' does not define a 'BaseIntermediateOutputPath'", project.ProjectName);
-				mProjectsToProcess.Add(
-					new ProjectInfo(
-						project.ProjectName,
-						project.AbsolutePath,
-						"",
-						NuGetPackageDependency.NoDependencies));
-				continue;
-			}
-
-			sLog.Write(LogLevel.Debug, "Found BaseIntermediateOutputPath = '{0}'", baseIntermediateOutputPath);
-			// calculate path to 'project.assets.json' for given project
-			string projectAssetsPath = Path.Combine(baseIntermediateOutputPath, ProjectAssets);
-			if (!Path.IsPathRooted(projectAssetsPath))
-			{
-				// try 'BaseIntermediateOutputPath' is relative to solution
-				projectAssetsPath = Path.Combine(
-					Path.GetDirectoryName(mSolutionPath) ?? "",
-					baseIntermediateOutputPath,
-					ProjectAssets);
-				if (!File.Exists(projectAssetsPath))
-					// 'BaseIntermediateOutputPath' is relative to project
-				{
-					projectAssetsPath = Path.Combine(
-						absolutePathDirectoryName,
-						baseIntermediateOutputPath,
-						ProjectAssets);
-				}
-			}
-
-			if (!File.Exists(projectAssetsPath))
-			{
-				// project does not use 'project.assets.json' or no NuGet package is present
-				sLog.Write(
-					LogLevel.Error,
-					"No '{0}' found for '{1}'.",
-					ProjectAssets,
-					project.ProjectName);
-				mProjectsToProcess.Add(
-					new ProjectInfo(
-						project.ProjectName,
-						project.AbsolutePath,
-						"",
-						NuGetPackageDependency.NoDependencies));
-				continue;
-			}
-
-			mProjectsToProcess.Add(
-				new ProjectInfo(
-					project.ProjectName,
-					project.AbsolutePath,
-					projectAssetsPath,
-					NuGetPackageDependency.PackageReference));
-			sLog.Write(LogLevel.Debug, "Found '{0}' for '{1}'.", projectAssetsPath, project.ProjectName);
+			// project seems to use package reference, path to 'project.assets.json' is determined by evaluating the project
+			projectsToEvaluate.Add((projectIndex, projectName, projectPath, projectBuildType, projectPlatform));
 		}
+
+		// evaluate projects in parallel as each evaluation runs in a separate 'dotnet msbuild' process
+		var evaluatedProjects = new ProjectInfo[projectsToEvaluate.Count];
+		await Parallel.ForEachAsync(
+				Enumerable.Range(0, projectsToEvaluate.Count),
+				new ParallelOptions
+				{
+					MaxDegreeOfParallelism = Math.Min(Environment.ProcessorCount, 8),
+					CancellationToken = cancellationToken
+				},
+				async (i, token) =>
+				{
+					(int Index, string Name, string Path, string BuildType, string Platform) project = projectsToEvaluate[i];
+					evaluatedProjects[i] = await DetermineProjectAssetsAsync(
+							                       project.Name,
+							                       project.Path,
+							                       project.BuildType,
+							                       project.Platform,
+							                       token)
+						                       .ConfigureAwait(false);
+				})
+			.ConfigureAwait(false);
+
+		for (int i = 0; i < projectsToEvaluate.Count; i++)
+		{
+			if (evaluatedProjects[i] == null) continue; // test project
+			collectedProjects.Add(projectsToEvaluate[i].Index, evaluatedProjects[i]);
+		}
+
+		mProjectsToProcess.AddRange(collectedProjects.Values);
 
 		sLog.Write(LogLevel.Notice, "Successful collect all projects for solution.");
 		sLog.Write(LogLevel.Notice, "--------------------------------------------------------------------------------");
+	}
+
+	/// <summary>
+	/// Determines the location of the 'project.assets.json' of a project using 'PackageReference' by evaluating the project.
+	/// </summary>
+	/// <param name="projectName">Name of the project.</param>
+	/// <param name="projectPath">Absolute path of the project file.</param>
+	/// <param name="projectBuildType">Project configuration the solution configuration maps to.</param>
+	/// <param name="projectPlatform">Project platform the solution platform maps to.</param>
+	/// <param name="cancellationToken">Token that can be signaled to cancel the operation.</param>
+	/// <returns>
+	/// Information about the project;
+	/// <c>null</c> if the project is a test project (MSBuild property 'IsTestProject' is 'true') and must be skipped.
+	/// </returns>
+	private async Task<ProjectInfo> DetermineProjectAssetsAsync(
+		string            projectName,
+		string            projectPath,
+		string            projectBuildType,
+		string            projectPlatform,
+		CancellationToken cancellationToken)
+	{
+		sLog.Write(LogLevel.Debug, "Calculate path to '{0}' for '{1}'.", ProjectAssets, projectName);
+
+		// pass the same global properties a solution build would pass
+		string solutionDirectory = Path.GetDirectoryName(mSolutionPath) ?? "";
+		var globalProperties = new Dictionary<string, string>
+		{
+			["SolutionDir"] = Path.EndsInDirectorySeparator(solutionDirectory) ? solutionDirectory : solutionDirectory + Path.DirectorySeparatorChar,
+			["SolutionPath"] = mSolutionPath,
+			["SolutionName"] = Path.GetFileNameWithoutExtension(mSolutionPath),
+			["SolutionFileName"] = Path.GetFileName(mSolutionPath),
+			["SolutionExt"] = Path.GetExtension(mSolutionPath)
+		};
+		if (!string.IsNullOrEmpty(projectBuildType)) globalProperties["Configuration"] = projectBuildType;
+		if (!string.IsNullOrEmpty(projectPlatform)) globalProperties["Platform"] = projectPlatform;
+
+		IReadOnlyDictionary<string, string> properties = await MsBuildPropertyEvaluator.EvaluateAsync(
+				                                                 projectPath,
+				                                                 globalProperties,
+				                                                 ["ProjectAssetsFile", "MSBuildProjectExtensionsPath", "IsTestProject"],
+				                                                 solutionDirectory,
+				                                                 cancellationToken)
+			                                                 .ConfigureAwait(false);
+
+		string projectAssetsPath = properties["ProjectAssetsFile"];
+		if (string.IsNullOrEmpty(projectAssetsPath) && !string.IsNullOrEmpty(properties["MSBuildProjectExtensionsPath"]))
+			projectAssetsPath = Path.Combine(properties["MSBuildProjectExtensionsPath"], ProjectAssets);
+
+		if (string.IsNullOrEmpty(projectAssetsPath))
+		{
+			sLog.Write(LogLevel.Error, "The project '{0}' does not define a 'ProjectAssetsFile' or 'MSBuildProjectExtensionsPath'.", projectName);
+			return new ProjectInfo(projectName, projectPath, "", NuGetPackageDependency.NoDependencies);
+		}
+
+		// relative paths in MSBuild are relative to the project directory
+		projectAssetsPath = Path.GetFullPath(projectAssetsPath, Path.GetDirectoryName(projectPath) ?? "");
+
+		if (!File.Exists(projectAssetsPath))
+		{
+			// project does not use 'project.assets.json' or it has not been restored
+			sLog.Write(LogLevel.Error, "No '{0}' found for '{1}' (expected at '{2}').", ProjectAssets, projectName, projectAssetsPath);
+			return new ProjectInfo(projectName, projectPath, "", NuGetPackageDependency.NoDependencies);
+		}
+
+		sLog.Write(LogLevel.Debug, "Found '{0}' for '{1}'.", projectAssetsPath, projectName);
+		return new ProjectInfo(projectName, projectPath, projectAssetsPath, NuGetPackageDependency.PackageReference);
 	}
 
 	#endregion

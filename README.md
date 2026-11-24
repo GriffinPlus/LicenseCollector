@@ -11,6 +11,12 @@ This repository contains the Griffin+ *LicenseCollector*, a tool which helps to 
 
 The tool is designed to accept a solution file with a specific build configuration. It collects all projects that are built under this configuration. It examines all referenced NuGet packages for C# and C++ projects and extracts their license information. In addition the tool supports static licenses which are found in the project folders via a given pattern as well. At last all collected license information are copied together and can be shipped with your software.
 
+## Requirements
+
+The solution file is read without MSBuild. To locate the `project.assets.json` of projects using `PackageReference`, the tool evaluates these projects by running `dotnet msbuild -getProperty` in a separate process. Therefore the .NET SDK 8.0.100 or later must be installed and `dotnet` must be in the `PATH`. The SDK is selected the same way as for a build of the solution, i.e. a `global.json` in the solution directory or one of its parent directories is respected.
+
+The solution must have been restored before running the tool.
+
 ## Razor template for output file
 
 An optional parameter can be given to load a razor template file. The template defines how the output is formatted to ensure optimal flexibility when generating a *Third Party Notices* file. An example for a template can be found in this repository (*THIRD_PARTY_NOTICES.template*).

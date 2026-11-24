@@ -15,10 +15,8 @@
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="GriffinPlus.Lib.Logging" Version="7.1.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.36" />
-		<PackageReference Include="Microsoft.Build" Version="18.9.6" ExcludeAssets="runtime" />
-		<PackageReference Include="Microsoft.Build.Locator" Version="1.11.2" />
-		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.9.6" ExcludeAssets="runtime" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
+		<PackageReference Include="Microsoft.VisualStudio.SolutionPersistence" Version="1.0.52" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 

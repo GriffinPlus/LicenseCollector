@@ -97,50 +97,6 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.Build 18.9.6
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package:     Microsoft.Build.Framework 18.9.6
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package:     Microsoft.Build.Locator 1.11.2
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: https://github.com/microsoft/MSBuildLocator
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package:     Microsoft.Build.Utilities.Core 18.9.6
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
 - Package:     Microsoft.CodeAnalysis.Analyzers 5.9.0-1.26328.17
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
@@ -174,10 +130,10 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     Microsoft.NET.StringTools 18.9.6
+- Package:     Microsoft.VisualStudio.SolutionPersistence 1.0.52
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: http://go.microsoft.com/fwlink/?LinkId=624683
+- Project URL: https://github.com/microsoft/vs-solutionpersistence
 - License URL: https://licenses.nuget.org/MIT
 
 MIT
@@ -196,40 +152,7 @@ MIT
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
 
-- Package:     System.Configuration.ConfigurationManager 10.0.8
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: https://dot.net/
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package:     System.Diagnostics.EventLog 10.0.8
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: https://dot.net/
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package:     System.Reflection.MetadataLoadContext 10.0.8
-- Author:      Microsoft
-- Copyright:   © Microsoft Corporation. All rights reserved.
-- Project URL: https://dot.net/
-- License URL: https://licenses.nuget.org/MIT
-
-MIT
-
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-
-- Package:     System.Security.Cryptography.ProtectedData 10.0.8
+- Package:     System.Diagnostics.EventLog 8.0.2
 - Author:      Microsoft
 - Copyright:   © Microsoft Corporation. All rights reserved.
 - Project URL: https://dot.net/
