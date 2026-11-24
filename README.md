@@ -17,6 +17,8 @@ The solution file is read without MSBuild. To locate the `project.assets.json` o
 
 The solution must have been restored before running the tool.
 
+Projects using `PackageReference` with the MSBuild property `IsTestProject` set to `true` (set by `Microsoft.NET.Test.Sdk`, `MSTest.Sdk`, xUnit v3 etc.) are skipped, because their dependencies are not shipped.
+
 ## Razor template for output file
 
 An optional parameter can be given to load a razor template file. The template defines how the output is formatted to ensure optimal flexibility when generating a *Third Party Notices* file. An example for a template can be found in this repository (*THIRD_PARTY_NOTICES.template*).

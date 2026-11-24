@@ -85,6 +85,13 @@ steps:
     -Recurse
   displayName: Build
 
+- task: DotNetCoreCLI@2
+  displayName: 'Test'
+  inputs:
+    command: 'test'
+    projects: 'LicenseCollector.slnx'
+    arguments: '--configuration $(buildConfiguration)'
+
 - powershell: |
     $ErrorActionPreference = "Stop"
     dotnet "$(Build.ArtifactStagingDirectory)/portable/LicenseCollector.dll" `

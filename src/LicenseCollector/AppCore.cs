@@ -302,6 +302,13 @@ public class AppCore
 				                                                 cancellationToken)
 			                                                 .ConfigureAwait(false);
 
+		// dependencies of test projects are not shipped
+		if (string.Equals(properties["IsTestProject"], "true", StringComparison.OrdinalIgnoreCase))
+		{
+			sLog.Write(LogLevel.Notice, "Skipping test project '{0}'.", projectName);
+			return null;
+		}
+
 		string projectAssetsPath = properties["ProjectAssetsFile"];
 		if (string.IsNullOrEmpty(projectAssetsPath) && !string.IsNullOrEmpty(properties["MSBuildProjectExtensionsPath"]))
 			projectAssetsPath = Path.Combine(properties["MSBuildProjectExtensionsPath"], ProjectAssets);

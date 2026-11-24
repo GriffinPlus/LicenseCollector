@@ -43,5 +43,6 @@
     <File Path="THIRD_PARTY_NOTICES" />
     <File Path="THIRD_PARTY_NOTICES.template" />
   </Folder>
+  <Project Path="src/LicenseCollector.Tests/LicenseCollector.Tests.csproj" />
   <Project Path="src/LicenseCollector/LicenseCollector.csproj" />
 </Solution>
